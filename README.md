@@ -33,7 +33,7 @@
 
 <p align="center">
   <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/highlights.gif" alt="Highlights of the ComicToons demo: the landing page, the Studio releasing comic panels during a Sample run, the audience view with catch-up, the manga reader and the OBS overlay" width="88%"></a><br>
-  <sub>▲ Highlights, looping with no sound. The full 4-minute walkthrough is below.</sub>
+  <sub>▲ Highlights, looping with no sound. The full narrated 4-minute walkthrough is below.</sub>
 </p>
 
 <p align="center">
@@ -41,7 +41,7 @@
   <a href="docs/media/ComicToons-demo.mp4"><b>▶ Watch the full demo video (about 4 minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a>
 </p>
 
-The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo. The video is rendered with [Remotion](https://www.remotion.dev); [`video/`](video) rebuilds it.
+The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo. It is narrated with Microsoft neural text-to-speech (the `en-GB-RyanNeural` voice, through `edge-tts`), captioned from the narration, and rendered with [Remotion](https://www.remotion.dev). The narration script is [`video/narration/script.json`](video/narration/script.json), and [`video/`](video) rebuilds the whole video.
 
 <table align="center">
 <tr>
@@ -522,7 +522,7 @@ npx playwright test -c tests/playwright.config.ts tests/ux-refinement.spec.ts
 | Illustration | Source frames (no API), OpenAI, Gemini, Pollinations, Cloudflare |
 | Quality | Playwright end-to-end tests, axe-core accessibility checks, a mock Twitch harness, ESLint, a secret scan |
 | Hosting | Vercel for the static Sample demo, OBS Browser Source for the overlay |
-| Demo video | Remotion, Playwright screen capture, FFmpeg |
+| Demo video | Remotion, Playwright screen capture, FFmpeg, Microsoft neural TTS (`edge-tts`) for the narration |
 
 ## 🗂️ Project structure
 
@@ -554,7 +554,7 @@ Built by **Tyk Anthony** (TYK3) for the Codex × TwitchCon hackathon. The owner 
 - Fonts: Bangers, Comic Neue and Space Grotesk, all under the SIL Open Font Licence (see `apps/web/src/ui/fonts`).
 - Sample art provenance and licence notes: [fixtures/art/generated/LICENSE-NOTE.md](fixtures/art/generated/LICENSE-NOTE.md). Dependency and licence review: [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md). Lettering maps: [docs/LETTERING_MAPS.md](docs/LETTERING_MAPS.md).
 - The speech-bubble logo is drawn for ComicToons and is not taken from any brand kit. The Connect glyph is a generic chat bubble, not the Twitch logo.
-- Demo video music is an original ambient bed synthesised by [`video/capture/make_music.py`](video/capture/make_music.py).
+- Demo video narration is generated with Microsoft neural text-to-speech through [`edge-tts`](https://github.com/rany2/edge-tts) by [`video/narration/make_voice.py`](video/narration/make_voice.py). The music is an original ambient bed synthesised by [`video/capture/make_music.py`](video/capture/make_music.py).
 
 Copyright © 2026 Tyk Anthony. All rights reserved.
 

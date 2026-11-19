@@ -60,8 +60,8 @@ export const Captions: React.FC<{ items: Cap[]; bottom?: number; dark?: boolean 
           boxShadow: `8px 8px 0 ${dark ? C.coral : C.teal}`,
           fontFamily: UI,
           fontWeight: 600,
-          fontSize: 38,
-          lineHeight: 1.25,
+          fontSize: active.text.length > 84 ? 32 : 38,
+          lineHeight: 1.22,
           textAlign: "center",
         }}
       >
@@ -85,12 +85,12 @@ export const Chip: React.FC<{ n: string; label: string }> = ({ n, label }) => {
 export type Callout = { from: number; to: number; box: [number, number, number, number]; label: string; side?: "top" | "bottom" | "left" | "right" };
 export type Zoom = { from: number; to: number; focus: [number, number]; scale: number };
 
-const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
+const CalloutView: React.FC<{ c: Callout; speed: number }> = ({ c, speed }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const t = frame / fps;
+  const t = (frame / fps) * speed;
   if (t < c.from || t > c.to) return null;
-  const enter = spring({ frame: frame - c.from * fps, fps, config: { damping: 16, stiffness: 160 } });
+  const enter = spring({ frame: frame - (c.from / speed) * fps, fps, config: { damping: 16, stiffness: 160 } });
   const exit = interpolate(t, [c.to - 0.25, c.to], [1, 0], { extrapolateLeft: "clamp" });
   const o = Math.min(1, enter) * exit;
   const pulse = 1 + Math.sin(frame / 5) * 0.012;
@@ -125,16 +125,15 @@ export const ScreenScene: React.FC<{
   start?: number;
   speed?: number;
   chapter: { n: string; label: string };
-  captions: Cap[];
   callouts?: Callout[];
   zooms?: Zoom[];
   bg?: "ink" | "teal";
   frameLabel?: string;
   still?: string;
-}> = ({ clip, still, start = 0, speed = 1, chapter, captions, callouts = [], zooms = [], bg = "ink", frameLabel }) => {
+}> = ({ clip, still, start = 0, speed = 1, chapter, callouts = [], zooms = [], bg = "ink", frameLabel }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const t = frame / fps;
+  const t = (frame / fps) * speed;
   const k = 1600 / 1920;
   // Smooth zoom: blend all active zooms
   let scale = 1;
@@ -165,7 +164,7 @@ export const ScreenScene: React.FC<{
               <Video src={staticFile(`clips/${clip}.mp4`)} trimBefore={Math.round(start * fps)} playbackRate={speed} muted style={{ width: 1920, height: 1080 }} />
             )}
             {callouts.map((c, i) => (
-              <CalloutView key={i} c={c} />
+              <CalloutView key={i} c={c} speed={speed} />
             ))}
           </div>
         </div>
@@ -173,7 +172,6 @@ export const ScreenScene: React.FC<{
       {frameLabel ? (
         <div style={{ position: "absolute", right: 160, top: 14, fontFamily: UI, fontWeight: 700, fontSize: 24, color: C.cream, letterSpacing: 2, textTransform: "uppercase", opacity: 0.85 }}>{frameLabel}</div>
       ) : null}
-      <Captions items={captions} bottom={22} />
     </AbsoluteFill>
   );
 };

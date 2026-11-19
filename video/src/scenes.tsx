@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Easing, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { Backdrop, Captions, Logo, type Cap } from "./components";
+import { Backdrop, Logo } from "./components";
 import { C, DISPLAY, FPS, UI } from "./theme";
 
 const ease = Easing.out(Easing.cubic);
@@ -63,18 +63,18 @@ const problems = [
   { n: "3", h: "Clips miss the crowd", p: "A clip shows the video, but not what chat was saying at the time.", c: C.coral },
 ];
 
-export const Problem: React.FC = () => {
+export const Problem: React.FC<{ at: number[] }> = ({ at }) => {
   const t = useT();
   return (
     <AbsoluteFill>
       <Backdrop variant="ink" />
       <div style={{ position: "absolute", left: 120, top: 70, fontFamily: DISPLAY, fontSize: 40, color: C.amber, letterSpacing: 4, opacity: reveal(t, 0.1) }}>THE PROBLEM</div>
-      <div style={{ position: "absolute", left: 120, top: 120, fontFamily: DISPLAY, fontSize: 112, color: C.cream, letterSpacing: 2, opacity: reveal(t, 0.2), translate: `0px ${(1 - reveal(t, 0.2)) * 30}px` }}>
+      <div style={{ position: "absolute", left: 120, top: 120, fontFamily: DISPLAY, fontSize: 112, color: C.cream, letterSpacing: 2, opacity: reveal(t, at[0]), translate: `0px ${(1 - reveal(t, at[0])) * 30}px` }}>
         A STREAM IS GREAT LIVE. THEN IT VANISHES.
       </div>
       <div style={{ position: "absolute", left: 120, right: 120, top: 330, display: "flex", gap: 40 }}>
         {problems.map((x, i) => {
-          const p = reveal(t, 1.6 + i * 2.2, 0.6);
+          const p = reveal(t, at[1 + i], 0.6);
           return (
             <div key={x.n} style={{ flex: 1, background: C.cream, border: `6px solid ${C.ink}`, boxShadow: `12px 12px 0 ${x.c}`, padding: "30px 34px", height: 500, opacity: p, translate: `0px ${(1 - p) * 60}px` }}>
               <div style={{ fontFamily: DISPLAY, fontSize: 88, color: x.c === C.amber ? C.ink : x.c, WebkitTextStroke: x.c === C.amber ? "0" : "0", lineHeight: 1 }}>{x.n}</div>
@@ -84,7 +84,7 @@ export const Problem: React.FC = () => {
           );
         })}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 70, textAlign: "center", fontFamily: DISPLAY, fontSize: 84, color: C.amber, letterSpacing: 3, opacity: reveal(t, 9.2, 0.7), scale: String(0.9 + 0.1 * reveal(t, 9.2, 0.7)) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 70, textAlign: "center", fontFamily: DISPLAY, fontSize: 84, color: C.amber, letterSpacing: 3, opacity: reveal(t, at[4], 0.7), scale: String(0.9 + 0.1 * reveal(t, at[4], 0.7)) }}>
         WHAT IF THE NIGHT BECAME A COMIC?
       </div>
     </AbsoluteFill>
@@ -102,7 +102,7 @@ const stages: { n: string; h: string; p: string; tag: string }[] = [
   { n: "8", h: "Publish", p: "Audience view, OBS overlay, and a Library of recap, comic book and manga", tag: "OUTPUT" },
 ];
 
-export const Architecture: React.FC<{ captions: Cap[] }> = ({ captions }) => {
+export const Architecture: React.FC<{ at: number[] }> = ({ at: starts }) => {
   const t = useT();
   const W = 400;
   const Hh = 290;
@@ -115,7 +115,7 @@ export const Architecture: React.FC<{ captions: Cap[] }> = ({ captions }) => {
       {stages.map((s, i) => {
         const row = Math.floor(i / 4);
         const col = i % 4;
-        const at = 1.2 + i * 3.3;
+        const at = starts[i];
         const p = spring({ frame: Math.round((t - at) * FPS), fps: FPS, config: { damping: 15, stiffness: 130 } });
         const x = left + col * (W + gapX);
         const y = 200 + row * (Hh + 90);
@@ -153,7 +153,6 @@ export const Architecture: React.FC<{ captions: Cap[] }> = ({ captions }) => {
           </React.Fragment>
         );
       })}
-      <Captions items={captions} bottom={30} />
     </AbsoluteFill>
   );
 };
@@ -193,7 +192,7 @@ const groups: { h: string; items: string[]; c: string }[] = [
   { h: "Hosting", items: ["Vercel (Sample demo)", "OBS Browser Source"], c: C.ink2 },
 ];
 
-export const TechStack: React.FC<{ captions: Cap[] }> = ({ captions }) => {
+export const TechStack: React.FC = () => {
   const t = useT();
   return (
     <AbsoluteFill>
@@ -218,7 +217,6 @@ export const TechStack: React.FC<{ captions: Cap[] }> = ({ captions }) => {
           );
         })}
       </div>
-      <Captions items={captions} bottom={36} />
     </AbsoluteFill>
   );
 };

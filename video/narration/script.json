@@ -1,0 +1,88 @@
+{
+  "voice": "en-GB-RyanNeural",
+  "scenes": {
+    "intro": [
+      {"text": "This is ComicToons. Your stream, inked live."},
+      {"text": "It turns Twitch stream moments into comic and manga pages that the streamer approves."}
+    ],
+    "problem": [
+      {"text": "A stream is great live, and then it vanishes."},
+      {"text": "The best moments scroll past in chat, and they are gone."},
+      {"text": "A viewer who joins halfway has no idea what just happened."},
+      {"text": "And a clip shows the video, but not what chat was saying."},
+      {"text": "So what if the night became a comic?"}
+    ],
+    "what-hero": [
+      {"text": "ComicToons turns Twitch stream moments into comic pages."},
+      {"text": "The streamer connects their channel, or tries the built-in Sample with no sign-in."}
+    ],
+    "what-scroll": [
+      {"text": "The best chat moments land on the overlay as panels, and the streamer approves every one."},
+      {"text": "When they log off, the whole night is a comic they can share."}
+    ],
+    "arch": [
+      {"text": "Here is how it works. Twitch provides chat over IRC, event notifications, and the live video.", "say": "Here is how it works. Twitch provides chat over I R C, event notifications, and the live video."},
+      {"text": "The server ingests those events. It removes duplicates, respects deletes and opt-outs, and caps the rate at sixty events a second."},
+      {"text": "Chat spikes, bursts of repeated emotes, and clusters of clips become candidate moments."},
+      {"text": "For each moment it captures real video frames with attributed chat. A page needs at least four distinct frames."},
+      {"text": "The page is composed as a source-frame comic, which needs no image API, or as an illustrated page from the provider you choose.", "say": "The page is composed as a source-frame comic, which needs no image A P I, or as an illustrated page from the provider you choose."},
+      {"text": "Speech balloons are lettered into reviewed pockets of the art, and they stay editable."},
+      {"text": "Then the streamer reviews every page, choosing Release, Reject, or Edit caption. Nothing airs unapproved."},
+      {"text": "Approved pages publish to the audience view, the OBS overlay, and a library of recaps, comic books and manga.", "say": "Approved pages publish to the audience view, the O B S overlay, and a library of recaps, comic books and manga."}
+    ],
+    "usecase": [
+      {"text": "Let's follow a sample use case."},
+      {"text": "Critical Mess is a fictional tabletop night, streamed by juniper rolls. Everything you will see is the built-in Sample, so there is no Twitch account and no keys."}
+    ],
+    "connect": [
+      {"text": "First, the streamer connects. They sign in with Twitch, or they can read any public chat, read-only."},
+      {"text": "Tokens stay in the API server's memory.", "say": "Tokens stay in the A P I server's memory."}
+    ],
+    "studio": [
+      {"text": "In Sample mode, pressing Run demo replays the fictional stream."},
+      {"text": "Panels release automatically as the scenes unfold, with live counters on top."},
+      {"text": "Chat is simulated locally, and every panel is labelled Sample, so nothing here pretends to be a real broadcast."},
+      {"text": "Twenty scenes later, the issue is ready to read."}
+    ],
+    "viewers": [
+      {"text": "The simulator lets you try a viewer joining, a raid, or a chat vote."},
+      {"text": "Each one shows up in the audience preview, on the same page."},
+      {"text": "A chat vote can pick the dialogue for a panel."}
+    ],
+    "audience": [
+      {"text": "The audience view shows released panels, with chat and votes one click away."},
+      {"text": "Catch-up gives late arrivals a quick recap."},
+      {"text": "And a viewer can join as a newcomer and take part."}
+    ],
+    "catchup": [
+      {"text": "Catch-up is a short Previously on card, with a five, fifteen, or thirty minute window."},
+      {"text": "So a late arrival is caught up in seconds."}
+    ],
+    "library": [
+      {"text": "The Library saves every issue and bundles the outputs."},
+      {"text": "Recap, comic book, manga series, and catch-up, each as a link or a PNG download."}
+    ],
+    "recap": [
+      {"text": "The recap shows every page at a glance, with PNG downloads."}
+    ],
+    "book": [
+      {"text": "The comic book reads cover to back page, two pages at a time."}
+    ],
+    "manga": [
+      {"text": "And the same story reads as a manga series, episode by episode."}
+    ],
+    "overlay": [
+      {"text": "For broadcast, the clean overlay is an OBS Browser Source, with no navigation.", "say": "For broadcast, the clean overlay is an O B S Browser Source, with no navigation."},
+      {"text": "Released panels, votes, and catch-up cards appear over the stream."},
+      {"text": "And Panic hide blanks the output instantly, if anything looks wrong."}
+    ],
+    "tech": [
+      {"text": "ComicToons is built with React and Vite on the front end, and Fastify on Node for the server."},
+      {"text": "It speaks Twitch OAuth, IRC chat and EventSub, supports four image providers or none, and is tested with Playwright and axe-core.", "say": "It speaks Twitch OAuth, I R C chat and EventSub, supports four image providers or none, and is tested with Playwright and axe-core."}
+    ],
+    "outro": [
+      {"text": "Try the Sample demo at comictoons-demo.vercel.app.", "say": "Try the Sample demo at comictoons dash demo, dot vercel, dot app."},
+      {"text": "ComicToons. Your stream, inked live."}
+    ]
+  }
+}
