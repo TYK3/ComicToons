@@ -37,11 +37,15 @@ test('UI-LIVE-A-NEXTUP-1: nextUp equals the panel that a mod\'s !ink yes approve
     assert.ok(cameo,'the !ink request drafted a cameo panel');
     const before=JSON.parse(JSON.stringify(studio.tick())) as {nextUp:string|null};
     assert.equal(before.nextUp,cameo,'GET /api/state names the cameo, not the oldest panel');
+    // A cameo is only a library placeholder until source-grounded art exists, so it cannot go on air:
+    // !ink yes is refused and nothing is approved. A moderator clears it with !ink no.
     await chat('sample_mod','!ink yes',true);
-    const approved=engine.director.log[0];
-    assert.equal(approved?.action,'approve');
-    assert.equal(approved?.panelId,before.nextUp,'!ink yes approved exactly the panel nextUp named');
-    assert.ok(studio.state.panels.some(panel=>panel.id===before.nextUp));
+    assert.ok(!engine.director.log.some(entry=>entry.action==='approve'),'a placeholder cameo is never approved');
+    assert.ok(!studio.state.panels.some(panel=>panel.id===before.nextUp),'the placeholder cameo did not go on air');
+    advance(5000);
+    await chat('sample_mod','!ink no',true);
+    assert.equal(engine.director.log[0]?.action,'reject');
+    assert.equal(engine.director.log[0]?.panelId,before.nextUp,'!ink no rejected exactly the panel nextUp named');
     assert.equal(studio.tick().nextUp,'sample-old-1','after the cameo, the oldest waiting panel is next again');
     advance(5000);
     await chat('sample_mod','!ink yes',true);

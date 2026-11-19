@@ -5,7 +5,9 @@ test('OVERLAY-POLL: overlay skips state polling while the event stream is health
   let stateRequests = 0;
   page.on('request', request => { if (new URL(request.url()).pathname === '/api/state') stateRequests += 1; });
   await page.goto('/overlay');
-  await expect(page.getByText('Waiting for approved moments').or(page.locator('.comic-panel').first())).toBeVisible();
+  // The Playwright server is shared: an earlier spec may have ended the stream or hidden the overlay, in which case the page shows only
+  // its (screen-reader) "Overlay hidden" heading. All three states render the OBS landmark, which is what polling needs.
+  await expect(page.getByRole('main', {name: 'ComicToons OBS overlay'}).or(page.getByText('Waiting for approved moments')).or(page.locator('.comic-panel').first())).toBeAttached();
   await page.waitForTimeout(1000);
   const healthyStart = stateRequests;
   await page.waitForTimeout(3000);

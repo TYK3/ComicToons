@@ -4,7 +4,7 @@
 import {spawnSync} from 'node:child_process';
 import {mkdirSync, readdirSync} from 'node:fs';
 import {join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 mkdirSync(join(root, 'artifacts', 'tmp'), {recursive: true});
@@ -12,7 +12,7 @@ const dir = join(root, 'tests', 'twitch');
 const files = readdirSync(dir).filter(name => name.endsWith('.test.ts')).sort().map(name => join(dir, name));
 if (!files.length) { console.error('No tests found in tests/twitch.'); process.exit(1); }
 // HARNESS-PORT-1: every test process refuses the live app's 3001/4173 unless the port env names them.
-const flags = ['--import', 'tsx', '--import', join(dir, 'port-guard.mjs')];
+const flags = ['--import', 'tsx', '--import', pathToFileURL(join(dir, 'port-guard.mjs')).href];
 // Node 20 has WebSocket behind a flag; Node 22+ has it by default.
 if (typeof globalThis.WebSocket === 'undefined') flags.push('--experimental-websocket');
 const env = {...process.env};

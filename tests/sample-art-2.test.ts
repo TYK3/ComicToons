@@ -25,7 +25,8 @@ const artOf = (panel: { imageUrl: string; provenance?: { asset?: string }; story
 function strays(id: string, panels: Parameters<typeof artOf>[0][]): string[] {
   const asset = sampleStory(id)?.asset;
   assert.ok(asset, `${id} has its own story art`);
-  const own = new RegExp(`^panel-story-${asset}-\\d+\\.png$`);
+  // Own art: the fixture's panel frames, or its page-level story art in a theme (samples/stories/<asset>-<theme>.png).
+  const own = new RegExp(`^(?:panel-story-${asset}-\\d+|${asset}-(?:festival|sunset|lagoon|blossom))\\.png$`);
   return [...new Set(panels.flatMap(artOf).filter(name => !own.test(name)))].sort();
 }
 

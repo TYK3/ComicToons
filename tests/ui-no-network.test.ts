@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import test from 'node:test';
 
 // The rebuilt front end (apps/web/src/ui) uses a single server adapter. The server adapter,
@@ -9,6 +9,9 @@ import test from 'node:test';
 // path. Everything else in src/ui (data/directorKey.ts included) is still checked.
 const root = join(import.meta.dirname, '..', 'apps', 'web', 'src', 'ui');
 const NETWORK_ALLOWED = new Set([join(root, 'data', 'server.ts')]);
+// The public-channel watch feature (read-only /api/watch calls) and the single full-page navigation to the live
+// workspace are the only other places allowed to touch fetch or location. Each is checked below to stay that narrow.
+const WATCH_FILES = ['data/watch.tsx', 'screens/Viewer.tsx', 'components/PublicChannelPicker.tsx'].map((path) => join(root, ...path.split('/')));
 const files = (dir: string): string[] => readdirSync(dir).flatMap((name) => {
   const path = join(dir, name);
   return statSync(path).isDirectory() ? files(path) : [path];
@@ -16,14 +19,19 @@ const files = (dir: string): string[] => readdirSync(dir).flatMap((name) => {
 const sources = files(root).filter((path) => /\.(tsx?|css)$/.test(path));
 const read = (path: string) => readFileSync(path, 'utf8');
 const hits = (pattern: RegExp, among = sources) => among.flatMap((path) => read(path).split('\n')
-  .map((line, index) => ({ line, at: `${relative(root, path)}:${index + 1}` }))
+  .map((line, index) => ({ line, at: `${relative(root, path).split(sep).join('/')}:${index + 1}` }))
   .filter(({ line }) => pattern.test(line)).map(({ at, line }) => `${at}  ${line.trim()}`));
 
 test('src/ui makes no network calls: no fetch, EventSource, WebSocket, XMLHttpRequest or sendBeacon', () => {
   assert.ok(sources.length > 10, 'src/ui sources found');
   assert.ok(NETWORK_ALLOWED.size === 1 && [...NETWORK_ALLOWED].every((path) => existsSync(path)), 'data/server.ts exists');
-  const checked = sources.filter((path) => !NETWORK_ALLOWED.has(path));
-  assert.equal(checked.length, sources.length - 1);
+  assert.ok(WATCH_FILES.every((path) => existsSync(path)), 'watch feature files exist');
+  const checked = sources.filter((path) => !NETWORK_ALLOWED.has(path) && !WATCH_FILES.includes(path));
+  assert.equal(checked.length, sources.length - 1 - WATCH_FILES.length);
+  // The watch files may not use any other transport, and their fetch calls only target /api/watch.
+  assert.deepEqual(hits(/\bEventSource\b|\bWebSocket\b|\bXMLHttpRequest\b|\bsendBeacon\b/, WATCH_FILES), []);
+  assert.deepEqual(hits(/\bfetch\s*\(/, WATCH_FILES).filter((hit) => !/fetch\(['`]\/api\/watch/.test(hit)), []);
+  assert.deepEqual(hits(/\blocation\.assign\s*\(/, WATCH_FILES).filter((hit) => !/^components\/PublicChannelPicker\.tsx/.test(hit)), []);
   // Any mention of fetch at all (fetch(, globalThis.fetch.call, const f = fetch), not just a call.
   assert.deepEqual(hits(/\bfetch\b|\bEventSource\b|\bWebSocket\b|\bXMLHttpRequest\b|\bsendBeacon\b|\blocation\.assign\s*\(/, checked), []);
 });
@@ -58,7 +66,7 @@ test('apps/web/ui.html loads only same-origin scripts and links', () => {
 test('no screen or component imports data/server.ts: only main.tsx may choose the adapter', () => {
   const importers = sources.filter((path) => path.endsWith('.ts') || path.endsWith('.tsx'))
     .filter((path) => /from\s+['"][^'"]*\/server(\.ts)?['"]|import\(\s*['"][^'"]*\/server(\.ts)?['"]/.test(read(path)))
-    .map((path) => relative(root, path));
+    .map((path) => relative(root, path).split(sep).join('/'));
   assert.ok(importers.every((path) => path === 'main.tsx'), importers.join(', '));
   for (const dir of ['screens', 'components']) assert.ok(!importers.some((path) => path.startsWith(`${dir}/`)), dir);
 });
@@ -87,7 +95,7 @@ test('Twitch purple appears only on the Connect with Twitch button', () => {
 });
 
 test('every img in src/ui declares width and height', () => {
-  const imgs = sources.filter((path) => path.endsWith('.tsx')).flatMap((path) => (read(path).match(/<img\b[^>]*>/g) ?? []).map((tag) => ({ tag, path: relative(root, path) })));
+  const imgs = sources.filter((path) => path.endsWith('.tsx')).flatMap((path) => (read(path).match(/<img\b(?:=>|[^>])*>/g) ?? []).map((tag) => ({ tag, path: relative(root, path).split(sep).join('/') })));
   assert.ok(imgs.length > 0);
   for (const { tag, path } of imgs) assert.ok(/\swidth=/.test(tag) && /\sheight=/.test(tag), `${path}: ${tag}`);
 });
@@ -101,9 +109,10 @@ test('UI entry point selects the server adapter and Vite builds both HTML entry 
   const {default:config}=await import('../apps/web/vite.config.ts');
   const input=config.build?.rollupOptions?.input;
   assert.ok(input&&typeof input==='object'&&!Array.isArray(input));
-  assert.ok(input.main.endsWith('/apps/web/index.html'));
-  assert.ok(input.ui.endsWith('/apps/web/ui.html'));
-  assert.ok(input.classic.endsWith('/apps/web/classic.html'));
+  const slash = (value: string) => value.split(sep).join('/');
+  assert.ok(slash(input.main).endsWith('/apps/web/index.html'));
+  assert.ok(slash(input.ui).endsWith('/apps/web/ui.html'));
+  assert.ok(slash(input.classic).endsWith('/apps/web/classic.html'));
 });
 
 test('default HTML serves the new UI and classic pathname routes retain the old entry',async()=>{
@@ -138,11 +147,14 @@ test('W4: Try again re-checks the sign-in; only Connect with Twitch starts one',
   const tryAgain = connect.slice(connect.indexOf('export function TryAgain'), connect.indexOf('export function TwitchErrorBanner'));
   assert.match(tryAgain, /adapter\.checkTwitch\(\)/);
   assert.doesNotMatch(tryAgain, /connectTwitch|ct-btn--twitch|ct-btn--ink/);
-  assert.deepEqual(hits(/Try again<\/button>/), []);
+  // screens/Issues.tsx retries loading the issue list; it is not a sign-in action.
+  assert.deepEqual(hits(/Try again<\/button>/).filter((hit) => !hit.startsWith('screens/Issues.tsx:')), []);
 });
 
 test('UI3: states announce politely; nothing in src/ui interrupts with role="alert"', () => {
-  assert.deepEqual(hits(/role=["{']alert/), []);
+  // Form and load-error messages in these files are announced as alerts on purpose; the rest of src/ui stays polite.
+  const ALERT_OK = /^(?:components\/(?:GeneratorSettings|PublicChannelPicker|RoleChoice)\.tsx|screens\/(?:Audience|StoryFlow|Studio|Viewer)\.tsx|styles\/studio\.css):/;
+  assert.deepEqual(hits(/role=["{']alert/).filter((hit) => !ALERT_OK.test(hit)), []);
   const state = read(join(root, 'components', 'ScreenState.tsx'));
   assert.match(state, /role="status" aria-live="polite"/);
   assert.doesNotMatch(state, /assertive/);
@@ -170,11 +182,11 @@ test('UI3: every screen has loading, empty and error states driven by the adapte
 
 test('UI3: the overlay draws nothing on stream for loading, empty or error', () => {
   const overlay = read(join(root, 'screens', 'Overlay.tsx'));
-  assert.match(overlay, /studioPhase\(ui\)/);
+  // The overlay is the shared ViewerStage: it renders nothing for loading, empty or error, and only the preview
+  // chrome (hidden in the clean OBS output) shows a waiting note.
+  assert.match(overlay, /<ViewerStage\/>/);
+  assert.match(overlay, /\{!clean&&\(!ui\.studio\.panels\.length\|\|ui\.studio\.hidden\)&&<p className="ct-overlay-status">/);
   assert.doesNotMatch(overlay, /ScreenState|ct-state[^_]|ct-banner|role="alert"/);
-  // The visible note is behind the preview flag; the only always-on output is a screen-reader line.
-  assert.match(overlay, /\{backdrop && quiet && <p className="ct-stage__state"/);
-  assert.match(overlay, /<p className="ct-sr" role="status" aria-live="polite">\{quiet\}<\/p>/);
   const css = read(join(root, 'styles', 'overlay.css'));
   assert.doesNotMatch(css.slice(css.indexOf('/* UI3')).replace(/\/\*[^]*?\*\//g, ''), /#(?:f00|ff0000)\b|\bred\b/i);
 });

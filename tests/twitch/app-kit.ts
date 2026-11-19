@@ -40,7 +40,7 @@ export function appEnv(fake: FakeTwitch, extra: Record<string, string> = {}) {
 
 export async function startApp(fake: FakeTwitch, extra: Record<string, string> = {}, readyTimeoutMs = 30_000): Promise<RunningApp> {
   if(['TWITCH_CLIENT_ID','TWITCH_CLIENT_SECRET','COMICTOONS_TWITCH_CLIENT_ID','COMICTOONS_TWITCH_CLIENT_SECRET'].some(name=>process.env[name]))throw new Error('Refusing inherited Twitch credentials; run the harness with a clean environment.');
-  const child = spawn(process.execPath, ['--import', fileURLToPath(new URL('./egress-guard.mjs',import.meta.url)), '--import', 'tsx', 'apps/server/src/index.ts'], {cwd: root, env: appEnv(fake, extra), stdio: ['ignore', 'pipe', 'pipe']});
+  const child = spawn(process.execPath, ['--import', new URL('./egress-guard.mjs',import.meta.url).href, '--import', 'tsx', 'apps/server/src/index.ts'], {cwd: root, env: appEnv(fake, extra), stdio: ['ignore', 'pipe', 'pipe']});
   let log = '';
   child.stdout!.on('data', (chunk: Buffer) => { log += chunk.toString('utf8'); });
   child.stderr!.on('data', (chunk: Buffer) => { log += chunk.toString('utf8'); });

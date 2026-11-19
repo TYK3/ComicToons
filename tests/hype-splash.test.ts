@@ -90,14 +90,17 @@ test('the splash letters only the event level, in a polite status', async () => 
   assert.ok(HYPE_SPLASH_MS >= 2500 && HYPE_SPLASH_MS <= 5000, 'short-lived');
 });
 
-test('the overlay shows the splash from the event, steps aside for the catch-up and honours Panic', () => {
-  const overlay = read('screens/Overlay.tsx');
-  assert.match(overlay, /useUiEvents\(\['catchup', 'hype-splash'\]/);
-  assert.match(overlay, /\{splash && !catchup && <HypeSplash level=\{splash\.level\}\/>\}/);
-  assert.match(overlay, /if \(event\.name === 'catchup'\) \{ setCatchup\(event\.data\); setSplash\(null\); \}/);
-  // Inside the !studio.hidden block, so Panic hides it with everything else.
-  const hiddenBlock = overlay.slice(overlay.indexOf('{!studio.hidden && <>'), overlay.indexOf('</>}', overlay.indexOf('{!studio.hidden && <>')));
-  assert.match(hiddenBlock, /<HypeSplash/);
+test('the overlay stage shows the hype banner from the event, shows the catch-up cue and honours Panic', () => {
+  // The overlay renders the shared ViewerStage, which owns the event cues.
+  assert.match(read('screens/Overlay.tsx'), /<ViewerStage\/>/);
+  const stage = read('components/ViewerStage.tsx');
+  assert.match(stage, /useUiEvents\(\['hype-splash'\]/);
+  assert.match(stage, /useUiEvents\(\['catchup'\]/);
+  assert.match(stage, /const catchup=active\?\.kind==='catchup'/);
+  // Inside the !hidden block, so Panic hides it with everything else.
+  const content = stage.slice(stage.indexOf('{!hidden&&<div className="ct-viewer-content"'));
+  assert.match(content, /\{hype&&<p className="ct-viewer-banner" role="status">Hype Train · Level \{hype\.level\}<\/p>\}/);
+  assert.match(stage, /const hidden=ui\.studio\.hidden&&!preview;/);
 });
 
 test('the splash is Bangers in Festival colours, stream-scale, click-through and still under reduced motion', () => {
@@ -111,10 +114,9 @@ test('the splash is Bangers in Festival colours, stream-scale, click-through and
   assert.match(css, /@media \(prefers-reduced-motion:reduce\)\{[^}]*\.ct-ov-hype\{animation:none[;}]/);
 });
 
-test('the splash and catch-up timers survive re-renders (route.params is a new object on every render)', () => {
-  const overlay = read('screens/Overlay.tsx');
-  assert.match(overlay, /const frozen = route\.params\.get\('freeze'\) === '1';/);
-  assert.match(overlay, /\}, \[splash, frozen\]\);/);
-  assert.match(overlay, /\}, \[catchup, frozen\]\);/);
-  assert.doesNotMatch(overlay, /\[(catchup|splash), route\.params\]/);
+test('the hype and cue timers survive re-renders (they depend on stable values, never on a fresh object)', () => {
+  const stage = read('components/ViewerStage.tsx');
+  assert.match(stage, /\},\[hype\]\);/);
+  assert.match(stage, /\},\[cue\?\.id\]\);/);
+  assert.doesNotMatch(stage, /\[(?:hype|cue|catchup),\s*route\.params\]/);
 });

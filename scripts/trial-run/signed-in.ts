@@ -239,7 +239,7 @@ export async function runSignedIn(options: SignedInOptions, deps: SignedInDeps):
       // Stands in for Young clicking "Authorize" in the box browser; a real run never fetches this itself.
       const authorizeResponse = await fetchImpl(authorizeUrl, { redirect: 'manual' });
       const callbackUrl = authorizeResponse.headers.get('location');
-      if (!callbackUrl) throw new Error('the mock Twitch did not redirect back to the callback');
+      if (!callbackUrl) throw new Error(`the mock Twitch did not redirect back to the callback (HTTP ${authorizeResponse.status} from ${new URL(authorizeUrl).origin})`);
       assertLoopback(callbackUrl);
       const callbackResponse = await fetchImpl(callbackUrl, { redirect: 'manual' });
       if (callbackResponse.status !== 302) throw new Error(`the sign-in callback returned ${callbackResponse.status}`);

@@ -1,3 +1,5 @@
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFileSync, statSync} from 'node:fs';
@@ -62,7 +64,10 @@ test('PREFLIGHT-EVENTSUB: listed equals expected (15), the unlisted stream.offli
 });
 
 test('PREFLIGHT-READ-ONLY: the script is executable and sends no write method anywhere', () => {
-  assert.ok(statSync(new URL('../scripts/preflight-live.sh', import.meta.url)).mode & 0o111, 'preflight-live.sh is executable');
+  // Windows file systems carry no execute bit, so a git checkout is checked by the mode git records (100755).
+  const script = new URL('../scripts/preflight-live.sh', import.meta.url);
+  const recorded = (() => { try { return execFileSync('git', ['ls-files', '-s', '--', 'scripts/preflight-live.sh'], { cwd: fileURLToPath(new URL('..', import.meta.url)), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).split(' ')[0]; } catch { return ''; } })();
+  assert.ok(recorded ? recorded === '100755' : statSync(script).mode & 0o111, 'preflight-live.sh is executable');
   const source = readFileSync(new URL('../scripts/preflight-live.ts', import.meta.url), 'utf8') + readFileSync(new URL('../scripts/preflight-live.sh', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /method:\s*['"](POST|PUT|PATCH|DELETE)/i);
   assert.doesNotMatch(source, /\/api\/(approve|reject|undo|caption|hide|stop|replay|settings|end|recaps'|twitch\/disconnect)|\/auth\/twitch\/login|oauth2\/(token|revoke)/);

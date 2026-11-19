@@ -14,7 +14,7 @@ if (names.length === 0) throw new Error('No tests/*.test.ts files discovered');
 console.log(`Discovered ${names.length} test files:`);
 for (const name of names) console.log(`  tests/${name}`);
 const result = spawnSync(process.execPath, [
-  '--import', 'tsx', '--test', ...names.map(name => join(root, 'tests', name)),
+  '--import', 'tsx', '--import', new URL('./css-stub-register.mjs', import.meta.url).href, '--test', ...names.map(name => join(root, 'tests', name)),
 ], { cwd: root, stdio: 'inherit', env: scrubbedEnv(process.env) });
 if (result.error) console.error(`Test runner failed to start: ${result.error.message}`);
 if (result.signal) console.error(`Test runner terminated by signal: ${result.signal}`);

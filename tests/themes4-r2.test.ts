@@ -17,31 +17,16 @@ function channel(value: number): number { const c = value / 255; return c <= 0.0
 function rgb(hex: string): [number, number, number] { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
 function luminance(hex: string): number { const [r, g, b] = rgb(hex); return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b); }
 function contrast(a: string, b: string): number { const [l1, l2] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (l1 + 0.05) / (l2 + 0.05); }
-// r3: a theme may grade with its own grade wash (Festival's teal grade); otherwise the grade is its wash.
-const gradeStops = (palette: { wash: { start: string; mid: string; end: string }; grade: unknown }) => (palette.grade as { wash?: { start: string; mid: string; end: string } }).wash ?? palette.wash;
-const wash = (id: string) => { const { start, mid, end } = gradeStops(mangaThemes.find((theme) => theme.id === id)!.palette); return `linear-gradient(145deg,${start} 0%,${mid} 50%,${end} 100%)`; };
-
-// M2: colour art is graded by the theme's own wash, as a soft-light layer at about 35%.
-test('R2-GRADE-CSS: every theme, festival included, grades colour art with its own wash at 35% soft-light', () => {
+// Current design: palettes style page furniture and paper; artwork is a painted variant and is never filtered or graded.
+test('R2-ART-UNGRADED: every theme leaves its art unfiltered and ungraded, on its own palette paper', () => {
   for (const theme of mangaThemes) {
-    const grade = (theme.palette as unknown as { grade?: object }).grade;
-    const { blend, opacity } = (grade ?? {}) as { blend?: string; opacity?: number };
-    assert.deepEqual({ blend, opacity }, { blend: 'soft-light', opacity: 0.35 }, `${theme.id} palette.grade`);
-    const rule = new RegExp(`\\.ct-art\\[data-look=${theme.id}\\]:not\\(\\[data-tone=grey\\]\\)::after(?:,[^{]*)?\\{([^}]*)\\}`).exec(lookStyles);
-    assert.ok(rule, `${theme.id} has a colour grade layer`);
-    const body = rule[1]!;
-    assert.ok(body.includes(`background:${wash(theme.id)}`), `${theme.id} grade uses its own wash`);
-    assert.match(body, /mix-blend-mode:soft-light/, `${theme.id} grade blend`);
-    assert.match(body, /opacity:0?\.35\b/, `${theme.id} grade opacity`);
-    assert.match(body, /position:absolute/); assert.match(body, /inset:0/); assert.match(body, /pointer-events:none/);
-    assert.notEqual(theme.palette.tint, null, `${theme.id} has a tint (no tint:null)`);
-    const { start, mid, end } = theme.palette.tint ?? { start: '', mid: '', end: '' };
-    assert.ok(new Set([start, mid, end]).size === 3 && ![start, mid, end].includes('#ffffff'), `${theme.id} tint is a real three-stop gradient, not flat white`);
-    assert.ok(new RegExp(`\\.ct-art\\[data-look=${theme.id}\\](?:,[^{]*)?\\{background:linear-gradient\\(145deg,${start} 0%,${mid} 50%,${end} 100%\\)\\}`).test(lookStyles), `${theme.id} paper is its tint`);
+    assert.ok(lookStyles.includes(`.ct-art[data-look=${theme.id}]{background:${theme.palette.paper}}`), `${theme.id} art sits on its palette paper`);
+    assert.ok(lookStyles.includes(`.ct-art[data-look=${theme.id}]>img{filter:none;mix-blend-mode:normal}`), `${theme.id} art image is neither filtered nor blended`);
+    assert.ok(lookStyles.includes(`.ct-art[data-look=${theme.id}]::after{content:none}`), `${theme.id} has no colour grade layer`);
+    assert.ok(mangaThemeStyles.includes(`.manga-pages[data-manga-theme=${theme.id}] .panel-art::after{content:none}`), `${theme.id} recap pages have no grade layer`);
   }
-  // The colour filter is one recipe for all four, so the wash is what tells them apart.
-  const filters = mangaThemes.map((theme) => new RegExp(`\\.ct-art\\[data-look=${theme.id}\\]>img(?:,[^{]*)?\\{filter:([^}]*)\\}`).exec(lookStyles)?.[1]);
-  assert.equal(new Set(filters).size, 1, 'one colour filter for all themes');
+  const filters = mangaThemes.map((theme) => new RegExp(`\\.ct-art\\[data-look=${theme.id}\\]>img\\{filter:([^;}]*)`).exec(lookStyles)?.[1]);
+  assert.deepEqual([...new Set(filters)], ['none'], 'no theme filters its art');
 });
 
 type Op = [string, ...unknown[]];
@@ -59,45 +44,38 @@ function fakeContext() {
   return ctx;
 }
 
-test('R2-GRADE-EXPORT: the PNG export grades colour art with the same wash layer, and paints a tint for festival too', () => {
+test('R2-EXPORT-UNGRADED: the PNG export paints the palette paper and never grades or filters the art', () => {
   for (const theme of mangaThemes) {
     const recipe = RECIPE[theme.id];
-    assert.equal(typeof recipe.grade, 'function', `${theme.id} recipe has a grade step`);
-    const ctx = fakeContext();
-    recipe.grade!(ctx as unknown as CanvasRenderingContext2D, 100, 80, 'colour');
-    const { start, mid, end } = gradeStops(theme.palette);
-    const gradient = ctx.ops.find((op) => op[0] === 'gradient')?.[1];
-    assert.deepEqual(gradient, [[0, start], [0.5, mid], [1, end]], `${theme.id} grade gradient is the wash`);
-    assert.ok(ctx.ops.some((op) => op[0] === 'gco' && op[1] === 'soft-light'), `${theme.id} soft-light`);
-    assert.ok(ctx.ops.some((op) => op[0] === 'alpha' && op[1] === 0.35), `${theme.id} 35%`);
-    assert.ok(ctx.ops.some((op) => op[0] === 'fillRect'), `${theme.id} grade is painted`);
-    const grey = fakeContext();
-    recipe.grade!(grey as unknown as CanvasRenderingContext2D, 100, 80, 'grey');
-    assert.equal(grey.ops.length, 0, `${theme.id} grey art keeps its wash only`);
+    assert.equal(recipe.filter('colour'), 'none', `${theme.id} colour art is not filtered`);
+    assert.equal(recipe.filter('grey'), 'none', `${theme.id} grey art is not filtered`);
+    for (const tone of ['colour', 'grey'] as const) {
+      const graded = fakeContext();
+      recipe.grade!(graded as unknown as CanvasRenderingContext2D, 100, 80, tone);
+      assert.equal(graded.ops.length, 0, `${theme.id} ${tone} art is not graded`);
+    }
     const paper = fakeContext();
     recipe.paper(paper as unknown as CanvasRenderingContext2D, 100, 80, 'colour');
-    assert.ok(paper.ops.some((op) => op[0] === 'gradient'), `${theme.id} colour paper is a tint gradient, not flat white`);
-    assert.doesNotMatch(recipe.filter('colour'), /sepia|hue-rotate/, `${theme.id} colour filter is the shared one`);
+    assert.deepEqual(paper.ops.filter((op) => op[0] === 'fillStyle' || op[0] === 'fillRect'), [['fillStyle', theme.palette.paper], ['fillRect', 0, 0, 100, 80]], `${theme.id} paper is the flat palette paper`);
   }
-  assert.match(read('apps/web/src/ui/export.ts'), /recipe\.grade\(lctx,/, 'drawArt runs the grade step');
 });
 
 test('R2-BALLOON: balloon text keeps 4.5:1 or better on its fill in every theme', () => {
   for (const theme of mangaThemes) assert.ok(contrast(theme.palette.balloon.text, theme.palette.balloon.fill) >= 4.5, theme.id);
-  // The grade layer sits inside .ct-art only; balloons and captions are its siblings, so it never covers them.
-  assert.match(read('apps/web/src/ui/components/Panel.tsx'), /<LookArt[^>]*\/>\s*\{lettering && panel\.caption/);
+  // Lettering is drawn by Panel next to the art (never filtered), so a balloon always sits on its own fill.
+  assert.match(read('apps/web/src/ui/components/Panel.tsx'), /<LookArt[^>]*\/>\{pocket && scene\.dialogue\[0\] && <p className=\{`ct-bubble/);
 });
 
-// Verdict item 4: the exported recap HTML draws SFX as fill over a stroke and a hard shadow.
-test('R2-SFX-CONTRAST: SFX fill vs its stroke and shadow is at least 4.5:1 in the exported recap, every theme', () => {
+// Verdict item 4: SFX letters as fill over a stroke; the live panel and the PNG export both need 4.5:1.
+test('R2-SFX-CONTRAST: SFX fill vs its stroke is at least 4.5:1 in the live panel and the PNG export, every theme', () => {
   const low: string[] = [];
   for (const theme of mangaThemes) {
-    const rule = new RegExp(`\\[data-manga-theme=${theme.id}\\] \\.story-sfx\\{color:(#[0-9a-f]{6});-webkit-text-stroke-color:(#[0-9a-f]{6});text-shadow:1px 2px (#[0-9a-f]{6})\\}`).exec(mangaThemeStyles);
-    assert.ok(rule, `${theme.id} story-sfx rule`);
-    const [, fill, stroke, shadow] = rule;
-    for (const [name, other] of [['stroke', stroke!], ['shadow', shadow!]] as const) if (contrast(fill!, other) < 4.5) low.push(`${theme.id} recap sfx fill/${name} ${contrast(fill!, other).toFixed(2)}`);
+    const rule = new RegExp(`\\.ct-panel\\[data-look=${theme.id}\\] \\.ct-sfx\\{color:(#[0-9a-f]{6});-webkit-text-stroke-color:(#[0-9a-f]{6})\\}`).exec(lookStyles);
+    assert.ok(rule, `${theme.id} live .ct-sfx rule`);
+    const [, fill, stroke] = rule;
+    if (contrast(fill!, stroke!) < 4.5) low.push(`${theme.id} live sfx fill/stroke ${contrast(fill!, stroke!).toFixed(2)}`);
   }
-  assert.deepEqual(low, [], 'exported recap SFX pairs under 4.5:1');
+  assert.deepEqual(low, [], 'live SFX pairs under 4.5:1');
   assert.ok(SFX_COLOURS, 'export.ts exports SFX_COLOURS');
   for (const theme of mangaThemes) assert.ok(contrast(SFX_COLOURS[theme.id]!.fill, SFX_COLOURS[theme.id]!.stroke) >= 4.5, `${theme.id} PNG sfx fill/stroke`);
 });
@@ -140,7 +118,7 @@ test('R2-GRID: the S6-srv column rule holds for 1 to 40 panels and the Studio gr
 test('R2-PICKER-BAR: a 6px three-stop palette bar sits under each live thumbnail', () => {
   const picker = read('apps/web/src/ui/components/LookPicker.tsx');
   assert.match(picker, /<\/span>\s*<span className="ct-look__bar"[^>]*aria-hidden="true"/, 'bar right after the thumbnail');
-  assert.match(picker, /linear-gradient\(90deg,\$\{a1\},\$\{a2\},\$\{a3\}\)/, 'bar uses the three accent stops');
+  assert.match(picker, /linear-gradient\(90deg,\$\{a1\} 0% 33\.33%,\$\{a2\} 33\.33% 66\.66%,\$\{a3\} 66\.66% 100%\)/, 'bar uses the three accent stops');
   const css = strip(read('apps/web/src/ui/styles/lookpicker.css'));
   assert.match(css, /\.ct-look__bar\{[^}]*height:6px/);
   assert.doesNotMatch(css, /radial-gradient/);

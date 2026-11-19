@@ -39,7 +39,7 @@ test('N3-SFX-DISTINCT: each SFX fill is distinct from every stop of its own wash
   for (const theme of mangaThemes) {
     const { sfx, wash, ink, grade } = theme.palette;
     // r2: Sunset and Lagoon letter over their own light stroke (N3-SFX-1.5 below); the others over ink.
-    const recapStroke = sfxStrokeOf(theme) ?? ink;
+    const recapStroke = sfxStrokeOf(theme) ?? ink; // the live panel letters over the same stroke
     fills.add(sfx);
     // The plain wash (grey art) and, where a theme has one, its own colour-art grade wash.
     const stops = [wash.start, wash.mid, wash.end, ...(grade.wash ? [grade.wash.start, grade.wash.mid, grade.wash.end] : [])];
@@ -52,9 +52,9 @@ test('N3-SFX-DISTINCT: each SFX fill is distinct from every stop of its own wash
     assert.equal(SFX_COLOURS[theme.id]!.fill, sfx, `${theme.id} PNG export uses the same fill`);
     assert.ok(contrast(sfx, SFX_COLOURS[theme.id]!.stroke) >= 4.5, `${theme.id} PNG sfx on its stroke`);
     assert.ok(lookStyles.includes(`.ct-panel[data-look=${theme.id}] .ct-sfx`) && new RegExp(`\\.ct-panel\\[data-look=${theme.id}\\] \\.ct-sfx(?:,[^{]*)?\\{color:${sfx}[;}]`).test(lookStyles), `${theme.id} live .ct-sfx colour`);
-    // Festival's HTML recap keeps its classic rules (#a52b48 on paper, 6.41:1); the other three use the palette fill.
-    if (theme.id === 'festival') assert.ok(mangaThemeStyles.includes('[data-manga-theme=festival] .story-sfx{color:#a52b48;'), 'festival recap keeps its classic SFX');
-    else assert.ok(mangaThemeStyles.includes(`[data-manga-theme=${theme.id}] .story-sfx{color:${sfx};`), `${theme.id} recap .story-sfx colour`);
+    assert.ok(contrast(sfx, recapStroke) >= 4.5, `${theme.id} live sfx on its stroke ${contrast(sfx, recapStroke).toFixed(2)}`);
+    // The HTML recap no longer styles SFX per theme (palettes style page furniture only).
+    assert.ok(!mangaThemeStyles.includes(`[data-manga-theme=${theme.id}] .story-sfx`), `${theme.id} recap has no per-theme SFX rule`);
   }
   assert.equal(fills.size, mangaThemes.length, 'each theme keeps its own SFX fill');
 });
@@ -70,8 +70,7 @@ test('N3-SFX-1.5: Sunset and Lagoon SFX fills are 1.5:1 or better on every wash 
     assert.ok(stroke, `${id} has its own SFX stroke`);
     assert.ok(contrast(sfx, stroke!) >= 4.5, `${id} sfx on its stroke ${stroke}: ${contrast(sfx, stroke!).toFixed(2)}:1 >= 4.5`);
     assert.deepEqual(SFX_COLOURS[id], { fill: sfx, stroke }, `${id} PNG export letters the same fill over the same stroke`);
-    assert.ok(lookStyles.includes(`.ct-panel[data-look=${id}] .ct-sfx{color:${sfx};-webkit-text-stroke-color:${stroke};text-shadow:3px 3px 0 ${stroke}}`), `${id} live .ct-sfx fill, stroke and shadow`);
-    assert.ok(mangaThemeStyles.includes(`[data-manga-theme=${id}] .story-sfx{color:${sfx};-webkit-text-stroke-color:${stroke};text-shadow:1px 2px ${stroke}}`), `${id} recap .story-sfx fill, stroke and shadow`);
+    assert.ok(lookStyles.includes(`.ct-panel[data-look=${id}] .ct-sfx{color:${sfx};-webkit-text-stroke-color:${stroke}`), `${id} live .ct-sfx fill and stroke`);
   }
 });
 
@@ -80,7 +79,7 @@ test('N3-SFX-1.5: Festival and Blossom keep their r1 SFX fill over the ink strok
     const theme = mangaThemes.find(entry => entry.id === id)!;
     assert.equal(sfxStrokeOf(theme), undefined, `${id} keeps the ink strokes`);
     assert.deepEqual(SFX_COLOURS[id], { fill: theme.palette.sfx, stroke: LIVE_INK }, `${id} PNG export unchanged`);
-    assert.ok(lookStyles.includes(`.ct-panel[data-look=${id}] .ct-sfx`) && !new RegExp(`\\.ct-panel\\[data-look=${id}\\] \\.ct-sfx(?:,[^{]*)?\\{[^}]*text-stroke`).test(lookStyles), `${id} live stroke stays the base --ink`);
+    assert.ok(lookStyles.includes(`.ct-panel[data-look=${id}] .ct-sfx{color:${theme.palette.sfx};-webkit-text-stroke-color:${theme.palette.ink}}`), `${id} live stroke is the palette ink`);
   }
   assert.equal(mangaThemes.find(entry => entry.id === 'festival')!.palette.sfx, '#d6faff');
   assert.equal(mangaThemes.find(entry => entry.id === 'blossom')!.palette.sfx, '#f7f2ff');

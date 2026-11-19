@@ -17,7 +17,9 @@ test('#1 studio shortcuts are page-wide except typing targets, open dialogs, mod
 });
 
 test('#7 the overlay stage label sits on a region', () => {
-  assert.match(read('screens/Overlay.tsx'), /className="ct-stage"[^>]*role="region"[^>]*aria-label="Stream overlay"/);
+  // The overlay renders the shared ViewerStage: a labelled <section> is a region landmark.
+  assert.match(read('screens/Overlay.tsx'), /<ViewerStage\/>/);
+  assert.match(read('components/ViewerStage.tsx'), /<section className=\{`ct-viewer-stage[^`]*`\} aria-label=\{preview\?'Viewer preview':'Viewer output'\}/);
 });
 
 test('#11 the landing page has one main landmark and the footer is outside it', () => {

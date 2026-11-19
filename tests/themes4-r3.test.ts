@@ -53,23 +53,16 @@ test('R3-FESTIVAL-GRADE: Festival grades colour art with a cool wash that starts
   }
 });
 
-test('R3-GRADE-CSS-EXPORT: the live ::after layer and the PNG export both paint the Festival teal grade', () => {
-  const g = gradeOf('festival');
-  assert.equal(g.start, '#1da2b3', 'festival grade is the teal grade, not the warm wash');
-  const gradient = `linear-gradient(145deg,${g.start} 0%,${g.mid} 50%,${g.end} 100%)`;
-  const rule = new RegExp(`\\.ct-art\\[data-look=festival\\]:not\\(\\[data-tone=grey\\]\\)::after(?:,[^{]*)?\\{([^}]*)\\}`).exec(lookStyles);
-  assert.ok(rule, 'festival grade rule');
-  assert.ok(rule![1].includes(`background:${gradient}`), 'festival ::after uses the teal grade');
-  const wash = palette('festival').wash;
-  assert.ok(new RegExp(`\\.ct-art\\[data-look=festival\\]\\[data-tone=grey\\](?:,[^{]*)?\\{background:linear-gradient\\(145deg,${wash.start} 0%,${wash.mid} 50%,${wash.end} 100%\\)\\}`).test(lookStyles), 'grey art keeps the festival wash');
+test('R3-GRADE-CSS-EXPORT: the live ::after layer and the PNG export no longer paint any grade, Festival included', () => {
+  assert.ok(lookStyles.includes('.ct-art[data-look=festival]::after{content:none}'), 'festival has no live grade layer');
   const ops: unknown[][] = [];
   const ctx = {
-    save() {}, restore() {}, fillRect() { ops.push(['fill']); },
-    set filter(_v: string) {}, set globalCompositeOperation(_v: string) {}, set globalAlpha(_v: number) {}, set fillStyle(_v: unknown) {},
-    createLinearGradient() { const s: unknown[] = []; ops.push(['gradient', s]); return { addColorStop: (o: number, c: string) => s.push([o, c]) }; },
+    save() { ops.push(['save']); }, restore() { ops.push(['restore']); }, fillRect() { ops.push(['fill']); },
+    set filter(_v: string) { ops.push(['filter']); }, set globalCompositeOperation(_v: string) { ops.push(['gco']); }, set globalAlpha(_v: number) { ops.push(['alpha']); }, set fillStyle(_v: unknown) { ops.push(['fillStyle']); },
+    createLinearGradient() { ops.push(['gradient']); return { addColorStop() {} }; },
   };
   RECIPE.festival.grade(ctx as unknown as CanvasRenderingContext2D, 100, 80, 'colour');
-  assert.deepEqual(ops.find((op) => op[0] === 'gradient')?.[1], [[0, g.start], [0.5, g.mid], [1, g.end]], 'export grade is the teal grade');
+  assert.deepEqual(ops, [], 'the export grade step paints nothing');
 });
 
 test('R3-DISTINCT: graded with each theme\'s grade, Festival is not in the closest pair', () => {

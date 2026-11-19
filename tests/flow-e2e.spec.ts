@@ -156,18 +156,24 @@ test('FLOW-E2E: connect, panels, A/R/E, !ink, vote, panic and un-panic, end and 
       await expect(page).toHaveURL(/#\/connect\?twitch=connected/, {timeout: 20_000});
       await expect(page.getByRole('heading', {name: /You’re in, @fakebroadcaster/})).toBeVisible({timeout: 20_000});
       await page.goto(`${stack.web}/ui.html#/studio`);
-      await page.getByRole('radio', {name: 'Live chat'}).click();
+      // The Studio now opens on Sample data; the Live Twitch switch is the way into live mode. The Live setup card only offers chat-only reading
+      // (no panels), so the panel-making ingest the old "Live chat" radio started is requested straight from the API, as the radio did.
+      await page.getByRole('switch', {name: 'Live Twitch', exact: true}).check();
+      // Remember the channel for this window exactly as the adapter's useLiveChat() does, then start the ingest it sends.
+      await page.evaluate(() => sessionStorage.setItem('comictoons-studio-live-channel-v1', 'fakebroadcaster'));
+      expect((await page.request.post(`${stack.web}/api/ingest`, {data: {mode: 'twitch', channel: 'fakebroadcaster'}})).ok()).toBe(true);
+      await page.reload();
       // The source switches from Sample to Twitch once the fixture chat speaks.
       await expect.poll(async () => { stack.fake.chat(viewer(1), 'hello from the fixture chat'); const source = (await stack.state()).source; return `${source?.active}/${source?.connection}`; }, {timeout: 20_000, intervals: [500]}).toBe('twitch/live');
-      await expect(page.getByRole('radio', {name: 'Live chat'})).toHaveAttribute('aria-checked', 'true', {timeout: 10_000});
+      await expect(page.getByRole('switch', {name: 'Live Twitch', exact: true})).toBeChecked({timeout: 10_000});
     });
 
-    overlay = await obsOverlay(browser, `${stack.web}/ui.html#/overlay`, blocked);
+    overlay = await obsOverlay(browser, `${stack.web}/ui.html#/overlay?workspace=live&obs=1`, blocked);
     overlay.on('pageerror', error => pageErrors.push(`overlay: ${error.message}`));
     await test.step('OBS overlay at 1920x1080 starts empty and transparent', async () => {
       expect(overlay!.viewportSize()).toEqual(OBS);
-      await expect(overlay!.getByRole('region', {name: 'Stream overlay'})).toBeAttached();
-      await expect(overlay!.locator('.ct-ov-lead')).toHaveCount(0);
+      await expect(overlay!.getByRole('region', {name: 'Viewer output'})).toBeAttached();
+      await expect(overlay!.locator('.ct-viewer-item')).toHaveCount(0);
       expect(await overlay!.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
     });
 
@@ -200,10 +206,10 @@ test('FLOW-E2E: connect, panels, A/R/E, !ink, vote, panic and un-panic, end and 
       await page.locator('body').click({position: {x: 5, y: 5}});
       await expect(page.locator('#ct-desk-title')).toHaveText(EDITED);
       await page.keyboard.press('a');
-      await expect(page.getByRole('status').filter({hasText: 'Panel is on air.'})).toBeVisible();
+      await expect(page.getByRole('status').filter({hasText: 'Panel released.'})).toBeVisible();
       await expect.poll(async () => (await stack.state()).panels.map(panel => panel.caption)).toContain(EDITED);
-      await expect(overlay!.locator('.ct-ov-lead')).toBeVisible({timeout: 10_000});
-      await expect(overlay!.locator('.ct-ov-lead')).toContainText(EDITED);
+      await expect(overlay!.locator('.ct-viewer-item').last()).toBeVisible({timeout: 10_000});
+      await expect(overlay!.locator('.ct-viewer-item').last()).toContainText(EDITED);
     });
 
     await test.step('R rejects the next one and it never reaches the overlay', async () => {
@@ -216,25 +222,27 @@ test('FLOW-E2E: connect, panels, A/R/E, !ink, vote, panic and un-panic, end and 
       const after = await stack.state();
       expect(after.panels.map(panel => panel.id)).not.toContain(rejected);
       expect(after.panels.length).toBe(before.panels.length);
-      await expect(overlay!.locator('.ct-ov-lead')).toContainText(EDITED);
+      await expect(overlay!.locator('.ct-viewer-item').last()).toContainText(EDITED);
     });
 
     await test.step('a chat vote picks the bubble, on the Studio and the overlay', async () => {
+      // The audience cards live in the On air sidebar's tabs now.
+      await page.getByRole('tab', {name: 'Votes', exact: true}).click();
       const card = page.locator('section', {has: page.locator('#ct-vote-title')});
       await card.getByRole('button', {name: 'Start a 45-second vote'}).click();
       await expect(card.getByText(/Chat vote: type !1, !2 or !3/)).toBeVisible({timeout: 10_000});
       // r1: the overlay (its own page) also learns about polls only from the 5 s participation poll; allow four polls.
-      await expect(overlay!.locator('.ct-ov-poll')).toBeVisible({timeout: 20_000});
-      await expect(overlay!.locator('.ct-ov-poll__hint')).toHaveText('Type !1, !2 or !3 in chat');
+      await expect(overlay!.getByRole('region', {name: 'Viewer vote'})).toBeVisible({timeout: 20_000});
+      await expect(overlay!.getByRole('region', {name: 'Viewer vote'})).toContainText('Type !1, !2 or !3');
       for (const [n, vote] of ['!1', '!1', '!1', '!2'].entries()) stack.fake.chat(viewer(40 + n), vote);
       await expect.poll(async () => (await stack.participation()).poll?.total, {timeout: 10_000}).toBe(4);
       // r1: chat votes reach the card only through the same 5 s participation poll; allow four polls.
       await expect(card.getByText(/· 4 votes ·/)).toBeVisible({timeout: 20_000});
-      await expect(overlay!.locator('.ct-ov-poll__pct').first()).toHaveText('75%', {timeout: 20_000});
+      await expect(overlay!.locator('.ct-viewer-choice strong').first()).toHaveText('3', {timeout: 20_000});
       await card.getByRole('button', {name: 'End vote now'}).click();
       await expect.poll(async () => (await stack.participation()).poll, {timeout: 10_000}).toBeNull();
       await expect(card.getByText(/Last vote:/)).toBeVisible({timeout: 10_000});
-      await expect(overlay!.locator('.ct-ov-poll')).toHaveCount(0, {timeout: 20_000});
+      await expect(overlay!.getByRole('region', {name: 'Viewer vote'})).toHaveCount(0, {timeout: 20_000});
     });
 
     await test.step('!ink: a viewer asks, the cameo waits for review, a mod answers !ink yes', async () => {
@@ -246,12 +254,29 @@ test('FLOW-E2E: connect, panels, A/R/E, !ink, vote, panic and un-panic, end and 
       // (apps/web/src/ui/data/server.ts:174). Wait for the server to list the request first, then allow
       // four polls for the card.
       await expect.poll(async () => (await stack.participation()).inkChat?.requests?.some(request => /flow_inker/i.test(request.name)), {timeout: 15_000}).toBe(true);
+      await page.getByRole('tab', {name: 'Cameos', exact: true}).click();
       const ink = page.locator('section', {has: page.locator('#ct-ink-title')});
       await expect(ink.getByText(/flow_inker/i).first()).toBeVisible({timeout: 20_000});
       expect((await stack.state()).panels.some(panel => panel.cameo === 'flow_inker'), 'nothing on air before the answer').toBe(false);
       stack.fake.chat('flow_mod', '!ink yes', {mod: true});
-      await expect.poll(async () => (await stack.state()).panels.some(panel => panel.cameo === 'flow_inker'), {timeout: 15_000}).toBe(true);
-      await expect(overlay!.locator('.ct-ov-lead')).toContainText(/flow_inker|Cameo/i, {timeout: 10_000});
+      // By design a cameo is a library placeholder (releaseBlocked) until source-grounded art exists, so even a mod's yes cannot put it on air.
+      await page.waitForTimeout(3_000);
+      const after = await stack.state();
+      expect(after.panels.some(panel => panel.cameo === 'flow_inker'), 'a placeholder cameo never reaches the air').toBe(false);
+      expect(after.pendingPanels.some(panel => panel.cameo === 'flow_inker'), 'the cameo stays in Waiting for review').toBe(true);
+      await expect(overlay!.locator('.ct-viewer-item').filter({hasText: /flow_inker/i})).toHaveCount(0);
+      // A second, source-backed panel goes on air so the recap below has two.
+      const sourceBacked = after.pendingPanels.find(panel => panel.cameo !== 'flow_inker');
+      expect(sourceBacked, 'a non-cameo panel is still waiting').toBeTruthy();
+      // The blocked cameo sits first in the queue, so the streamer rejects it (R) to reach the next panel.
+      await page.locator('body').click({position: {x: 5, y: 5}});
+      await expect(page.locator('[data-next-up]')).toHaveAttribute('data-next-up', /^cameo-/, {timeout: 10_000});
+      await page.keyboard.press('r');
+      await expect.poll(async () => (await stack.state()).pendingPanels.some(panel => panel.cameo === 'flow_inker'), {timeout: 15_000}).toBe(false);
+      await page.locator('body').click({position: {x: 5, y: 5}});
+      await expect(page.locator('[data-next-up]')).toHaveAttribute('data-next-up', sourceBacked!.id, {timeout: 10_000});
+      await page.keyboard.press('a');
+      await expect.poll(async () => (await stack.state()).panels.some(panel => panel.id === sourceBacked!.id), {timeout: 15_000}).toBe(true);
     });
 
     await test.step('Panic hides the overlay at once; un-Panic brings it back', async () => {
@@ -259,22 +284,23 @@ test('FLOW-E2E: connect, panels, A/R/E, !ink, vote, panic and un-panic, end and 
       await page.getByRole('button', {name: 'Panic hide'}).first().click();
       await expect.poll(async () => (await stack.state()).overlayHidden).toBe(true);
       await expect(page.getByText('Overlay hidden.')).toBeVisible();
-      await expect(overlay!.locator('.ct-ov-strip')).toHaveCount(0, {timeout: 5_000});
-      await expect(overlay!.locator('.ct-stage .ct-panel, .ct-stage img')).toHaveCount(0);
+      await expect(overlay!.locator('.ct-viewer-item')).toHaveCount(0, {timeout: 5_000});
+      await expect(overlay!.locator('.ct-viewer-stage .ct-panel, .ct-viewer-stage img')).toHaveCount(0);
       // Chat keeps arriving while hidden; nothing shows on stream.
       stack.fake.chat(viewer(60), 'still chatting while it is hidden');
       await page.waitForTimeout(1500);
-      await expect(overlay!.locator('.ct-ov-strip')).toHaveCount(0);
+      await expect(overlay!.locator('.ct-viewer-item')).toHaveCount(0);
       await page.getByRole('button', {name: 'Show overlay'}).first().click();
       await expect.poll(async () => (await stack.state()).overlayHidden).toBe(false);
-      await expect(overlay!.locator('.ct-ov-strip')).toBeVisible({timeout: 10_000});
-      await expect(overlay!.locator('.ct-ov-lead')).toBeVisible();
+      await expect(overlay!.locator('.ct-viewer-item').first()).toBeVisible({timeout: 10_000});
+      await expect(overlay!.locator('.ct-viewer-item').last()).toBeVisible();
       expect((await stack.state()).panels.length).toBe(onAir);
     });
 
     await test.step('recap: end the stream and export the issue', async () => {
       const approved = (await stack.state()).panels.length;
       expect(approved).toBeGreaterThanOrEqual(2);
+      await page.getByRole('tab', {name: 'Settings', exact: true}).click();
       await page.getByRole('button', {name: /End stream/}).first().click();
       const dialog = page.getByRole('dialog', {name: 'End the stream?'});
       await expect(dialog).toBeVisible();

@@ -187,6 +187,9 @@ export class FakeTwitch extends EventEmitter<{log: [LogEntry]}> {
   appEnv(): Record<string, string> {
     return {
       TWITCH_CLIENT_ID: this.clientId, TWITCH_CLIENT_SECRET: this.clientSecret, TWITCH_REDIRECT_URI: this.redirectUris[0]!,
+      // The COMICTOONS_ names take precedence over the legacy ones, so they must be set too: otherwise a developer's
+      // real repo-root .env would win over the fake and a dry run would talk to the wrong app.
+      COMICTOONS_TWITCH_CLIENT_ID: this.clientId, COMICTOONS_TWITCH_CLIENT_SECRET: this.clientSecret, COMICTOONS_TWITCH_REDIRECT_URI: this.redirectUris[0]!,
       TWITCH_CHANNEL: this.broadcaster.login,
       COMICTOONS_TWITCH_AUTH_BASE_URL: this.urls.authBase, COMICTOONS_TWITCH_HELIX_BASE_URL: this.urls.helixBase,
       COMICTOONS_TWITCH_EVENTSUB_WS_URL: this.urls.eventSubWs, COMICTOONS_TWITCH_IRC_URL: this.urls.irc,

@@ -73,13 +73,17 @@ test('IMPORT-1-WIRE: Studio shows the card, and Sample data (the mock adapter) r
   const mock: ComicToonsAdapter = sample;
   try {
     const studio = renderToStaticMarkup(createElement(AdapterProvider, { adapter: mock, children: createElement(Studio) }));
-    assert.equal(studio.match(/id="ct-import-title"/g)?.length, 1, 'the card is mounted once in the Studio');
-    // IMPORT-UI-1: the card fills the studio's main column (it was squeezed into the 400 px side column, and
-    // the side column's fade mask dimmed its result).
-    const main = studio.slice(studio.indexOf('<main id="ct-main"'), studio.indexOf('</main>'));
-    assert.match(main, /id="ct-import-title"/, 'the card sits in the main column, under the panel grid');
-    assert.match(studio, /<section class="ct-card ct-import-card"/);
-    assert.match(text(studio), /A video longer than 10 min is cut to its first 10 min, and the result says so\./);
+    // The card now lives in the Studio's Live setup (under "Create pages from a VOD or clip"), so Sample mode, which
+    // cannot import, does not mount it. The card itself is rendered directly with the Sample adapter below.
+    assert.equal(studio.match(/id="ct-import-title"/g)?.length ?? 0, 0, 'Sample mode does not mount the import card');
+    const studioSource = (await import('node:fs')).readFileSync(new URL('../apps/web/src/ui/screens/Studio.tsx', import.meta.url), 'utf8');
+    assert.equal(studioSource.match(/<MakeFromLink\/>/g)?.length, 1, 'the card is mounted once in the Studio, inside Live setup');
+    assert.match(studioSource, /\{!sample&&<section className="ct-live-start ct-card"[^]*?<MakeFromLink\/>/, 'only the Live workspace mounts it');
+    const { MakeFromLink } = await import('../apps/web/src/ui/screens/studio/MakeFromLink.tsx');
+    const card = renderToStaticMarkup(createElement(AdapterProvider, { adapter: mock, children: createElement(MakeFromLink) }));
+    assert.equal(card.match(/id="ct-import-title"/g)?.length, 1, 'the card renders once');
+    assert.match(card, /<section class="ct-card ct-import-card"/);
+    assert.match(text(card), /A video longer than 10 min is cut to its first 10 min, and the result says so\./);
     assert.ok(typeof mock.importLink === 'function' && typeof mock.addSeriesChapter === 'function');
     await assert.rejects(mock.importLink!({ input: 'https://clips.twitch.tv/x' }), { message: MOCK_IMPORT_UNAVAILABLE });
     await assert.rejects(mock.addSeriesChapter!('somechannel', { importId: 'x' }), { message: MOCK_IMPORT_UNAVAILABLE });

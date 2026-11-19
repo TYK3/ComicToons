@@ -111,7 +111,7 @@ test('trial-run args: defaults to ports 3125/4125, a 5 s interval and an output 
   assert.equal(options.intervalSeconds, 5);
   assert.ok(!options.outDir.startsWith(repoRoot + '/'), 'default output is outside the repo');
   const custom = parseArgs(['--channel', 'a_b', '--minutes', '0.5', '--api-port', '3999', '--web-port', '4999', '--out', '/tmp/trial-x', '--interval', '2'], { repoRoot, env: {}, now: T0 });
-  assert.deepEqual('help' in custom ? undefined : [custom.apiPort, custom.webPort, custom.outDir, custom.intervalSeconds, custom.minutes], [3999, 4999, '/tmp/trial-x', 2, 0.5]);
+  assert.deepEqual('help' in custom ? undefined : [custom.apiPort, custom.webPort, custom.outDir, custom.intervalSeconds, custom.minutes], [3999, 4999, resolve('/tmp/trial-x'), 2, 0.5]);
   assert.deepEqual(parseArgs(['--help'], { repoRoot, env: {}, now: T0 }), { help: true });
 });
 
@@ -135,7 +135,7 @@ test('trial-run server env: art network forced off whatever the environment says
   assert.equal(env.PANELCAST_ART_NETWORK, '0');
   assert.equal(env.CLOUDFLARE_API_TOKEN, '');
   assert.equal(env.POLLINATIONS_API_KEY_2, '');
-  assert.equal(env.COMICTOONS_ART_CACHE_DIR, '/tmp/trial-y/art-cache');
+  assert.equal(env.COMICTOONS_ART_CACHE_DIR, join('/tmp/trial-y', 'art-cache'));
   assert.equal(env.COMICTOONS_API_PORT, '3125');
   assert.equal(env.PATH, '/usr/bin');
   const flagged = serverEnv({ COMICTOONS_FLAG_INK_ME: '1', COMICTOONS_FLAG_TWITCH_POLLS: 'true', PANELCAST_FLAG_HYPE: 'on', COMICTOONS_FLAG_BOT_REPLIES: '1', COMICTOONS_FLAG_POLLS: '1' }, { apiPort: 3125, outDir: '/tmp/trial-y' });

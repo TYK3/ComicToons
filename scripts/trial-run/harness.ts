@@ -5,6 +5,7 @@
  * talks to the loopback server), keeps the art network off, and never writes inside the repo.
  */
 import { spawn } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import { appendFileSync, closeSync, existsSync, mkdirSync, openSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve, isAbsolute } from 'node:path';
@@ -120,7 +121,7 @@ export async function startServer(options: { repoRoot: string; outDir: string; e
   const logPath = join(options.outDir, 'server.log');
   const fd = openSync(logPath, 'a');
   const tsx = import.meta.resolve('tsx');
-  const child = spawn(process.execPath, ['--import', tsx, ...(options.extraImports ?? []).flatMap(path => ['--import', path]), join(options.repoRoot, 'apps', 'server', 'src', 'index.ts')], { cwd: options.outDir, env: options.env, stdio: ['ignore', fd, fd] });
+  const child = spawn(process.execPath, ['--import', tsx, ...(options.extraImports ?? []).flatMap(path => ['--import', isAbsolute(path) ? pathToFileURL(path).href : path]), join(options.repoRoot, 'apps', 'server', 'src', 'index.ts')], { cwd: options.outDir, env: options.env, stdio: ['ignore', fd, fd] });
   closeSync(fd);
   const pid = child.pid;
   if (pid === undefined) throw new Error('The server process did not start.');

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
-import {join, relative, resolve} from 'node:path';
+import {join, relative, resolve, sep} from 'node:path';
 import {buildSampleSets, SAMPLE_FIXTURES} from '../scripts/build-samples.ts';
 import {sampleStory} from '../packages/core/src/story.ts';
 
@@ -39,7 +39,11 @@ function imagePaths(value: unknown, out: string[] = []): string[] {
   return out;
 }
 function listFiles(dir: string): string[] {
-  return readdirSync(dir).flatMap(name => statSync(join(dir, name)).isDirectory() ? listFiles(join(dir, name)) : [relative(samplesDir, join(dir, name))]).sort();
+  return readdirSync(dir).flatMap(name => statSync(join(dir, name)).isDirectory() ? listFiles(join(dir, name)) : [relative(samplesDir, join(dir, name)).split(sep).join('/')]).sort();
+}
+/** Files build:samples produces: everything except the hand-made web story art in samples/stories. */
+function generatedFiles(dir: string): string[] {
+  return listFiles(dir).filter(path => !path.startsWith('stories/'));
 }
 
 test('sample manifest validates against the published field list', () => {
@@ -87,7 +91,11 @@ test('every fixture has all four parts and every referenced file exists', () => 
     }
     assert.deepEqual([...new Set(images)].sort(), [...(fixture.art as string[])].sort(), `${id}: art lists exactly the images used`);
   }
-  assert.deepEqual(listFiles(samplesDir), [...referenced].sort(), 'no unreferenced files in samples');
+  // samples/stories holds the hand-made page art for the web Sample stories (not produced by build:samples); it is
+  // checked for completeness below instead.
+  assert.deepEqual(generatedFiles(samplesDir), [...referenced].sort(), 'no unreferenced files in samples');
+  const stories = listFiles(samplesDir).filter(path => path.startsWith('stories/'));
+  assert.deepEqual(stories, ['cooking', 'speedrun', 'tabletop'].flatMap(art => ['blossom', 'festival', 'lagoon', 'sunset'].map(theme => `stories/${art}-${theme}.png`)).sort(), 'every Sample story has page art in all four themes');
 });
 
 test('every panel in a set uses its own fixture art, never another stream\'s', () => {
@@ -113,7 +121,7 @@ test('build is offline and deterministic, and the committed sets are current', a
     const first = await buildSampleSets(); const second = await buildSampleSets();
     assert.deepEqual([...first.keys()].sort(), [...second.keys()].sort());
     for (const [path, bytes] of first) assert.ok(bytes.equals(second.get(path)!), `${path} is byte-identical on rerun`);
-    assert.deepEqual([...first.keys()].sort(), listFiles(samplesDir), 'committed file list matches a fresh build');
+    assert.deepEqual([...first.keys()].sort(), generatedFiles(samplesDir), 'committed file list matches a fresh build');
     for (const [path, bytes] of first) assert.ok(bytes.equals(readFileSync(join(samplesDir, path))), `${path} matches a fresh build (run npm run build:samples)`);
   } finally { globalThis.fetch = realFetch; }
   assert.deepEqual(SAMPLE_FIXTURES.map(f => f.id), ['tabletop-night', 'speedrun-fail', 'irl-cooking']);

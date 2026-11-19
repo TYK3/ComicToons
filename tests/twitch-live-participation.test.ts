@@ -205,9 +205,14 @@ test('Ink me live: approving the cameo marks the redemption FULFILLED; rejecting
 });
 
 test('Ink me live: the streamer fulfil and cancel buttons reach Twitch', async () => {
-  const { engine, bus, server, advance } = setup();
+  const { engine, studio, bus, server, advance } = setup();
   await engine.rewards.enable();
   redeem(bus, 'r1', engine.rewards.rewardId!, 'u1'); await flush();
+  // A drafted cameo is a library placeholder and cannot go on air, so it cannot be fulfilled until source-grounded art
+  // exists. Nothing reaches Twitch for the refused attempt. Once the art is generated the release gate is lifted.
+  await assert.rejects(engine.rewards.resolve('r1', 'fulfil'), /source-grounded cameo image/i);
+  assert.equal(server.calls.filter(call => call.path === '/helix/channel_points/custom_rewards/redemptions').length, 0);
+  for (const panel of studio.state.pendingPanels) delete panel.releaseBlocked;
   await engine.rewards.resolve('r1', 'fulfil');
   advance(301_000);
   redeem(bus, 'r2', engine.rewards.rewardId!, 'u2'); await flush();
