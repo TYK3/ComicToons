@@ -3,6 +3,7 @@ import { isSampleSource } from '@comictoons/core';
 import { timecode } from '../../types';
 import { studioPhase, useAdapter, useUi } from '../data/store';
 import { RetryButton, ScreenState } from '../components/ScreenState';
+import { Arrow } from '../components/Icons';
 import { Logo, Sample } from '../components/Brand';
 import { Panel } from '../components/Panel';
 import { LookSwitch } from '../components/LookSwitch';
@@ -10,11 +11,13 @@ import { ConnectionBanner } from '../components/AppBar';
 import { inkQueueWaiting, nextUpPanel, readNextUpId } from './studio/live';
 import { href } from '../router';
 import '../styles/director.css';
+import {useStudioMode} from '../data/StudioSession';
 
 /** Director: the studio on a phone propped beside the keyboard. Big targets, one decision at a time. */
 export function Director() {
   const ui = useUi();
   const adapter = useAdapter();
+  const {mode,setMode}=useStudioMode();
   const { studio, participation } = ui;
   // UI-LIVE-B #4: show the panel a mod's !ink yes would approve (server nextUp), so Approve here acts on the same one.
   const next = nextUpPanel(studio);
@@ -51,7 +54,7 @@ export function Director() {
       {/* UI-LIVE-B #7: SAMPLE only while the chat really is sample data (or the mock). */}
       {(adapter.kind === 'mock' || isSampleSource(studio.source)) && <Sample ink/>}
       {studio.hidden && <span className="ct-director__hidden" role="status">Hidden</span>}
-      <a className="ct-btn ct-btn--back ct-btn--sm" href={href('/studio')} aria-label="Full studio"><span className="ct-director__wide">Full studio</span><span className="ct-director__narrow" aria-hidden="true">Studio</span></a>
+      <a className="ct-btn ct-btn--back ct-btn--sm" href={href('/studio')} aria-label="Back to Studio"><Arrow dir="left"/><span className="ct-director__wide">Back to Studio</span><span className="ct-director__narrow">Back</span></a>
     </header>
     {phase !== 'error' && <ConnectionBanner/>}
     {phase === 'error' ? <main className="ct-director__main" id="ct-main">
@@ -74,15 +77,16 @@ export function Director() {
         {next ? <>
           <Panel panel={next} eager/>
           <p className="ct-director__cap">{next.caption}</p>
+          {next.releaseBlocked&&<p className="ct-note" role="status">{next.releaseBlocked}</p>}
           {(next.cameo || serverPicked || participation.rules.modApprove) && <p className="ct-note">{next.cameo ? `Cameo for @${next.cameo}. ` : ''}{serverPicked ? (next.cameo ? 'Cameos come first, ahead of older panels. ' : 'The studio puts this one ahead of older panels. ') : ''}{participation.rules.modApprove ? 'A mod’s !ink yes approves this one.' : ''}</p>}
           <div className="ct-director__decide">
             <button type="button" className="ct-btn" onClick={() => void decide('reject')} disabled={ui.busy === 'reject'}>Reject</button>
-            <button type="button" className="ct-btn ct-btn--ink" onClick={() => void decide('approve')} disabled={ui.busy === 'approve'}>Approve</button>
+            <button type="button" className="ct-btn ct-btn--ink" onClick={() => void decide('approve')} disabled={ui.busy === 'approve'||!!next.releaseBlocked}>Approve</button>
           </div>
         </> : phase === 'empty' ? <div className="ct-director__empty">
           <p className="ct-director__idle">No panels yet. Once chat gets going, each new panel lands here for a yes or no.</p>
           <p className="ct-note">Not live yet? Start the Sample replay to practise, with made-up chat.</p>
-          <button type="button" className="ct-btn ct-btn--ink" onClick={() => void adapter.replay(studio.fixtureId || ui.fixtures[0]?.id || '')} disabled={ui.busy === 'replay' || !ui.fixtures.length}>{ui.busy === 'replay' ? 'Starting…' : 'Start the Sample replay'}</button>
+          <button type="button" className="ct-btn ct-btn--ink" onClick={() => {if(mode==='sample')void adapter.replay(studio.fixtureId || 'tabletop-night');else setMode('sample');}} disabled={ui.busy === 'replay'}>{mode==='sample'?'Start the Sample replay':'Open Sample chat'}</button>
         </div> : <p className="ct-director__idle">The writer is watching chat. You’ll feel a new panel land here.</p>}
         {undo && <button type="button" className="ct-btn ct-btn--ghost" onClick={() => { void adapter.undo(undo); setUndo(undefined); setSaid('Undone.'); }}>Undo last decision</button>}
         <p className="ct-sr" role="status" aria-live="polite">{said}</p>
@@ -96,7 +100,7 @@ export function Director() {
             <button type="button" className="ct-btn ct-btn--sm" onClick={() => void adapter.endPoll()}>End vote</button>
           </> : <>
             {phase === 'empty' && <p className="ct-note">A vote needs a panel first.</p>}
-            <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => void adapter.startPoll()} disabled={phase === 'empty'}>Start a vote</button>
+            <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => void adapter.startPoll()} disabled={![...studio.pendingPanels,...studio.panels].some(panel=>!panel.releaseBlocked&&!panel.imageRevision)}>Start a vote</button>
           </>}
         </div>
         <div className="ct-tile">

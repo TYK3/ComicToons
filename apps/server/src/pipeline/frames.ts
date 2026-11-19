@@ -53,7 +53,7 @@ export function runFfmpeg(input: Buffer, args: string[], options: { ffmpegPath: 
 export async function inkClipFrame(clip: ClipRef | undefined, options: InkFrameOptions = {}): Promise<InkFrameResult | undefined> {
   if (!clip?.thumbnailUrl) return undefined;
   const ffmpegPath = options.ffmpegPath ?? '/usr/bin/ffmpeg';
-  if (!ffmpegAvailable(ffmpegPath)) return undefined;
+  if (!options.spawnImpl && !ffmpegAvailable(ffmpegPath)) return undefined;
   const started = Date.now();
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const fetchImpl = options.fetchImpl ?? fetch;

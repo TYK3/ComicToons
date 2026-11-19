@@ -32,6 +32,8 @@ export function useUiEvents(names: readonly UiEventName[], onEvent: (event: UiEv
 export function useNow(): number {
   const adapter = useAdapter();
   useUi();
+  const [,tick]=useState(0);
+  useEffect(()=>{const timer=setInterval(()=>tick(n=>n+1),1000);return()=>clearInterval(timer);},[adapter]);
   return adapter.now();
 }
 

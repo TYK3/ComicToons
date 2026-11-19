@@ -1,64 +1,34 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { isSampleSource } from '@comictoons/core';
-import { LookPicker } from '../../components/LookPicker';
-import { LookSwitch } from '../../components/LookSwitch';
-import { ChannelGroup } from '../../components/TwitchConnect';
-import { useAdapter, useUi } from '../../data/store';
-import { EventSubTool } from './EventSub';
+import {useState} from 'react';
+import {ConnectButton} from '../../components/TwitchConnect';
+import {StudioModeSwitch} from '../../components/StudioModeSwitch';
+import {useStudioMode} from '../../data/StudioSession';
+import {useAdapter,useUi} from '../../data/store';
+import {href} from '../../router';
+import {SampleDemo,type AudienceTool} from './SampleDemo';
 
-/** True while the media query matches (W8: the phone toolbar folds). */
-export function useMedia(query: string) {
-  const [matches, setMatches] = useState(() => typeof matchMedia !== 'undefined' && matchMedia(query).matches);
-  useEffect(() => {
-    const list = matchMedia(query);
-    const update = () => setMatches(list.matches);
-    update();
-    list.addEventListener('change', update);
-    return () => list.removeEventListener('change', update);
-  }, [query]);
-  return matches;
-}
-
-/** On phones the replay and source controls fold away so the first screen shows the review desk (W8). */
-function Fold({ fold, summary, children }: { fold: boolean; summary: ReactNode; children: ReactNode }) {
-  if (!fold) return <>{children}</>;
-  return <details className="ct-tool__fold"><summary>{summary}</summary><div className="ct-tool__foldbody">{children}</div></details>;
-}
-
-/** D1a top toolbar: Channel | Twitch events | Replay | Look. Sticky under the app bar on desktop, stacked on small screens. */
-export function Toolbar() {
-  const ui = useUi();
-  const adapter = useAdapter();
-  const { studio, fixtures } = ui;
-  const sample = isSampleSource(studio.source) && studio.source.active !== 'twitch';
-  const phone = useMedia('(max-width: 640px)');
+/** One persistent row: source, playback and the in-page audience drawer. */
+export function Toolbar({previewOpen,onPreview,onTool}:{previewOpen:boolean;onPreview:()=>void;onTool:(tool:AudienceTool)=>void}){
+  const ui=useUi(),adapter=useAdapter(),{mode}=useStudioMode();
+  const [simulationOpen,setSimulationOpen]=useState(false),[error,setError]=useState('');
+  const sample=mode==='sample',running=ui.sampleSimulation?.guided;
+  const paused=ui.sampleSimulation?.paused;
+  const runDemo=(fixtureId?:string)=>{
+    setError('');if(!previewOpen)onPreview();
+    void adapter.startSampleDemo?.(fixtureId).catch(cause=>setError(cause instanceof Error?cause.message:'Could not start the demo.'));
+  };
   return <section className="ct-toolbar" aria-label="Studio controls">
-    <ChannelGroup/>
-    <EventSubTool/>
-    <div className="ct-tool ct-tool--replay">
-      <Fold fold={phone} summary={sample ? <>Replay settings <span className="ct-sample">Sample</span></> : <>Live chat <span className="ct-tool__hint">#{studio.source.channel}</span></>}>
-      {sample ? <>
-        <p className="ct-tool__label"><label htmlFor="ct-stream">Sample stream</label> <span className="ct-sample">Sample</span></p>
-        <div className="ct-tool__row">
-          <select id="ct-stream" className="ct-select" value={studio.fixtureId} onChange={event => void adapter.replay(event.target.value)}>
-            {fixtures.map(fixture => <option key={fixture.id} value={fixture.id}>{fixture.streamTitle}</option>)}
-          </select>
-          <div className="ct-seg" role="radiogroup" aria-label="Replay speed">
-            {([1, 10, 60] as const).map(speed => <button key={speed} type="button" role="radio" aria-checked={studio.speed === speed} onClick={() => void adapter.setSpeed(speed)}>{speed}×</button>)}
-          </div>
-          <button type="button" className="ct-btn ct-btn--sm" onClick={() => void adapter.replay(studio.fixtureId)} disabled={ui.busy === 'replay'}>Restart replay</button>
-        </div>
-      </> : <>
-        <p className="ct-tool__label">Live chat <span className="ct-tool__hint">#{studio.source.channel}</span></p>
-        <div className="ct-tool__row ct-tool__stats">
-          <span><strong>{studio.source.received}</strong> messages read</span>
-          <span><strong>{studio.budget.used}/{studio.budget.perHour}</strong> panels this hour</span>
-          <span>Clips: <strong>{studio.clips ?? 0}</strong></span>
-          {studio.source.simulated && <span className="ct-sample">Sample</span>}
-        </div>
-      </>}
-      </Fold>
+    <div className="ct-toolbar__primary">
+      <StudioModeSwitch/>
+      {sample?<>
+        <label className="ct-stream-select"><span className="ct-sr">Sample stream</span><select id="ct-stream" aria-label="Sample stream" className="ct-select" value={ui.studio.fixtureId} onChange={event=>{if(event.target.value==='jynxzi-qa')void adapter.replay(event.target.value);else runDemo(event.target.value);}}>{ui.fixtures.map(fixture=><option key={fixture.id} value={fixture.id}>{fixture.streamTitle}</option>)}</select></label>
+        <button className="ct-btn ct-btn--ink ct-btn--sm" type="button" aria-label={running?'Pause demo':paused?'Resume demo':'Run the stream demo'} onClick={()=>{if(running)adapter.stopSampleDemo?.();else if(paused){adapter.resumeSampleDemo?.();if(!previewOpen)onPreview();}else runDemo();}}>{running?'Pause demo':paused?'Resume demo':'Run demo'}</button>
+        <button className="ct-btn ct-btn--sm ct-simulator-toggle" type="button" role="switch" aria-label="Viewer simulator" aria-checked={simulationOpen} aria-controls="ct-simulator" onClick={()=>setSimulationOpen(value=>!value)}><span className="ct-control-full">Simulate viewers</span><span className="ct-control-short">Simulator</span><span aria-hidden="true">{simulationOpen?'▴':'▾'}</span></button>
+        <details className="ct-replay-menu"><summary>Replay settings</summary><div className="ct-replay-menu__body"><p className="ct-note">Run demo handles releases and audience activity automatically. Restart replay below to review panels yourself.</p><button className="ct-btn ct-btn--sm" onClick={()=>runDemo()}>Restart guided demo</button><div className="ct-seg" role="radiogroup" aria-label="Replay speed">{([1,10,60] as const).map(speed=><button key={speed} type="button" role="radio" aria-checked={ui.studio.speed===speed} onClick={()=>void adapter.setSpeed(speed)}>{speed}×</button>)}</div><button className="ct-btn ct-btn--sm" onClick={()=>void adapter.replay(ui.studio.fixtureId)}>Restart replay</button><button className="ct-btn ct-btn--sm" onClick={()=>adapter.pauseReplay?.()} disabled={running||!ui.sampleReplay?.revealed||ui.sampleReplay.revealed>=ui.sampleReplay.total}>{ui.sampleReplay?.running?'Pause replay':'Resume replay'}</button></div></details>
+      </>:<><span className="ct-toolbar__channel">{ui.studio.source.channel?`#${ui.studio.source.channel}`:'Choose a Twitch channel below'}</span>{ui.twitch.state==='connected'?<a className="ct-btn ct-btn--sm" href={href('/connect')}>Twitch account</a>:<ConnectButton/>}</>}
+      <button className="ct-btn ct-btn--sm ct-preview-toggle" aria-label={previewOpen?'Hide On air':'Show On air'} aria-expanded={previewOpen} aria-controls="ct-audience-sidebar" onClick={onPreview}><span className="ct-control-full">{previewOpen?'Hide On air':'Show On air'}</span><span className="ct-control-short">On air</span><span aria-hidden="true">◧</span></button>
     </div>
-    <div className="ct-tool ct-tool--look">{phone ? <LookSwitch/> : <LookPicker/>}</div>
+    {sample&&simulationOpen&&<SampleDemo onView={()=>{setSimulationOpen(false);if(!previewOpen)onPreview();}} onTool={tool=>{setSimulationOpen(false);onTool(tool);}}/>}
+    {sample&&ui.studio.status==='ended'&&ui.studio.recapUrl&&<a className="ct-note ct-finished-issue" href={href(ui.studio.recapUrl)}>Read the finished Sample issue</a>}
+    {error&&<p className="ct-note" role="status">{error}</p>}
   </section>;
 }

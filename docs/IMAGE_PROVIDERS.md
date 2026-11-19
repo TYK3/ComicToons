@@ -1,0 +1,36 @@
+# Local image credentials and basic provider tests
+
+Put secrets in the ignored `.env.images` file at the repo root, never in chat or a VITE variable. The server loads `.env` followed by `.env.images`; existing process and `.env` settings take precedence. Restart the API after changing credentials. Keep production credentials in the hosting service's server-side secret settings instead of distributing this private file with the app.
+
+| Provider | Slot 1 | Slots 2 and 3 | Extra |
+|---|---|---|---|
+| Google Gemini | `GEMINI_API_KEY` | `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3` | Google AI Studio API keys with model access and credits |
+| Pollinations | `POLLINATIONS_API_KEY` | `POLLINATIONS_API_KEY_2`, `POLLINATIONS_API_KEY_3` | Secret generation keys, not publishable app keys |
+| Cloudflare | `CLOUDFLARE_API_TOKEN` | `CLOUDFLARE_API_TOKEN_2`, `CLOUDFLARE_API_TOKEN_3` | Pair each token with `CLOUDFLARE_ACCOUNT_ID` and matching `_2` / `_3` Account IDs; Workers AI access |
+
+`npm run images:check` reports configuration status only: no network calls, no billing, no key values. It cannot prove credentials work. Duplicate keys are skipped by the diagnostic and reference pools.
+
+`npm run images:test` makes one image request per configured distinct slot, up to nine images. Each provider bills its own account. No retries or fallback. Limit it with `npm run images:test -- --provider=gemini --slot=1`. Images, exact fictional prompt and a sanitized JSON report are saved under ignored `artifacts/qa/image-providers/<timestamp>/`. Provider errors are reduced to safe status codes; raw error bodies and secret values are never printed. `image-received` means a recognizable image was returned; face/lettering/quality review remains manual. No Twitch footage is included in these basic tests.
+
+For automatic Viewer/Streamer scene pages, set `COMICTOONS_IMAGE_PROVIDER=gemini` and `GEMINI_IMAGE_MODEL=gemini-3.1-flash-image`. Choose **Use app default / forget my key** in Studio after an API restart. Jobs use configured Gemini slots in round-robin order, with one account retained throughout each job's analysis, drawing and review. A failed job stops with its error; it does not retry another account or provider. The shared app budget is `IMAGE_BUDGET_PER_HOUR` (default 12 attempts/hour across scene sessions; 0 disables app-funded attempts), in addition to the 1–5 attempt session limit. Basic CLI tests are separately bounded to one image per selected slot and do not consume this in-memory scene budget. A server restart resets the in-memory budget. A user-supplied session key uses that user's account, not the shared keys.
+
+The older optional art pipeline already supports three Cloudflare slots and three Pollinations slots, with its documented Cloudflare → Pollinations → frame/library fallbacks and its own hourly counter. It remains behind `COMICTOONS_ART_NETWORK`; the local launcher keeps that route off. This basic-art path is separate from the reference-grounded Viewer pipeline and does not establish a faithful reconstruction of a stream. These two budget counters are separate. Do not infer a combined spend cap if both routes are enabled.
+
+This local setup is not a public hosting deployment or a billing system. A public launch needs authenticated usage limits and durable cost accounting; never ship server keys to clients.
+
+Official APIs checked: [Gemini image generation](https://ai.google.dev/gemini-api/docs/image-generation), [Cloudflare FLUX.1 Schnell](https://developers.cloudflare.com/workers-ai/models/flux-1-schnell/), [Pollinations API recipes](https://github.com/pollinations/pollinations/blob/main/gen.pollinations.ai/src/docs/apidocs-recipes.md).
+
+
+## Pollinations reference pages and reviewed lettering revisions
+
+The full scene pipeline also accepts Pollinations with a server-side secret `sk_` key or a session key entered in the app. Explicit server selection: `COMICTOONS_IMAGE_PROVIDER=pollinations`, `POLLINATIONS_REFERENCE_MODEL=google/gemini-3.1-flash-image`. The app uses `openai/gpt-5.4-nano` for image-input analysis/review and `/v1/images/edits` with repeated image uploads for the selected image model. Keys authenticate against `/account/key`; the public catalogue alone is not a credential check. No provider fallback. Cloudflare basic art remains separate from the reference-page pipeline.
+
+Caption edits, vote winners and prediction commentary on generated pages trigger an image revision with the original frames, original storyboard and selected chat. The first panel narration is replaced with explicitly attributed Author / Chat chose / Prediction result commentary. Captured evidence is unchanged. These are paid attempts within the session/shared budget. Release and automatic release are blocked during unresolved revisions. The picture changes only after source/face/exact-lettering review passes; a failure retains the last reviewed image and Studio offers Keep original image. A withdrawal or stop during rendering prevents republishing. Automated vision review still needs human inspection during live QA.
+
+Pollinations also permits `black-forest-labs/flux.2-klein-4b`; this model receives at most four chronological scene references. Other supported reference models allow six. Oversized drawing inputs are rejected before the provider call. HTTP 402/429 pauses automatic analysis/drawing attempts while capture continues; the UI exposes a sanitized failure stage and code. Explicitly reconfiguring the generator clears the pause. Changing configuration is not an automatic cross-account retry. An explicitly selected unsupported provider fails closed.
+
+The first real own-channel ten-minute capture on 2 November produced 56 unique frames and three actual owner chat messages. It produced no usable manga: four evidence holds and one drawing quota/credit/rate-limit failure. The exact HTTP status for that older drawing failure was not retained. Authenticated connection success and image-model catalogue access therefore remain separate from actual generation success.
+
+The SuperTuxKart follow-up completed 600 seconds and 59 unique source frames. Two real Klein comic outputs failed source/face/lettering review and were never released. The explicit Gemini retest exposed an analysis-model issue: `gemini-2.5-flash` generation returned 404 on this account despite its catalog entry; `gemini-3.1-flash-lite` returned content. Analysis/review now use the latter. A full saved-frame retry passed analysis but drawing with `gemini-2.5-flash-image` returned HTTP 429, correctly pausing further generation. No usable manga page or successful generation entitlement is claimed. See QA_GAMEPLAY_2026-11-02.md.
+
+On 2 November, all three Gemini model reads succeeded but all three actual basic image generations failed HTTP 429. All three Pollinations authenticated requests returned identical cached/deterministic one-scene images; all three Cloudflare requests returned images. None of those six basic outputs met the requested four-panel layout; Cloudflare slot 2 also misspelled READY!, and slot 3 broke panel/character continuity. These are credential diagnostics, not successful manga QA. Pollinations authenticated reference-model checks pass for all three keys; real full-page drawing quality is still pending own-stream footage.

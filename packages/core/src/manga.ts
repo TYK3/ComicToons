@@ -4,6 +4,7 @@ export interface MangaSource {
   id: string; caption: string; mood?: string; sfx?: string; at?: number;
   dialogue?: string[]; imageUrl?: string; altText?: string; sourceId?: string;
   storyBeats?: StoryBeat[]; storyCaption?: string; atlas?: StoryAtlas; crop?: MangaCrop;
+  provenance?:{provider?:string};
 }
 /** Framing of one split frame: zoom about a focal point, in percent of the art. */
 export interface MangaCrop { shot: number; zoom: number; x: number; y: number }
@@ -85,6 +86,8 @@ export function buildMangaPages<T extends MangaSource>(source: readonly T[]): Ma
   const pages: MangaPage<MangaFrame<T>>[] = [];
   while (frames.length) {
     let size = frames.length > 6 && frames.length < 9 ? frames.length - 3 : Math.min(6, frames.length);
+    const whole=frames.findIndex(p=>p.provenance?.provider?.startsWith('scene-'));
+    if(whole===0)size=1;else if(whole>0)size=Math.min(size,whole);
     let spans = rowSpans(frames.slice(0,size));
     // Count the actual filled rows, including lone frames next to a dense one.
     while (spans.reduce((sum,span) => sum + span,0) > 36) {
@@ -191,7 +194,8 @@ export function buildBook<T extends OutputPanel>(source:readonly T[],opts:{title
     chapters.push({title:name,start:group[0]!.at??0,end:group.at(-1)!.at??0,panels:group.length,cameos:group.filter(p=>p.cameo).length,page:pages.length+1});
     pages.push({kind:'chapter',title:name,panels:[group[0]!],number:pages.length+1,chapter:index+1});
     pages.push({kind:'peak',title:'The peak',panels:[peak],number:pages.length+1,chapter:index+1});
-    for(let i=0;i<group.length;i+=5)pages.push({kind:'story',title:name,panels:group.slice(i,i+5),number:pages.length+1,chapter:index+1});
+    let row:T[]=[];const flush=()=>{if(row.length)pages.push({kind:'story',title:name,panels:row,number:pages.length+1,chapter:index+1});row=[];};
+    for(const panel of group){if(panel.provenance?.provider?.startsWith('scene-')){flush();row=[panel];flush();}else{row.push(panel);if(row.length===5)flush();}}flush();
   }
   return {title,chapters,pages,panelCount:panels.length};
 }

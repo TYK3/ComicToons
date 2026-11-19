@@ -135,6 +135,15 @@ function extractTokens(text: string, keywords: string[]): string[] {
  * keeps one sustained burst from reopening a fresh moment on every qualifying message.
  */
 export class MomentDetector {
+  diagnostics(now: number) {
+    const recent = this.chatTimes.filter(item => now - item.t <= this.config.spikeWindowSeconds);
+    const observed = Math.min(this.config.baselineWindowSeconds, Math.max(0, now - (this.firstChatAt ?? now)));
+    const baseline = this.chatTimes.filter(item => now - item.t > this.config.spikeWindowSeconds && now - item.t <= this.config.baselineWindowSeconds);
+    const baselinePerWindow = baseline.length / Math.max(1, observed - this.config.spikeWindowSeconds) * this.config.spikeWindowSeconds;
+    return { recent: recent.length, baselinePerWindow, multiplier: baselinePerWindow ? recent.length / baselinePerWindow : 0,
+      warmedUp: observed >= this.config.spikeWarmupSeconds, distinctUsers: new Set(recent.map(item => item.user).filter(Boolean)).size,
+      cooldownRemaining: Math.max(0, this.cooldownUntil - now) };
+  }
   private readonly config: MomentConfig;
   /** Chat arrivals in the baseline window; the id and user let forget() drop withdrawn lines. */
   private chatTimes: { t: number; id?: string; user?: string }[] = [];

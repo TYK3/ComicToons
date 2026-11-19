@@ -7,6 +7,7 @@ import { isKeyless } from './studio/live';
 import { Arrow } from '../components/Icons';
 import { twitchErrorCopy } from '../data/twitch-copy';
 import { href } from '../router';
+import { PublicChannelPicker } from '../components/PublicChannelPicker';
 import '../styles/connect.css';
 
 const SCOPES = [
@@ -55,9 +56,9 @@ export function Connect() {
         </ScreenState>}
 
         {known && twitch.state === 'signed-out' && <>
-          <p className="ct-connect__lede">Sign in with Twitch and your own chat starts writing the comic. Until then the studio runs on a Sample stream, so you can try everything first.</p>
+          <p className="ct-connect__lede">Sign in with Twitch to use your own chat in Live Studio. The separate Sample demo is available without signing in.</p>
           <ConnectButton wide/>
-          <p className="ct-note">Sample data until you connect.</p>
+          <p className="ct-note">Live Studio waits for Twitch. Sample streams stay in their own workspace.</p>
         </>}
 
         {known && twitch.state === 'connecting' && <>
@@ -68,20 +69,20 @@ export function Connect() {
 
         {/* UI-HEAD #4: a keyless computer never tried a sign-in, so this is set-up copy, not a failure. */}
         {known && keyless && <>
-          <p className="ct-connect__lede">For now the studio runs on a Sample stream, so you can try everything first.</p>
+          <p className="ct-connect__lede">Try the separate Sample demo while you set up Twitch.</p>
           <div className="ct-banner ct-banner--paper ct-connect__err" role="status" aria-live="polite" data-keyless>
             <p id="ct-keyless-note"><strong>{KEYLESS_TITLE}</strong> {KEYLESS_BODY}</p>
           </div>
           <div className="ct-connect__acts">
             <ConnectButton wide/>
-            <a className="ct-btn ct-btn--ghost" href={href('/studio')}>Use Sample data</a>
+            <a className="ct-btn ct-btn--ghost" href={href('/studio',{workspace:'sample'})}>Use Sample data</a>
           </div>
         </>}
 
         {known && twitch.state === 'error' && !keyless && <>
           {/* W4 + item 9: purple Connect is the one primary (a new sign-in); the ink Try again only re-checks Twitch. */}
           <div className="ct-banner ct-banner--paper ct-connect__err" role="status" aria-live="polite">
-            <p><strong>{twitchErrorCopy(twitch.error).heading}</strong> {twitch.error ?? 'You may have cancelled it, or Twitch didn’t answer.'} Your sample replay is still running.</p>
+            <p><strong>{twitchErrorCopy(twitch.error).heading}</strong> {twitch.error ?? 'You may have cancelled it, or Twitch didn’t answer.'} You can still use the separate Sample demo.</p>
             <TryAgain/>
           </div>
           <div className="ct-connect__acts">
@@ -92,7 +93,7 @@ export function Connect() {
         </>}
 
         {known && twitch.state === 'connected' && <>
-          <p className="ct-connect__lede">{affiliate ? 'Everything is switched on. Live chat is feeding the studio now.' : 'Live chat is feeding the studio now. A couple of extras wait for Affiliate.'} {showSampleAccountBadge(adapter.kind, twitch) && <Sample label="Sample account"/>}</p>
+          <p className="ct-connect__lede">{affiliate ? 'Twitch is connected. Open Live Studio to choose chat reading or video capture.' : 'Twitch is connected. Chat reading and source-frame comics are available; some channel-point extras need Affiliate.'} {showSampleAccountBadge(adapter.kind, twitch) && <Sample label="Sample account"/>}</p>
           <ul className="ct-ready" aria-label="What’s ready">
             {features.map(feature => <li key={feature.name} data-ok={feature.ok}><span aria-hidden="true">{feature.ok ? '✓' : '–'}</span>{feature.name}<span className="ct-sr">{feature.ok ? ': ready' : ': needs Affiliate or Partner'}</span></li>)}
           </ul>
@@ -105,6 +106,7 @@ export function Connect() {
         <p className="ct-sr" role="status" aria-live="polite">{twitch.state === 'connecting' ? 'Waiting for Twitch.' : twitch.state === 'connected' ? `Connected as @${twitch.login}.` : ''}</p>
       </section>
 
+      {known && <section className="ct-connect__card" aria-label="Read a public channel"><h2 className="ct-display">Read another stream</h2><PublicChannelPicker openStudio/></section>}
       <aside className="ct-connect__why" aria-labelledby="ct-scope-title">
         <h2 id="ct-scope-title" className="ct-display">What we ask Twitch for</h2>
         <ul className="ct-scopes">

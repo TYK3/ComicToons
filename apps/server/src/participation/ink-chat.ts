@@ -60,13 +60,13 @@ export class InkChatRequests {
     const imageUrl = `/art/generated/${art}`;
     const line = this.deps.recentLine?.(entry.user);
     const dialogue = line ? [fitText(line, 60)] : [];
-    const caption = fitText(`Cameo: ${entry.name} joins the panel`, 60);
-    const scene = `Original illustration with a cameo drawn for ${entry.name}, who asked with !ink.`;
-    const panel: ComicPanel = { id: `cameo-${entry.id}`, origin: 'twitch', caption, storyCaption: caption, dialogue, scene, altText: scene, characters: [entry.name], mood: 'playful', imageUrl, at: this.deps.studio.state.elapsed, cameo: entry.login,
-      provenance: { provider: 'library', asset: art, style: 'pop-ink', fallback: false }, storyBeats: [{ frame: 0, imageUrl, scene, dialogue: [...dialogue] }] };
+    const caption = fitText(`Ink request from ${entry.name}`, 60);
+    const scene = `Library placeholder for an Ink me request from ${entry.name}; no source-grounded cameo image has been generated.`;
+    const panel: ComicPanel = { id: `cameo-${entry.id}`, origin: 'twitch', releaseBlocked: 'A source-grounded cameo image has not been generated. Library placeholders cannot go on air.', caption, storyCaption: caption, dialogue, scene, altText: scene, characters: [], mood: 'playful', imageUrl, at: this.deps.studio.state.elapsed, cameo: entry.login,
+      provenance: { provider: 'library', asset: art, style: 'pop-ink', fallback: true }, storyBeats: [{ frame: 0, imageUrl, scene, dialogue: [...dialogue] }] };
     // Always into the review queue: nothing reaches the overlay without the streamer or a mod.
     this.deps.studio.state.pendingPanels.push(panel);
-    entry.status = 'drafted'; entry.panelId = panel.id; entry.note = 'Cameo drafted; waiting for !ink yes or !ink no.';
+    entry.status = 'drafted'; entry.panelId = panel.id; entry.note = 'Waiting for source-grounded cameo generation. Library placeholder cannot go on air.';
     this.deps.bus.emit('cameo', { requestId: entry.id, panelId: panel.id, login: entry.login });
     return true;
   }

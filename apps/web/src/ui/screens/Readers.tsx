@@ -3,12 +3,14 @@ import { LOOKS, type IssueView } from '../data/adapter';
 import { useAdapter, useLoad, useUi } from '../data/store';
 import { ReaderBar } from '../components/ReaderBar';
 import { ComicPage, toPages } from '../components/ComicPage';
+import { comicScenes } from '../data/lettering';
 import { LookArt, Panel } from '../components/Panel';
 import { Arrow } from '../components/Icons';
 import { Sample } from '../components/Brand';
 import { RetryButton, ScreenState } from '../components/ScreenState';
 import { downloadBlob } from '../export';
 import { href, type Route } from '../router';
+import {useStudioMode} from '../data/StudioSession';
 import { useReveal } from '../motion';
 import '../styles/pages.css';
 import '../styles/readers.css';
@@ -16,9 +18,12 @@ import '../styles/readers.css';
 const DEFAULT_ISSUE = 'sample-tabletop-night';
 
 /** The current Look travels with every read, so a server can render or describe the issue in it. */
-function useIssue(id = DEFAULT_ISSUE) {
+function useIssue(requestedId?:string) {
   const adapter = useAdapter();
-  const look = useUi().studio.look;
+  const {mode}=useStudioMode();
+  const studio=useUi().studio;
+  const id=requestedId??studio.recapUrl?.split('/').pop()??(mode==='sample'?DEFAULT_ISSUE:'');
+  const look = studio.look;
   return useRetry(useLoad(() => adapter.getIssue(id, look), [adapter, id, look]));
 }
 /** Try again asks the adapter to reconnect first (GET /api/state), then loads the page again. */
@@ -36,10 +41,11 @@ function Loading({ label }: { label: string }) {
 }
 /** m17 + UI3: readers land here too, so besides Try again the way out is the home page and the Sample series. */
 function Failed({ text, what = 'That issue', onRetry, retrying, level = 1 }: { text: string; what?: string; onRetry: () => void; retrying: boolean; level?: 1 | 2 }) {
+  const {mode}=useStudioMode();
   return <ScreenState kind="error" level={level} title={`${what} didn’t load`} actions={<>
     <RetryButton onRetry={onRetry} busy={retrying}/>
     <a className="ct-btn" href={href('/')}>Go to the home page</a>
-    <a className="ct-btn ct-btn--ghost" href={href(`/series/${DEFAULT_ISSUE}`)}>Read the Sample series</a>
+    <a className="ct-btn ct-btn--ghost" href={href('/issues')}>Open {mode==='sample'?'Sample':'Live'} issues</a>
   </>}>
     <p>{text}</p>
     <p>Check your connection, then try again. If the studio computer is off, the comic comes back when it is on.</p>
@@ -70,7 +76,7 @@ export function Recap({ route }: { route: Route }) {
   if (error) return <Shell look={false} back="/" backLabel="Home"><Failed text={error} what="That recap" onRetry={tryAgain} retrying={retrying}/></Shell>;
   if (!data) return <Shell><Loading label="Loading the recap"/></Shell>;
   if (!data.panels.length) return <Shell title={<span className="ct-reader__crumb">Recap</span>}><EmptyIssue issue={data} what="this recap"/></Shell>;
-  const pages = toPages(data.panels);
+  const pages = toPages(comicScenes(data.panels));
   const save = async (page: number | 'cover' | 'back') => {
     const name = page === 'cover' ? 'The cover' : page === 'back' ? 'The back page' : `Page ${page + 1}`;
     setExporting(`Drawing ${name.toLowerCase()}…`);
@@ -86,14 +92,15 @@ export function Recap({ route }: { route: Route }) {
           <h1 className="ct-display">{data.title}</h1>
           <p className="ct-recap__facts">{data.panels.length} panels · {pages.length} {pages.length === 1 ? 'page' : 'pages'} · approved live by the streamer</p>
           <div className="ct-recap__acts">
-            <a className="ct-btn ct-btn--ink" href={href(`/book/${data.id}`)}>Read the comic book <Arrow/></a>
-            <a className="ct-btn" href={href(`/read/${data.id}`)}>Read as manga</a>
-            <a className="ct-btn" href={href(`/series/${data.id}`)}>Series</a>
+            <a className="ct-btn ct-btn--ink" href={href(`/book/${data.id}`)}>Read the collected book <Arrow/></a>
+            <a className="ct-btn" href={href(`/read/${data.id}`)}>Read the episode</a>
+            <a className="ct-btn" href={href(`/series/${data.id}`)}>Chapters & episodes</a>
           </div>
           <div className="ct-recap__png" role="group" aria-label="Save the book as PNG">
             <button type="button" className="ct-btn ct-btn--sm" onClick={() => void save('cover')}>Save cover as PNG</button>
             <button type="button" className="ct-btn ct-btn--sm" onClick={() => void save('back')}>Save back page as PNG</button>
           </div>
+          <p className="ct-note">{data.storyPanels ? "One complete story: read its episode or browse the same pages in the collected book." : "One comic/manga story, organised into episodes and chapters for a collected book."}</p>
           <p className="ct-note" role="status" aria-live="polite">{exporting || 'PNGs use the Look you have picked, with the speech bubbles and sound effects.'}</p>
         </div>
       </header>
@@ -142,7 +149,7 @@ export function Book({ route }: { route: Route }) {
     query.addEventListener('change', update);
     return () => query.removeEventListener('change', update);
   }, []);
-  const total = data ? toPages(data.panels).length + 2 : 0;
+  const total = data ? toPages(comicScenes(data.panels)).length + 2 : 0;
   const step = wide ? 2 : 1;
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -161,7 +168,7 @@ export function Book({ route }: { route: Route }) {
   if (error) return <Shell look={false} back="/" backLabel="Home"><Failed text={error} what="That comic book" onRetry={tryAgain} retrying={retrying}/></Shell>;
   if (!data) return <Shell><Loading label="Loading the comic book"/></Shell>;
   if (!data.panels.length) return <Shell title={<span className="ct-reader__crumb">{data.title}</span>} back={`/recap/${data.id}`} backLabel="Recap"><EmptyIssue issue={data} what="this comic book"/></Shell>;
-  const pages = toPages(data.panels);
+  const pages = toPages(comicScenes(data.panels));
   const leaves: ReactNode[] = [
     <BookCover key="cover" issue={data}/>,
     ...pages.map((page, index) => <ComicPage key={index} panels={page} number={index + 1}/>),
@@ -206,7 +213,8 @@ function BookCover({ issue }: { issue: IssueView }) {
 export function Series({ route }: { route: Route }) {
   const adapter = useAdapter();
   const ui = useUi();
-  const id = route.id ?? DEFAULT_ISSUE;
+  const {mode}=useStudioMode();
+  const id = route.id ?? ui.studio.recapUrl?.split('/').pop() ?? (mode==='sample'?DEFAULT_ISSUE:'');
   const look = ui.studio.look;
   const { data, error, retrying, tryAgain } = useRetry(useLoad(() => adapter.getSeries(id, look), [adapter, id, look]));
   const [at, setAt] = useState(0);
@@ -220,15 +228,15 @@ export function Series({ route }: { route: Route }) {
   return <Shell title={<span className="ct-reader__crumb">Series</span>} back={`/recap/${data.id}`} backLabel="Recap">
     <div className="ct-series" ref={root}>
       <header className="ct-series__head" data-reveal="up">
-        <p className="ct-kicker">Manga series {data.sample && <Sample/>}</p>
+        <p className="ct-kicker">Chapters & episodes {data.sample && <Sample/>}</p>
         <h1 className="ct-display">{data.title}</h1>
-        {episode && <p className="ct-series__lede">{data.episodes.length === 1 ? 'One episode' : `${data.episodes.length} episodes`}, one for each chapter of the stream. Each opens on the moment chat liked most.</p>}
+        {episode && <p className="ct-series__lede">{data.episodes.length === 1 ? 'One complete story' : `${data.episodes.length} episodes`}. Read every scene in order, from the opening to the resolution.</p>}
       </header>
       {!episode ? <ScreenState kind="empty" title="No episodes yet" actions={<>
         <a className="ct-btn ct-btn--ink" href={href('/studio')}>Open the studio</a>
         <a className="ct-btn" href={href('/output')}>Bind it again</a>
       </>}>
-        <p>Each episode is one chapter of a stream, and this one has no approved panels to make a chapter from.</p>
+        <p>A chapter collects episodes, and this one has no approved pages yet.</p>
         <p>Approve panels in the studio, then bind the issue again from Outputs.</p>
       </ScreenState>
         : <div className="ct-series__layout">
@@ -244,7 +252,7 @@ export function Series({ route }: { route: Route }) {
           </ol>
           <section className="ct-series__episode" aria-labelledby="ct-episode-title">
             <h2 id="ct-episode-title" className="ct-display">Episode {episode.number}</h2>
-            <ComicPage panels={episode.panels} number={episode.number} title={episode.title}/>
+            <div className="ct-manga-pages">{toPages(comicScenes(episode.panels)).map((page, index) => <ComicPage key={index} panels={page} number={index + 1} title={index === 0 ? episode.title : undefined}/>)}</div>
             <p className="ct-note">Highlight: “{episode.highlight.caption}”{episode.highlight.chosenBy ? ` · chat chose it, ${episode.highlight.chosenBy.votes} votes` : ''}{episode.highlight.cameo ? ` · cameo by @${episode.highlight.cameo}` : ''}</p>
             <div className="ct-row" ref={episodeNav}>
               <button type="button" className="ct-btn" disabled={at === 0} onClick={() => setAt(at - 1)}><Arrow dir="left"/>Previous</button>
@@ -259,6 +267,7 @@ export function Series({ route }: { route: Route }) {
 
 /** Manga reader: one long vertical strip, made for phones. */
 export function Reader({ route }: { route: Route }) {
+  const [pageSize, setPageSize] = useState(4);
   const { data, error, retrying, tryAgain } = useIssue(route.id);
   const bar = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -273,21 +282,22 @@ export function Reader({ route }: { route: Route }) {
   if (error) return <Shell look={false} back="/" backLabel="Home"><Failed text={error} what="That episode" onRetry={tryAgain} retrying={retrying}/></Shell>;
   if (!data) return <Shell><Loading label="Loading the episode"/></Shell>;
   if (!data.panels.length) return <Shell title={<span className="ct-reader__crumb">{data.title}</span>} back={`/series/${data.id}`} backLabel="Series"><EmptyIssue issue={data} what="this episode"/></Shell>;
+  const storyPages = toPages(comicScenes(data.storyPanels ?? data.panels), pageSize);
   return <Shell title={<span className="ct-reader__crumb">{data.title}</span>} back={`/series/${data.id}`} backLabel="Series">
     <div className="ct-progress" aria-hidden="true"><div ref={bar}/></div>
-    <article className="ct-strip" aria-label={`${data.title}, ${data.panels.length} panels`}>
+    <article className="ct-strip" aria-label={`${data.title}, ${storyPages.length} pages`}>
       <header className="ct-strip__head">
         <p className="ct-kicker">@{data.channel}{data.date && ` · ${data.date}`} {data.sample && <Sample/>}</p>
         <h1 className="ct-display">{data.title}</h1>
         <p>From the stream “{data.streamTitle}”.</p>
       </header>
-      {data.panels.map((panel, index) => <section key={panel.id} className="ct-strip__beat" aria-label={`Panel ${index + 1}`}>
-        <Panel panel={panel} tags={index === 0}/>
-      </section>)}
+      <p className="ct-note">{storyPages.length} pages · {(data.storyPanels ?? data.panels).length} scenes · {data.storyPanels ? 'A complete Sample story' : 'Your approved stream moments'}</p>
+      <label className="ct-field ct-reader-density">Panels per page<select aria-label="Panels per page" value={pageSize} onChange={event=>setPageSize(Number(event.target.value))}>{[4,5,6].map(n=><option key={n}>{n}</option>)}</select></label>
+      <div className="ct-manga-pages">{storyPages.map((page, index) => <ComicPage key={index} panels={page} number={index + 1}/>)}</div>
       <footer className="ct-strip__end">
-        <p className="ct-display">To be continued…</p>
-        <p>Next episode drops when @{data.channel} goes live again.</p>
-        <div className="ct-row"><a className="ct-btn ct-btn--ink" href={href(`/series/${data.id}`)}>All episodes</a><a className="ct-btn" href={href(`/book/${data.id}`)}>Read as a comic book</a></div>
+        <p className="ct-display">The end</p>
+        <p>{data.storyPanels ? "Every adventure deserves an ending. Thanks for reading." : `More stories when @${data.channel} goes live again.`}</p>
+        <div className="ct-row"><a className="ct-btn ct-btn--ink" href={href(`/series/${data.id}`)}>All episodes</a><a className="ct-btn" href={href(`/book/${data.id}`)}>Collected book</a></div>
       </footer>
     </article>
   </Shell>;
@@ -298,7 +308,8 @@ export function CatchUp({ route }: { route: Route }) {
   const adapter = useAdapter();
   const ui = useUi();
   const [minutes, setMinutes] = useState(() => Number(route.params.get('minutes')) || 15);
-  const { data, error, retrying, tryAgain } = useRetry(useLoad(() => adapter.getCatchup(minutes), [adapter, minutes]));
+  const releasedVersion = JSON.stringify(ui.studio.panels.map(panel => [panel.id, panel.imageUrl, panel.caption]));
+  const { data, error, retrying, tryAgain } = useRetry(useLoad(() => adapter.getCatchup(minutes), [adapter, minutes, releasedVersion]));
   return <Shell title={<span className="ct-reader__crumb">Catch-up</span>}>
     <div className="ct-catchup">
       <header className="ct-catchup__head">
@@ -326,7 +337,7 @@ export function CatchUp({ route }: { route: Route }) {
         </ol>
         <div className="ct-row ct-catchup__acts">
           {data.channel && <a className="ct-btn ct-btn--ink" href={`https://www.twitch.tv/${data.channel}`} target="_blank" rel="noopener noreferrer">Back to the stream on Twitch</a>}
-          <a className="ct-btn" href={href(`/recap/sample-${ui.studio.fixtureId}`)}>Read the full issue</a>
+          <a className="ct-btn" href={href(ui.studio.recapUrl??'/issues')}>{ui.studio.recapUrl?'Read the full issue':'Browse saved issues'}</a>
         </div>
       </>}
     </div>

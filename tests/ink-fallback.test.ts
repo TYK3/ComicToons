@@ -27,7 +27,7 @@ async function nonAffiliateApp(){
   return {irc,f,calls,status};
 }
 
-test('INK-FB-1: non-Affiliate channel creates no reward; viewer !ink queues a cameo; a mod !ink yes approves it',async()=>{
+test('INK-FB-1: non-Affiliate requests queue honestly and a mod cannot release placeholder art',async()=>{
   const {irc,f,calls,status}=await nonAffiliateApp();
   try{
     const before=await status();
@@ -39,7 +39,8 @@ test('INK-FB-1: non-Affiliate channel creates no reward; viewer !ink queues a ca
     let state=await f.state();
     const cameo=state.pendingPanels.find((panel:ComicPanel)=>panel.cameo==='juniper');
     assert.ok(cameo,'viewer !ink drafted a cameo into the review queue');
-    assert.equal(cameo.caption,'Cameo: Juniper joins the panel');
+    assert.equal(cameo.caption,'Ink request from Juniper');
+    assert.ok(cameo.releaseBlocked);
     assert.equal(state.panels.length,0,'nothing reaches the overlay without review');
     const queued=(await status()).inkChat.requests;
     assert.deepEqual(queued.map((entry:{name:string;status:string})=>[entry.name,entry.status]),[['Juniper','drafted']]);
@@ -49,10 +50,11 @@ test('INK-FB-1: non-Affiliate channel creates no reward; viewer !ink queues a ca
     assert.ok(!state.pendingPanels.concat(state.panels).some((panel:ComicPanel)=>panel.dialogue.some(line=>/^!ink/i.test(line))),'an !ink command is never quoted in a panel');
     irc.feed(privmsg('mod-yes','moss','!ink yes','mod=1'));await flush();
     state=await f.state();
-    assert.deepEqual(state.panels.map((panel:ComicPanel)=>panel.id),[cameo.id],'the mod approved the cameo');
+    assert.deepEqual(state.panels,[],'a moderator cannot release library art as a completed cameo');
+    assert.ok(state.pendingPanels.some((panel:ComicPanel)=>panel.id===cameo.id));
     assert.ok(!state.pendingPanels.some((panel:ComicPanel)=>panel.dialogue.some(line=>/^!ink/i.test(line))),'the mod command did not open a quoted panel');
     const after=await status();
-    assert.equal(after.inkChat.requests[0].status,'approved');
+    assert.equal(after.inkChat.requests[0].status,'drafted');
     assert.equal(after.optedOut,0);
   }finally{await f.close();}
 });
@@ -193,7 +195,8 @@ test('INT-FID-T12-MOCK-403: mock Helix hand-over preserves the passed non-Affili
     const queued=(await app.inject('/api/participation/status')).json().inkChat.requests;
     assert.equal(queued.length,1);assert.equal(queued[0].status,'drafted');
     bus.emit('stream-event',{id:'mock-approval',t:2,type:'chat',user:'mock-mod',name:'TestModerator',text:'!ink yes',moderator:true});await flush();
-    assert.equal(studio.state.panels.length,1);
-    assert.equal((await app.inject('/api/participation/status')).json().inkChat.requests[0].status,'approved');
+    assert.equal(studio.state.panels.length,0);
+    assert.ok(studio.state.pendingPanels[0]?.releaseBlocked);
+    assert.equal((await app.inject('/api/participation/status')).json().inkChat.requests[0].status,'drafted');
   }finally{await app.close();studio.close();}
 });

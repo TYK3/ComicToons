@@ -114,11 +114,30 @@ test('polls: Twitch poll when allowed, falling back to chat votes on a 403', asy
   assert.match(fallback.fallbackReason!, /403/);
 });
 
-test('polls: a vote needs a pending panel and two lines, and pauses when the budget is used', async () => {
+test('poll result remains rendering until image lettering succeeds and reports image failure truthfully',async()=>{
+  for(const success of [true,false]){
+    const f=setup();f.studio.state.pendingPanels.push(panel('reviewed-page'));f.chat('author1','First real line');f.chat('author2','Second real line');await flush();
+    let complete!:()=>void,reject!:(error:Error)=>void;const pending=new Promise<void>((resolve,fail)=>{complete=resolve;reject=fail;});
+    f.studio.caption=()=>pending;const poll=await f.engine.polls.start();f.chat('voter',`!${poll.choices[0]!.key}`);await flush();
+    const result=f.engine.polls.finish()!;assert.equal(result.outcome,'rendering');assert.equal(f.studio.state.pendingPanels[0]!.caption,'Panel reviewed-page');
+    if(success)complete();else reject(new Error('Controlled image quality failure'));await flush();
+    assert.equal(result.outcome,success?'applied':'image-failed');f.engine.close();
+  }
+});
+
+test('prediction image failure does not emit a false applied punchline',async()=>{
+  const f=setup();let reject!:(error:Error)=>void;const pending=new Promise<void>((_,fail)=>{reject=fail;});f.studio.caption=()=>pending;
+  f.bus.emit('stream-event',{t:0,type:'hype_train_begin',level:1});await flush();const prediction=f.engine.hype.prediction!;
+  f.bus.emit('stream-event',{t:0,type:'hype',prediction:{id:prediction.id,status:'RESOLVED',winningOutcomeId:prediction.outcomes[0]!.id,outcomes:[]}} as ParticipationEvent);await flush();
+  f.studio.state.pendingPanels.push(panel('after-result'));f.engine.tick();assert.equal(f.seen.some(e=>e.channel==='punchline'),false);
+  reject(new Error('Controlled image failure'));await flush();assert.match(f.engine.hype.view().error??'',/image lettering failed/);assert.equal(f.seen.some(e=>e.channel==='punchline'),false);f.engine.close();
+});
+
+test('polls: a vote needs an eligible panel and two lines, and pauses when the budget is used', async () => {
   const { studio, engine, chat } = setup({}, { budget: 0 });
   await assert.rejects(engine.polls.start(), /paused/);
   const roomy = setup();
-  await assert.rejects(roomy.engine.polls.start(), /no panel/);
+  await assert.rejects(roomy.engine.polls.start(), /no eligible panel/);
   roomy.studio.state.pendingPanels.push(panel('p1'));
   roomy.chat('ana', 'only one line'); await flush();
   await assert.rejects(roomy.engine.polls.start(), /two different lines/);
@@ -161,7 +180,7 @@ test('Ink me: reward matches the lead decision and Twitch limits, created on con
   assert.match(notAffiliate.engine.rewards.error!, /partner or affiliate/);
 });
 
-test('Ink me: a redemption drafts a cameo, then fulfils; repeats and cooldown refund', async () => {
+test('Ink me: placeholder redemptions cannot fulfil; cancellation, repeats and cooldown refund', async () => {
   const { bus, engine, helix, studio, chat, advance, seen } = setup();
   bus.emit('twitch-connected', {}); await flush();
   const rewardId = engine.rewards.rewardId!;
@@ -172,8 +191,9 @@ test('Ink me: a redemption drafts a cameo, then fulfils; repeats and cooldown re
   assert.equal(cameo.cameo, 'u1'); assert.deepEqual(cameo.dialogue, ['draw me as a wizard']);
   assert.ok(cameo.caption.length <= 60);
   assert.ok(seen.some(entry => entry.channel === 'cameo'));
-  await engine.rewards.resolve('r1', 'fulfil');
-  assert.deepEqual(helix.calls.at(-1), { method: 'updateRedemptionStatus', input: { rewardId, redemptionIds: ['r1'], status: 'FULFILLED' } });
+  await assert.rejects(engine.rewards.resolve('r1', 'fulfil'),/source-grounded cameo/);
+  await engine.rewards.resolve('r1', 'cancel');
+  assert.deepEqual(helix.calls.at(-1), { method: 'updateRedemptionStatus', input: { rewardId, redemptionIds: ['r1'], status: 'CANCELED' } });
   redeem('r2', 'u2'); await flush(); // inside the 5-minute cooldown
   assert.equal(engine.rewards.redemptions.find(entry => entry.id === 'r2')!.status, 'canceled');
   advance(301_000);
@@ -289,8 +309,7 @@ test('!noink after redeeming or while their line is on the ballot removes them',
   await flush();
   assert.ok(studio.state.pendingPanels.some(entry => entry.id === 'cameo-r1'));
   chat('ana', 'winner line'); chat('ben', 'other line'); await flush();
-  const poll = await engine.polls.start({ panelId: 'cameo-r1', duration: 15 });
-  void poll;
+  await assert.rejects(engine.polls.start({ panelId: 'cameo-r1', duration: 15 }),/eligible panel/);
   chat('u1', '!noink'); await flush(); await flush();
   assert.equal(studio.state.pendingPanels.some(entry => entry.id === 'cameo-r1'), false);
   assert.equal(engine.rewards.redemptions[0]!.status, 'canceled');

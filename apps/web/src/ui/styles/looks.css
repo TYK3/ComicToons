@@ -1,9 +1,6 @@
-/* Looks (design D1a). One recipe per Look: a paper layer behind the art plus a filter on the art,
-   blended with multiply. The same fixture art, so every view changes together on each pick.
-   No pseudo-elements and no SVG filters, so PNG exports can rebuild the treatment from computed styles.
-   Colour appears only inside panel art; the chrome stays ink and paper.
-   The per-Look recipes themselves (core `lookStyles`, packages/core/src/theme.ts) are injected once
-   at start-up by main.tsx, so every mounted view picks them up without its own <style> tag. */
-.ct-art>img{mix-blend-mode:multiply}
-
-@media (prefers-reduced-motion:reduce){.ct-art>img{transition:none}}
+/* The artwork carries its own palette. No image filters or tint layers. */
+.ct-art{overflow:hidden}
+.ct-art[data-atlas]{container-type:size;display:grid;place-items:center}
+.ct-art__crop{position:relative;overflow:hidden;flex:none}
+.ct-art img{width:100%;height:100%;object-fit:contain;mix-blend-mode:normal;filter:none}
+.ct-art::after{content:none}

@@ -1,0 +1,37 @@
+import {expect,test} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {mkdir} from 'node:fs/promises';
+
+test('landing has no access gate, and full readers open from explicit links',async({page})=>{
+  await page.setViewportSize({width:1280,height:900});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  const accessRequests:string[]=[];
+  page.on('request',request=>{if(request.url().includes('/api/access'))accessRequests.push(request.url());});
+  await page.goto('/ui.html#/');
+  await expect(page.getByRole('link',{name:'Connect Twitch',exact:true})).toBeVisible();
+  await expect(page.getByRole('link',{name:'Try Sample demo',exact:true})).toHaveAttribute('href','#/studio?workspace=sample');
+  await expect(page.locator('.ct-issues a')).toHaveCount(3);
+  for(const id of ['tabletop-night','speedrun-fail','irl-cooking'])await expect(page.locator(`.ct-issues a[href="#/book/sample-${id}?workspace=sample"]`)).toBeVisible();
+  await expect(page.locator('#ct-set-panel .ct-reader-preview')).toHaveCount(2);
+  await expect(page.locator('#ct-set-panel .ct-page, #ct-set-panel .ct-part__episodes')).toHaveCount(0);
+  await mkdir('artifacts/tmp/open-studio',{recursive:true});
+  await page.locator('.ct-reading-options').screenshot({path:'artifacts/tmp/open-studio/previews-desktop.jpg',type:'jpeg',quality:85});
+  const issues=(await new AxeBuilder({page}).analyze()).violations.filter(v=>v.impact==='serious'||v.impact==='critical');expect(issues).toEqual([]);
+  await page.getByRole('link',{name:'Read full comic book',exact:true}).click();
+  await expect(page).toHaveURL(/#\/book\/sample-tabletop-night/);
+  await expect(page.locator('.ct-book__cover')).toBeVisible();
+  await page.goto('/ui.html#/');
+  await page.getByRole('link',{name:'Read full manga series',exact:true}).click();
+  await expect(page).toHaveURL(/#\/series\/sample-tabletop-night/);
+  await expect(page.locator('.ct-series')).toBeVisible();
+  await page.goto('/ui.html#/studio');
+  await expect(page.getByRole('switch',{name:'Live Twitch',exact:true})).toBeVisible();
+  await page.goto('/ui.html#/connect');
+  await expect(page.getByRole('button',{name:'Connect with Twitch',exact:true})).toBeVisible();
+  expect(accessRequests).toEqual([]);
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/ui.html#/');
+  await expect(page.locator('.ct-reader-preview')).toHaveCount(2);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.locator('.ct-reading-options').screenshot({path:'artifacts/tmp/open-studio/previews-mobile.jpg',type:'jpeg',quality:85});
+});

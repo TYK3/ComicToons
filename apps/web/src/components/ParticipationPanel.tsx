@@ -59,7 +59,7 @@ export function ParticipationPanel() {
             <p className="pc-note">{poll.mode === 'chat' ? `Viewers vote by typing ${poll.choices.map(choice => `!${choice.key}`).join(', ')} in chat.` : 'Viewers vote in the Twitch poll.'}{poll.fallbackReason && poll.mode === 'chat' && !poll.fallbackReason.startsWith('Twitch polls are off') ? ` ${poll.fallbackReason}` : ''}</p>
             <button type="button" className="pc-btn" onClick={() => act('/api/participation/polls/end')}>End vote now</button>
           </> : <>
-            {result && <p className="pc-note" role="status">{result.outcome === 'applied' ? `Last vote: “${result.caption}” won with ${result.voters} ${result.voters === 1 ? 'vote' : 'votes'}.` : result.outcome === 'no-votes' ? 'Last vote: nobody voted, so the caption stayed.' : 'Last vote: the panel was already gone.'}</p>}
+            {result && <p className="pc-note" role="status">{result.outcome === 'applied' ? `Last vote: “${result.caption}” won with ${result.voters} ${result.voters === 1 ? 'vote' : 'votes'}.` : result.outcome === 'rendering' ? 'Winning line selected; rendering the revised picture.' : result.outcome === 'image-failed' ? 'Winning image revision failed; original picture retained.' : result.outcome === 'no-votes' ? 'Last vote: nobody voted, so the caption stayed.' : 'Last vote: the panel was already gone.'}</p>}
             <button type="button" className="pc-btn pc-btn--ink" disabled={paused} onClick={() => act('/api/participation/polls', { duration: 45 })}>Start a vote on the next panel</button>
             <p className="pc-note">{flags.twitchPolls ? 'Uses a Twitch poll. ' : ''}Not an Affiliate or Partner? Viewers vote by typing !1, !2 or !3 in chat instead.</p>
           </>}

@@ -5,7 +5,7 @@ import {TwitchTokenStore} from '../apps/server/src/twitch/token-store.ts';
 import type {AdapterFactory,ChatAdapter} from '../apps/server/src/ingest/irc.ts';
 import {FakeClock,flush,notification,socketFactory,welcome} from './eventsub-fakes.ts';
 
-export async function liveAppFixture(options:{helix?:NonNullable<Parameters<typeof createApp>[0]>['helix'];failChat?:boolean;adapterFactory?:AdapterFactory;env?:Record<string,string>}={}) {
+export async function liveAppFixture(options:{scene?:NonNullable<Parameters<typeof createApp>[0]>['scene'];helix?:NonNullable<Parameters<typeof createApp>[0]>['helix'];failChat?:boolean;adapterFactory?:AdapterFactory;env?:Record<string,string>}={}) {
   const clock=new FakeClock();const {sockets,factory}=socketFactory();
   const env={TWITCH_CLIENT_ID:'live-test-client',TWITCH_CLIENT_SECRET:'live-test-secret'};
   const identityFetch=(async(input:string|URL|Request)=>{
@@ -25,13 +25,13 @@ export async function liveAppFixture(options:{helix?:NonNullable<Parameters<type
   }) as typeof fetch;
   let callbacks:Parameters<ChatAdapter['start']>[0]|undefined,handovers=0;
   const off=eventBus.on('twitch-auth',()=>{handovers++;});
-  const app=createApp({helix:options.helix,env:options.env??{},logger:false,now:()=>clock.now,twitchStore:store,
+  const app=createApp({scene:options.scene,helix:options.helix,env:options.env??{},logger:false,now:()=>clock.now,twitchStore:store,
     adapterFactory:options.adapterFactory??(()=>({start(next){callbacks=next;},stop(){}})),
     eventSub:{socketFactory:factory,timers:clock,now:()=>clock.now,fetch:helixFetch,helixUrl:'https://subscriptions.invalid',backoffMs:()=>1000}});
   await app.ready();
   return {app,store,clock,sockets,subscriptions,get handovers(){return handovers;},
     irc(event:StreamEvent){assert.ok(callbacks);callbacks.event(event);},
-    async startIRC(){assert.equal((await app.inject({method:'POST',url:'/api/ingest',payload:{mode:'twitch',channel:'approved_test'}})).statusCode,200);},
+    async startIRC(){assert.equal((await app.inject({method:'POST',url:'/api/ingest',payload:{mode:'twitch',channel:'streamer'}})).statusCode,200);},
     async signIn(){
       const state=new URL((await app.inject('/auth/twitch/login')).headers.location!).searchParams.get('state');
       assert.equal((await app.inject(`/auth/twitch/callback?state=${state}&code=live-test-code`)).statusCode,302);

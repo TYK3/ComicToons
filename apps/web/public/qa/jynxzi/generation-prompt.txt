@@ -1,0 +1,17 @@
+Create a polished full-colour manga/comic page for a PRIVATE ComicToons QA test, portrait page, exactly SIX illustrated panels in two columns and three rows, clean dark ink borders and narrow cream gutters. This is a chat-inspired fictional scene interpretation, not a claim about verified video action.
+
+REFERENCE: attached screenshot is ONLY a character appearance reference. Use ONLY the adult male streamer visible in the lower-left part of the video, around x240-450 y290-440 of the screenshot. He has light skin, short light brown hair, expressive face, black T-shirt and large dark teal over-ear headphones. Preserve his recognizable facial features consistently across all six drawings. Ignore all screenshot UI, browser chrome, other people, usernames, unrelated chat and notices. Do not recreate any Twitch/other logos.
+
+Art: original detailed, cinematic, expressive contemporary manga drawing, fully painted natural skin/clothing/object colours. Colourful gaming room with teal/blue shadows, warm golden desk light and coral accents. No monochrome gradient filter. Never stretch people. Same face, haircut, shirt, headset and room throughout. The in-game avatar is an original tactical virtual version of the same adult streamer, with no copyrighted game characters or branding.
+
+Story and composition:
+1. SETUP: medium wide view of streamer at his gaming desk leaning toward monitor in focused concentration. Keep his face entirely unobscured in the right half. Small integrated narration box inside the picture in empty upper-left wall reads "ONE ROUND. ONE CHANCE."
+2. ACTION: immersive view of his original virtual tactical avatar moving through a blue-orange game environment, preparing an accurate shot; dynamic motion and clear silhouette. No dialogue; small drawn sound effect "CLICK" near mouse/control action. Non-graphic game action.
+3. PAYOFF: over-shoulder monitor view shows a single clean successful game elimination, simple monitor display "+1 ELIMINATION"; his hand on mouse, startled raised brow visible in profile. No real injury, no gore.
+4. CHAT RESPONSE: expressive close/medium view of streamer reading chat with an incredulous smile. COMPOSE the person in the RIGHT HALF and leave large uncluttered illustrated room background on the LEFT for one clear white comic balloon with small label "CHAT" and exact text "HE SAID I’M CHEATING BECAUSE I KILLED HIM ONCE LMAO". The balloon belongs to chat (small tail toward a generic chat/emote icon), NOT a quote attributed to streamer. Entire balloon is INSIDE this panel image. Face and headset completely clear.
+5. REACTION: streamer leans back laughing, one hand open in amused disbelief, glowing game screen nearby. Silent expressive reaction, no invented streamer speech.
+6. RESOLUTION: streamer returns to his desk, poised for next round; the original virtual avatar reflected in monitor, room full of colour. Small integrated narration box in clear wall background reads "NEXT ROUND." Face clear.
+
+Page title outside panels: "ONE ELIMINATION LATER".
+Small footer outside panels: "CHAT-INSPIRED QA · SCENE INTERPRETATION".
+All speech/dialogue/narration boxes must be inside their illustrated panels. Design the illustration AROUND the lettering: NEVER cover a face, eyes, mouth, headset, hands or key action with text; no outside caption cards, no arbitrary screenshot chat rectangles, no watermarks. Large readable lettering, exact quote, no other dialogue or usernames. Strong visual continuity and an actual beginning, action, reaction and ending.

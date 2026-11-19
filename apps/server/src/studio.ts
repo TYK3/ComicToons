@@ -1,3 +1,4 @@
+import type { StoryFlowReport, StoryFlowMoment, ScenePage, AuthoredLettering } from '@comictoons/core';
 import { readProductEnv } from '../../../packages/core/src/env.mjs';
 import { illustrateIssue, LibraryProvider } from './pipeline/library.ts';
 import {buildIssue, fixtures, getFixture, safeText, isOptOutCommand, mockArt, eventBus, type ComicPanel, type ComicIssue, type TwitchConnection} from '@comictoons/core';
@@ -5,7 +6,7 @@ import {ChatSource} from './ingest/source.ts';
 import {validChannel,type AdapterFactory} from './ingest/irc.ts';
 import {resolveMangaTheme,sampleSource,type ChatSourceState,type StreamEvent,type MangaTheme} from '@comictoons/core';
 import {randomUUID} from 'node:crypto';
-import {MomentDetector, type LiveMoment, type MomentConfig, type MomentKind} from './pipeline/moments.ts';
+import {MomentDetector, defaultMomentConfig, type LiveMoment, type MomentConfig, type MomentKind} from './pipeline/moments.ts';
 import {writeCaptionSync, type WriterContext} from './pipeline/writer.ts';
 import {ArtPipeline, buildArtPrompt} from './pipeline/imagegen.ts';
 import {nextUpFor} from './participation/director.ts';
@@ -67,6 +68,8 @@ export class Studio {
    * liveEvent/busEvent stop drafting new panels, and sourceChanged keeps reporting the chat
    * connection as 'ended' even if chat keeps arriving on the old transport. */
   private liveEnded=false;
+  private sceneCapture=false;
+  private chatOnly=false;
   constructor(options:{managedChatSource?:boolean;adapterFactory?:AdapterFactory;now?:()=>number;momentConfig?:Partial<MomentConfig>;artPipeline?:ArtPipeline}={}) {
     this.momentConfig=options.momentConfig;
     this.now=options.now??(()=>Date.now());
@@ -109,14 +112,50 @@ export class Studio {
     return {...structuredClone(this.state),source:sampleSource(),status:'ready',elapsed:this.state.duration,
       panels:this.state.approvalMode?[]:panels,pendingPanels:this.state.approvalMode?panels:[],recapUrl:undefined,shareUrl:undefined,pageUrls:undefined};
   }
-  useSource(mode:'sample'|'twitch',channel='') {
+  private sceneEditor?: (id:string,lettering:AuthoredLettering)=>Promise<unknown>;
+  setSceneEditor(editor:(id:string,lettering:AuthoredLettering)=>Promise<unknown>){this.sceneEditor=editor;}
+  queueScenePage(page:ScenePage,channel:string,imageUrl:string){
+    const existing=[...this.state.pendingPanels,...this.state.panels].find(panel=>panel.id===page.id);
+    if(existing&&page.status==='ready'&&page.authoredLettering){existing.imageUrl=imageUrl;existing.caption=page.authoredLettering.text;existing.imageRevision=undefined;return;}
+    if(page.status!=='ready'||this.state.panels.some(p=>p.id===page.id)||this.state.pendingPanels.some(p=>p.id===page.id))return;
+    const description=page.provider==='source'?'Actual captured frames composed locally with attributed chat; no AI illustration':'AI interpretation of timestamped captured frames';
+    this.state.pendingPanels.push({id:page.id,origin:'twitch',caption:page.title,dialogue:[],scene:description,characters:[],mood:'observed',altText:`${page.title}. ${description}; no speech transcription.`,imageUrl,at:this.state.elapsed,provenance:{provider:`scene-${page.provider}`,style:'comic',asset:page.id,fallback:false},sources:page.sourceChatIds});
+    this.state.issueTitle=this.state.issueTitle||`#${channel} comic`;this.state.status='live';
+  }
+  beginSceneCapture(channel:string){this.sceneCapture=true;this.useSource('twitch',channel,true);}
+  withdrawScenePage(id:string){this.state.panels=this.state.panels.filter(p=>p.id!==id);this.state.pendingPanels=this.state.pendingPanels.filter(p=>p.id!==id);}
+  storyFlow(): StoryFlowReport {
+    const panels = [...this.state.panels, ...this.state.pendingPanels];
+    const moments: StoryFlowMoment[] = panels.filter(panel => panel.origin === 'twitch').map(panel => {
+      const draft = this.momentDrafts.get(panel.id);
+      const bucket = this.liveDrafts.get(panel.id);
+      const moment = draft ? this.visibleMoment(draft) : undefined;
+      const events = moment?.events ?? (bucket?.lines ?? []).map(line => ({ ...line, type: 'chat' as const }));
+      const chats = events.filter(event => event.type === 'chat');
+      return { id: panel.id, kind: moment?.kind ?? 'chat', at: panel.at, endAt: moment?.endAt ?? events.at(-1)?.t ?? panel.at,
+        score: moment?.score ?? chats.length, candidate: !!moment && moment.kind !== 'chat', token: moment?.token,
+        messageCount: chats.length, distinctUsers: new Set(chats.map(event => event.user).filter(Boolean)).size,
+        quotes: chats.slice(0, 8).map(event => ({ id: event.id, at: event.t, text: safeText(event.text ?? '') })),
+        sourceIds: moment?.sourceIds ?? panel.sources ?? [], clipUrl: panel.clipUrl,
+        artProvider: panel.provenance?.provider ?? 'unknown', caption: panel.caption };
+    });
+    const source = this.state.source ?? sampleSource();
+    return { capturedAt: new Date(this.now()).toISOString(), channel: source.channel, connected: source.active === 'twitch',
+      simulated: source.simulated, transport: source.transport, received: source.received, throttled: this.ingest.diagnostics.throttled,
+      clips: this.state.clips ?? 0, detector: this.moments.diagnostics(this.state.elapsed),
+      thresholds: { ...defaultMomentConfig, ...this.momentConfig }, moments: moments.slice(-24).reverse(),
+      capabilities: { videoAnalysis: false, speechTranscription: false, automaticScenePages: false } };
+  }
+  useSource(mode:'sample'|'twitch',channel='',fresh=false,chatOnly=false) {
     if(this.state.status==='exporting')throw new Error('Please wait while your issue is being exported.');
+    this.chatOnly=mode==='twitch'&&chatOnly;
     if(mode==='sample') {
       if(this.state.source?.active!=='twitch')this.state=this.sampleSnapshot();
       this.ingest.sample();
     } else {
       if(!validChannel(channel))throw new Error('Enter a valid Twitch channel name.');
       if(this.state.source?.active==='twitch')this.liveArchive=structuredClone(this.state);
+      if(fresh)this.liveArchive=undefined;
       this.sampleFallback=this.sampleSnapshot();this.sampleFallback.status='ready';
       this.state=structuredClone(this.sampleFallback);
       this.ingest.start(channel);
@@ -263,6 +302,7 @@ export class Studio {
     // first: the same message id arriving by the other path is neither counted nor quoted again.
     if(event.id){if(this.seenEventIds.has(event.id))return;this.markSeenEventId(event.id);}
     const opened=text?this.moments.ingest(event):undefined;
+    if(this.sceneCapture||this.chatOnly)return;
     if(!text||/^!ink$/i.test(text)||this.state.source?.active!=='twitch'||this.liveEnded)return;
     // Chat velocity spikes and emote/keyword bursts become their own kind-specific panels.
     if(opened)this.openMomentPanel(opened);
@@ -461,6 +501,7 @@ export class Studio {
     if(this.state.source?.active!=='twitch'||this.liveEnded)return;
     if(event.type==='clip')this.state.clips=(this.state.clips??0)+1;
     const opened=this.moments.ingest(event);
+    if(this.sceneCapture||this.chatOnly)return;
     if(opened)this.openMomentPanel(opened);
     // EventSub chat on the bus is quoted like IRC chat (it is the chat source while connected);
     // a line already taken from IRC never reaches here, because its id was seen above.
@@ -489,6 +530,8 @@ export class Studio {
     if(body.mangaTheme){const theme=resolveMangaTheme(body.mangaTheme);this.state.mangaTheme=theme;if(this.sampleFallback)this.sampleFallback.mangaTheme=theme;if(this.liveArchive)this.liveArchive.mangaTheme=theme;}
     this.tick();this.anchorElapsed=this.state.elapsed;this.anchor=Date.now();
     if(body.speed!==undefined)this.state.speed=body.speed;
+    if(body.approvalMode===false&&this.state.pendingPanels.some(panel=>panel.releaseBlocked))throw new Error('Source-grounded cameo art is required; library placeholders cannot be released.');
+    if(body.approvalMode===false&&this.state.pendingPanels.some(panel=>panel.imageRevision))throw new Error('Resolve image lettering revisions before enabling automatic release.');
     if(body.approvalMode!==undefined){this.state.approvalMode=body.approvalMode;if(!body.approvalMode){this.state.panels.push(...this.state.pendingPanels);this.state.pendingPanels=[];}}
     return this.state;
   }
@@ -499,6 +542,8 @@ export class Studio {
   moderate(kind:'approve'|'reject',panelId?:string,all=false){
     this.tick();const selected=this.state.pendingPanels.filter((p,i)=>panelId?p.id===panelId:all||kind==='approve'||i===0);
     if(!selected.length)throw new Error('There are no matching panels waiting for review.');
+    if(kind==='approve'&&selected.some(panel=>panel.releaseBlocked))throw new Error('Source-grounded cameo art is required; library placeholders cannot be released.');
+    if(kind==='approve'&&selected.some(panel=>panel.imageRevision))throw new Error('Resolve the image lettering revision before releasing this page.');
     this.state.pendingPanels=this.state.pendingPanels.filter(p=>!selected.some(s=>s.id===p.id));
     if(kind==='approve')this.state.panels.push(...selected);
     this.state.panels.sort((a,b)=>a.at-b.at);
@@ -511,11 +556,20 @@ export class Studio {
     const present=new Set([...this.state.panels,...this.state.pendingPanels].map(p=>p.id));this.state.pendingPanels.push(...action.panels.filter(p=>!present.has(p.id)));
     this.state.pendingPanels.sort((a,b)=>a.at-b.at);return this.state;
   }
-  caption(panelId:string,caption:string){
-    const panel=this.state.pendingPanels.find(p=>p.id===panelId);if(!panel)throw new Error('That panel is no longer waiting for review.');
-    // Only the caption changes (B2): dialogue and storyCaption stay as written, so the pages
-    // letter the edited caption in its own balloon ahead of every dialogue line.
-    const cleaned=safeText(caption).trim();if(!cleaned)throw new Error('Write a caption before saving.');panel.caption=cleaned;return this.state;
+  caption(panelId:string,caption:string,attribution:AuthoredLettering['attribution']='Author'){
+    const panel=[...this.state.pendingPanels,...this.state.panels].find(p=>p.id===panelId);if(!panel)throw new Error('That panel is no longer available.');
+    const cleaned=safeText(caption).trim();if(!cleaned||cleaned.length>280)throw new Error('Use 1 to 280 characters for the caption.');
+    if(panel.provenance?.provider.startsWith('scene-')){
+      if(!this.sceneEditor)throw new Error('Image revision is unavailable. The original picture is unchanged.');
+      if(panel.imageRevision?.status==='rendering')throw new Error('This image revision is already rendering.');
+      panel.imageRevision={status:'rendering'};
+      return this.sceneEditor(panelId,{text:cleaned,attribution}).then(()=>{panel.imageRevision=undefined;return this.state;},error=>{panel.imageRevision={status:'failed',reason:error instanceof Error?error.message:'Image revision failed.'};throw error;});
+    }
+    if(!this.state.pendingPanels.includes(panel))throw new Error('That panel is no longer waiting for review.');
+    panel.caption=cleaned;return this.state;
+  }
+  discardImageRevision(panelId:string){
+    const panel=[...this.state.pendingPanels,...this.state.panels].find(p=>p.id===panelId);if(!panel||panel.imageRevision?.status!=='failed')throw new Error('Only a failed image revision can be discarded.');panel.imageRevision=undefined;return this.state;
   }
   /** Edits a pending panel's speech balloons; the caption is left exactly as it is. */
   dialogue(panelId:string,lines:string[]){

@@ -1,6 +1,12 @@
 html[data-screen=overlay],html[data-screen=overlay] body{background:transparent;overflow:hidden}
 .ct-overlay-root{position:fixed;inset:0;overflow:hidden}
 .ct-overlay-root[data-backdrop]{background:var(--ink)}
+.ct-overlay-root:not([data-clean]){overflow:auto;padding-top:86px}
+.ct-overlay-controls{position:fixed;top:0;left:0;right:0;z-index:10;background:var(--act);padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;border-bottom:3px solid var(--ink)}
+.ct-overlay-root:not([data-clean]) .ct-audience-output{min-height:calc(100vh - 86px)}
+.ct-overlay-status{margin:20px;color:var(--paper);font-weight:700}
+.ct-overlay-root[data-clean] .ct-viewer-empty{display:none}
+@media(max-width:750px){.ct-overlay-controls{position:static}.ct-overlay-root:not([data-clean]){padding-top:0}.ct-overlay-controls .ct-btn{font-size:14px;padding:10px}.ct-overlay-root:not([data-clean]) .ct-audience-output{min-height:300px;padding:12px}}
 .ct-stage{position:absolute;top:0;left:0;width:1920px;height:1080px;transform-origin:0 0;font-size:24px}
 .ct-stage__backdrop{position:absolute;inset:0}
 .ct-stage__backdrop .ct-art{position:absolute;inset:0;filter:blur(2px) brightness(.7)}

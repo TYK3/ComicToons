@@ -4,7 +4,7 @@
 .ct-look{position:relative;width:112px;min-width:0;grid-template-columns:minmax(0,1fr);padding:3px;border:var(--b-hair);background:var(--paper);display:grid;gap:4px;text-align:left;box-shadow:var(--sh-1);transition:transform var(--m-fast) var(--ease-out)}
 .ct-look:hover{transform:translate(-1px,-1px)}
 .ct-look[aria-checked=true]{background:var(--ink);color:var(--paper);box-shadow:none;transform:translate(2px,2px)}
-.ct-look__thumb{position:relative;display:block;height:42px;overflow:hidden;border:1.5px solid var(--ink)}
+.ct-look__thumb{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border:1.5px solid var(--ink)}
 .ct-look[aria-checked=true] .ct-look__thumb{border-color:var(--paper)}
 /* Flat theme gradient while no sample panel is on the grid yet. No dots, no radial-gradient. */
 .ct-look__blank{position:absolute;inset:0}

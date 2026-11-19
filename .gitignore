@@ -71,3 +71,6 @@ Thumbs.db
 desktop.ini
 .idea/
 .vscode/
+
+# Static demo build output
+dist-demo/

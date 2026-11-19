@@ -166,3 +166,18 @@
 .ct-book__end>.ct-book__endart{position:absolute;inset:0;padding:0}
 .ct-book__end>:not(.ct-book__endart){position:relative}
 @media (min-width:641px){.ct-catchup__cap{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}} /* m18: the caption is already in the panel; the list stays for screen readers and phones. */
+
+/* A cover reserves separate masthead, artwork and title areas. */
+.ct-book__cover{padding:16px;gap:16px;display:flex;flex-direction:column;min-height:0}
+.ct-book__cover .ct-art{position:relative;inset:auto;aspect-ratio:16/9;flex:none;order:2;margin:0 -16px}
+.ct-book__cover .ct-book__mast{order:1}
+.ct-book__cover .ct-book__title{order:3;margin:0;font-size:clamp(34px,5vw,72px)}
+.ct-book__cover .ct-book__by{order:4}
+.ct-book__cover .ct-book__sample{position:static!important;order:5;align-self:start}
+.ct-part__episodes[data-count="1"]{grid-template-columns:1fr;max-width:880px;margin-inline:auto}
+.ct-strip{max-width:880px}
+.ct-part__epart{overflow:hidden}
+
+.ct-reader-density{display:flex;gap:12px;align-items:center;margin:16px 0}.ct-reader-density select{width:80px}
+.ct-page[data-complete]{aspect-ratio:auto;min-height:0}.ct-page[data-complete] .ct-page__grid{display:block;height:auto}.ct-page[data-complete] .ct-panel{height:auto}.ct-page[data-complete] .ct-panel__scene{height:auto}
+.manga-page:has(.complete-scene-page) .manga-grid{display:block}.manga-page .complete-scene-page{height:auto;aspect-ratio:auto;display:block}.complete-scene-page .panel-art{position:relative;height:auto;aspect-ratio:auto}.complete-scene-page img{display:block;width:100%;height:auto;object-fit:contain}

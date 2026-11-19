@@ -1,10 +1,10 @@
 import {directorGuard} from '../director-access.ts';
-import type {FastifyPluginAsync} from 'fastify';
+import type {FastifyPluginAsync,onRequestHookHandler} from 'fastify';
 import type {EventBus, ComicToonsBusEvents,ComicPanel} from '@comictoons/core';
 import {buildBook,buildSeries} from '../../../../packages/core/src/manga.ts';
 import {readEditionTitle,writeEditionTitle} from '../recaps.ts';
 import type {Studio} from '../studio.ts';
-export interface RouteContext { studio:Studio; eventBus:EventBus<ComicToonsBusEvents>; directorKey?:string; sse?:Partial<SseLimits> }
+export interface RouteContext { studio:Studio; eventBus:EventBus<ComicToonsBusEvents>; directorKey?:string; sse?:Partial<SseLimits>;guard?:onRequestHookHandler }
 /** MEM-1a #1: per-client SSE write limits. Under `softBytes` queued a frame is written; above it one-off frames
  * (events, heartbeats) are skipped and only the newest state is held for 'drain'. A client is dropped when its
  * queue passes `hardBytes` or it has not drained for `stallMs`; its EventSource reconnects and gets full state. */
@@ -48,8 +48,8 @@ export function catchupFromBus(studio:Studio,payload:unknown){
   if(!Number.isInteger(minutes)||minutes<1||minutes>1440)return undefined;
   return studioCatchup(studio,request);
 }
-export const comicsRoutes:FastifyPluginAsync<RouteContext> = async (app,{studio,eventBus,directorKey,sse}) => {
-  const guard=directorGuard(directorKey);
+export const comicsRoutes:FastifyPluginAsync<RouteContext> = async (app,{studio,eventBus,directorKey,sse,guard:providedGuard}) => {
+  const guard=providedGuard??directorGuard(directorKey);
   const clients=new Map<import('node:http').ServerResponse,ReturnType<typeof sseWriter>>();
   const summary=(request:CatchupRequest)=>studioCatchup(studio,request);
   const unsubscribe=eventBus.on('catchup',payload=>{const data=catchupFromBus(studio,payload);if(!data)return;const frame=`event: catchup\ndata: ${JSON.stringify(data)}\n\n`;for(const writer of clients.values())writer.event(frame);});

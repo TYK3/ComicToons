@@ -131,9 +131,11 @@ export class HypeAndPredictions {
   private markSeen() { for (const panel of this.deps.studio.state.pendingPanels) this.seen.add(panel.id); }
   private applyPunchline(target: string) {
     if (!this.punchline) return;
-    this.deps.studio.caption(target, this.punchline.text);
-    this.punchline.panelId = target;
-    this.deps.bus.emit('punchline', { panelId: target, text: this.punchline.text });
+    const text=this.punchline.text;this.punchline.panelId=target;
+    try{const revision=this.deps.studio.caption(target,text,'Prediction result');
+      const announce=()=>this.deps.bus.emit('punchline',{panelId:target,text});
+      if(revision instanceof Promise)void revision.then(announce,()=>{this.error='Prediction image lettering failed. Original picture retained.';});else announce();
+    }catch{this.error='Prediction image lettering could not start. Original picture retained.';}
   }
   view() { return { hype: this.hype, prediction: this.prediction, punchline: this.punchline, error: this.error }; }
 }

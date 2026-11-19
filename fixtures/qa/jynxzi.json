@@ -1,0 +1,7 @@
+{
+  "id":"jynxzi-qa","title":"One elimination later","streamTitle":"Jynxzi QA — chat-inspired sample","channel":"jynxzi","interpretation":true,
+  "referenceUrl":"https://www.twitch.tv/videos/2917030838","referenceUse":"appearance only; not time-aligned scene evidence",
+  "source":{"id":"f1d9a53d-0e84-472a-9f57-a9c1f7eac299","captureOffset":1020.139,"text":"he said i’m cheating because i killed him once lmao","excludedUnrelatedMessages":3,"candidate":false,"score":4},
+  "panels":["One round. One chance.","The virtual avatar takes the shot.","One game elimination.","Chat reacts to the accusation.","An amused reaction.","Next round."],
+  "art":{"festival":"/qa/jynxzi/six-panel-page.png","sunset":"/qa/jynxzi/six-panel-sunset.png","lagoon":"/qa/jynxzi/six-panel-lagoon.png","blossom":"/qa/jynxzi/six-panel-blossom.png"}
+}

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { canUseChannelFeatures } from '../data/adapter';
+import { showSampleAccountBadge } from '../data/adapter';
 import { useAdapter, useUi } from '../data/store';
 import { twitchErrorCopy } from '../data/twitch-copy';
 import { ChatGlyph } from './Icons';
+import { PublicChannelPicker } from './PublicChannelPicker';
+import { readingOtherChannel } from '../data/channel';
 import { chatSourceChip, isKeyless } from '../screens/studio/live';
 
 /** UI-HEAD #4: a computer with no Twitch app set up. Nothing failed: sign-in just can't start here yet. */
@@ -50,7 +52,7 @@ function AccountMenu() {
   }, [open]);
   return <div className="ct-menu" ref={root} onBlur={event => { if (open && event.relatedTarget && !root.current?.contains(event.relatedTarget as Node)) setOpen(false); }}>
     <button ref={trigger} type="button" className="ct-account" aria-expanded={open} aria-controls="ct-account-menu" onClick={() => setOpen(value => !value)}>
-      <span className="ct-dot" aria-hidden="true"/>@{twitch.login}<span className="ct-sample">Sample</span><span aria-hidden="true">▾</span>
+      <span className="ct-dot" aria-hidden="true"/>@{twitch.login}{showSampleAccountBadge(adapter.kind,twitch) && <span className="ct-sample">Sample</span>}<span aria-hidden="true">▾</span>
     </button>
     {open && <div className="ct-menu__list" id="ct-account-menu">
       <button type="button" onClick={() => { setOpen(false); trigger.current?.focus(); void adapter.disconnectTwitch().then(refocus, () => undefined); }}>Disconnect Twitch</button>
@@ -63,17 +65,18 @@ export function ChannelGroup() {
   const ui = useUi();
   const adapter = useAdapter();
   const { twitch, studio } = ui;
-  const live = studio.source.active === 'twitch';
+  const live = studio.source.requested === 'twitch';
+  const otherChannel = readingOtherChannel(studio.source,twitch);
   // UI-LIVE-B #7: the same words as the header chip (chatSourceChip), whether or not you're signed in.
   const chip = chatSourceChip(studio.source);
   const keyless = isKeyless(twitch);
   const status = twitch.state === 'connecting' ? 'Waiting for Twitch. Finish signing in on the Twitch tab.'
-    : twitch.state === 'connected' ? `Connected to Twitch as @${twitch.login}. ${chip}.${canUseChannelFeatures(twitch) ? '' : ' Ink me is off because this channel is not an Affiliate or Partner yet.'}`
+    : twitch.state === 'connected' ? `Connected to Twitch as @${twitch.login}. ${chip}.`
       : keyless ? `${KEYLESS_TITLE} ${chip}.` : '';
   return <div className="ct-tool ct-tool--channel">
     <p className="ct-tool__label">Channel <span className="ct-tool__hint">
       {twitch.state === 'connecting' ? 'Finish signing in on the Twitch tab.'
-        : twitch.state === 'connected' ? (canUseChannelFeatures(twitch) ? `Connected. ${chip}.` : <span className="ct-hintchip">Ink me is off: needs Affiliate</span>)
+        : twitch.state === 'connected' ? (otherChannel ? <span className="ct-hintchip">Read-only chat</span> : null)
           : <span id={keyless ? 'ct-keyless-note' : undefined}>{keyless ? 'Sign-in isn’t set up on this computer. ' : ''}{live ? `${chip}, read without signing in.` : chip === 'Sample data' ? 'Sample data until you connect.' : `${chip}.`}</span>}
     </span></p>
     <div className="ct-tool__row">
@@ -88,6 +91,7 @@ export function ChannelGroup() {
         {twitch.state === 'connecting' && <button type="button" className="ct-btn ct-btn--ghost ct-btn--sm" onClick={() => void adapter.cancelConnect()}>Cancel</button>}
       </>}
     </div>
+    <PublicChannelPicker/>
     <p className="ct-sr" role="status" aria-live="polite">{status}</p>
   </div>;
 }

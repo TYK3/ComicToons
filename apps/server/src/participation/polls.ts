@@ -32,7 +32,7 @@ export interface HelixPolls {
 type Line = { user?: string; name?: string; text: string; at: number };
 export interface PollChoice { key: number; title: string; caption: string; author?: string; authorName?: string; votes: number }
 export interface PollView { id: string; mode: 'twitch' | 'chat'; panelId: string; panelCaption: string; question: string; duration: number; endsAt: number; choices: PollChoice[]; total: number; fallbackReason?: string }
-export interface PollResult { pollId: string; panelId: string; mode: 'twitch' | 'chat'; outcome: 'applied' | 'no-votes' | 'panel-gone' | 'discarded'; caption?: string; voters: number; percent?: number; at: number }
+export interface PollResult { pollId: string; panelId: string; mode: 'twitch' | 'chat'; outcome: 'applied' | 'rendering' | 'image-failed' | 'no-votes' | 'panel-gone' | 'discarded'; caption?: string; voters: number; percent?: number; at: number }
 
 /**
  * Chat votes the bubble. Choices are real chat lines (escaped, never invented, no LLM), cut to
@@ -73,9 +73,9 @@ export class CaptionPolls {
   async start(options: { panelId?: string; duration?: number } = {}): Promise<PollView> {
     if (this.current) throw new Error('A vote is already running.');
     if (this.deps.budget.exhausted()) throw new Error('Votes are paused until the panel budget resets.');
-    const pending = this.deps.studio.state.pendingPanels;
+    const pending = [...this.deps.studio.state.pendingPanels,...this.deps.studio.state.panels].filter(panel=>!panel.releaseBlocked&&panel.imageRevision?.status!=='rendering');
     const panel = options.panelId ? pending.find(entry => entry.id === options.panelId) : pending[0];
-    if (!panel) throw new Error('There is no panel waiting for review to vote on.');
+    if (!panel) throw new Error('There is no eligible panel to vote on.');
     const lines = this.candidates(panel.dialogue);
     const choices = lines.map((line, index): PollChoice => ({ key: index + 1, title: fitText(line.text, POLL_LIMITS.choiceMax), caption: fitText(line.text, BUBBLE_MAX), author: line.user, authorName: line.name, votes: 0 }));
     const duration = options.duration ?? 45;
@@ -125,15 +125,18 @@ export class CaptionPolls {
     if (poll.mode === 'twitch' && !options.endedOnTwitch && this.deps.helix?.endPoll && this.deps.now() < poll.endsAt) {
       void this.deps.helix.endPoll({ id: poll.id, status: 'TERMINATED' }).catch(error => { this.endError = `Twitch poll could not be ended (${error instanceof Error ? error.message : 'unknown error'}); it closes on its own.`; });
     }
-    const panel = this.deps.studio.state.pendingPanels.find(entry => entry.id === poll.panelId);
+    const panel = [...this.deps.studio.state.pendingPanels,...this.deps.studio.state.panels].find(entry => entry.id === poll.panelId&&!entry.releaseBlocked);
     if (!panel) return this.close('panel-gone');
     // Someone who opted out while the vote ran is never quoted, even if their line won.
     const eligible = poll.choices.filter(choice => !this.deps.optOuts.has(choice.author, choice.authorName));
     const winner = [...eligible].sort((a, b) => b.votes - a.votes || a.key - b.key)[0];
     if (!winner || winner.votes === 0) return this.close('no-votes');
-    this.deps.studio.caption(panel.id, winner.caption);
+    let revision:unknown;
+    try{revision=this.deps.studio.caption(panel.id,winner.caption,'Chat chose');}catch{return this.close('image-failed',winner.caption);}
     panel.voters = poll.total;
-    return this.close('applied', winner.caption, poll.total ? Math.round(winner.votes / poll.total * 100) : undefined);
+    const result=this.close(revision instanceof Promise?'rendering':'applied',winner.caption,poll.total?Math.round(winner.votes/poll.total*100):undefined);
+    if(revision instanceof Promise)void revision.then(()=>{result.outcome='applied';this.deps.bus.emit('poll-result',result);},()=>{result.outcome='image-failed';this.deps.bus.emit('poll-result',result);});
+    return result;
   }
   private close(outcome: PollResult['outcome'], caption?: string, percent?: number): PollResult {
     const poll = this.current!;

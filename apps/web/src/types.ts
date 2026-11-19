@@ -2,6 +2,8 @@ import type {MangaTheme} from '@comictoons/core';
 import type { LetteringMap } from '../../../packages/core/src/lettering';
 import type { ChatSourceState, StoryBeat, StoryAtlas } from '@comictoons/core';
 export interface Panel {
+  releaseBlocked?: string;
+  imageRevision?: {status:'rendering'|'failed';reason?:string};
   origin?: 'sample' | 'twitch';
   storyBeats?: StoryBeat[];
   storyCaption?: string;

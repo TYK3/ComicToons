@@ -267,3 +267,34 @@ h1.ct-state__title{font-size:40px}
    (the only fill and the only shadow) is the loudest. */
 .ct-mobilebar .ct-btn:nth-child(2){background:transparent;color:var(--ink);border-color:var(--ink)}
 .ct-mobilebar .ct-btn--ghost-ink{color:var(--ink);border-color:var(--ink)}
+
+/* Reserve lettering inside each comic frame; the complete image remains unobstructed. */
+.ct-panel[data-lettered]{display:flex;flex-direction:column;aspect-ratio:auto;container-type:inline-size}
+.ct-panel[data-lettered]>.ct-art{position:relative;inset:auto;width:100%;aspect-ratio:16/9;flex:none;order:2}
+.ct-panel[data-lettered]>.ct-caption{position:static;order:1;margin:0;max-width:none;width:100%;border:0;border-bottom:1px solid var(--ink);padding:6px 10px;font-size:clamp(10px,2.8cqw,15px);background:transparent}
+.ct-panel[data-lettered] .ct-lettering{order:3;display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 10px;min-height:42px}
+.ct-panel[data-lettered] .ct-bubble{position:relative;inset:auto;max-width:100%;margin:0;padding:5px 12px;border-radius:16px;font-size:clamp(11px,3cqw,17px);box-shadow:none;flex:1}
+.ct-panel[data-lettered] .ct-bubble::after{display:none}
+.ct-panel[data-lettered] .ct-sfx{position:static;font-size:clamp(18px,5cqw,34px);transform:none;flex:none;margin-left:auto}
+.ct-panel[data-lettered]>.ct-panel__tags{position:static;order:4;max-width:none;padding:4px 8px;margin:0}
+.ct-panel[data-lettered]>.ct-stamp{top:auto;left:auto;right:4px;bottom:4px;translate:none;transform:none}
+
+@media(min-width:821px) and (max-width:1350px){
+  .ct-appbar{gap:8px;padding-inline:16px}
+  .ct-appbar nav{gap:0}.ct-appbar nav a{padding-inline:8px;font-size:13px;white-space:nowrap}
+  .ct-appbar__right{gap:8px}.ct-appbar__right>.ct-hide-sm{display:none}
+  .ct-appbar .ct-end{margin-left:0}
+}
+
+/* Reviewed in-image balloon pockets: the art continues behind the lettering, no caption rails. */
+.ct-panel__scene{position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;container-type:inline-size}
+.ct-panel[data-integrated] .ct-bubble--inside{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;margin:0;padding:clamp(1px,.5cqw,3px) clamp(2px,1cqw,7px);max-width:none;min-width:0;border:2px solid var(--ink);border-radius:48% 43% 46% 40%;background:#fff;color:var(--ink);font:700 clamp(6px,2.5cqw,20px)/1.05 var(--f-letter);text-align:center;text-transform:uppercase;box-shadow:2px 2px 0 var(--ink);overflow-wrap:break-word}
+.ct-panel[data-integrated] .ct-bubble--inside::after{display:block;content:'';position:absolute;left:70%;bottom:-6px;width:9px;height:9px;background:#fff;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:skewY(25deg);clip-path:polygon(0 0,100% 0,100% 100%)}
+.ct-panel__dialogue-nav{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:3px 6px;font:700 11px var(--f-ui)}
+.ct-panel__dialogue-nav button{border:1px solid var(--ink);background:var(--paper);color:var(--ink);min-width:28px;min-height:28px}
+.ct-panel__layout-needed{font:700 11px var(--f-ui);padding:6px}
+.ct-panel[data-integrated] .ct-bubble--replacement{border-radius:18%;box-shadow:none;font-size:clamp(8px,4cqw,25px);padding:4% 3%}
+.ct-panel[data-integrated] .ct-bubble--replacement::after{display:none}
+.ct-bubble__label{position:absolute;top:-12%;left:15%;background:#7757e9;color:#fff;border:2px solid var(--ink);border-radius:14px;padding:1% 7%;font-size:.7em;white-space:nowrap}
+.ct-panel[data-lettered] .ct-sfx--inside{position:absolute;right:auto;bottom:auto;margin:0;display:flex;align-items:center;justify-content:center;transform:none;white-space:nowrap}
+@media(max-width:600px){.ct-page[data-layout] .ct-panel{grid-column:span 6}}

@@ -33,8 +33,32 @@ export function useRoute(): Route {
   return parseRoute(hash);
 }
 
-/** Keep the screenshot/state query (look, twitch, count, freeze…) when moving between screens. */
-export function href(path: string): string {
-  const query = location.hash.includes('?') ? location.hash.slice(location.hash.indexOf('?')) : '';
-  return `#${path}${query}`;
+export type Workspace = 'sample' | 'live';
+const WORKSPACE_PAGES = ['studio','director','overlay','audience','catchup','output','flow','issues','recap','book','series','read'];
+export function routeWorkspace(route: Route, fallback: Workspace = 'sample'): Workspace {
+  const explicit = route.params.get('workspace');
+  if (explicit === 'sample' || explicit === 'live') return explicit;
+  if (route.name === 'connect' || route.name === 'viewer') return 'live';
+  if (['recap','book','series','read'].includes(route.name) && route.id) return route.id.startsWith('sample-') ? 'sample' : 'live';
+  return fallback;
+}
+
+/** Merge query parameters once; workspace is pinned into every workspace link. */
+export function href(path: string, options: {workspace?: Workspace | null} = {}): string {
+  const [target, query = ''] = path.split('?');
+  const current = parseRoute(location.hash);
+  const params = new URLSearchParams(current.params);
+  for (const [key,value] of new URLSearchParams(query)) params.set(key,value);
+  const name = target.split('/').filter(Boolean)[0] ?? 'landing';
+  const id = target.split('/').filter(Boolean)[1];
+  if (options.workspace === null || name === 'landing') params.delete('workspace');
+  else if (name === 'connect') params.set('workspace','live');
+  else if (WORKSPACE_PAGES.includes(name)) {
+    let fallback: Workspace = 'sample';
+    try { if (localStorage.getItem('comictoons-studio-mode-v1') === 'live') fallback='live'; } catch { /* this window */ }
+    const workspace = options.workspace ?? (['book','recap','series','read'].includes(name) && id ? (id.startsWith('sample-')?'sample':'live') : routeWorkspace(current,fallback));
+    params.set('workspace',workspace);
+  }
+  const suffix=params.toString();
+  return `#${target}${suffix?`?${suffix}`:''}`;
 }

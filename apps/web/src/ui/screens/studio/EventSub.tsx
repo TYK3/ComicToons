@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { EVENTSUB_TYPES, eventSubFeature, eventSubHealth, type EventSubHealth, type EventSubRevocation, type EventSubStatus } from '../../data/adapter';
 import { useAdapter, useUi, useUiEvents } from '../../data/store';
 import { Sample } from '../../components/Brand';
+import { readingOtherChannel } from '../../data/channel';
 
 const LABEL: Record<EventSubHealth, string> = { off: 'Off', connecting: 'Connecting', connected: 'Connected', partial: 'Partial', failed: 'Failed', revoked: 'Revoked' };
 const TOTAL = EVENTSUB_TYPES.length;
@@ -51,6 +52,7 @@ export function EventSubTool() {
     document.addEventListener('keydown', esc);
     return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', esc); };
   }, [open]);
+  if(readingOtherChannel(ui.studio.source,ui.twitch))return <div className="ct-tool ct-tool--events"><p className="ct-tool__label">Channel access</p><span className="ct-hintchip">Public chat only</span><p className="ct-note">Streamer events stay on your own channel.</p></div>;
   const count = health === 'off' || health === 'connecting' ? '' : `${status.subscribed.length}/${TOTAL}`;
   return <div className="ct-tool ct-tool--events" ref={root}>
     <p className="ct-tool__label">Twitch events {sample && <Sample/>}</p>
@@ -103,7 +105,7 @@ export function EventSubBanner() {
   const adapter = useAdapter();
   const status = ui.eventsub;
   const health = eventSubHealth(status);
-  if (ui.twitch.state === 'connecting') return null;
+  if (ui.twitch.state === 'connecting' || readingOtherChannel(ui.studio.source,ui.twitch)) return null;
   if (health === 'failed' && ui.studio.source.requested === 'twitch') {
     // The reason is the server's own (lastError, else the first per-subscription error); nothing is guessed.
     const why = status.lastError || status.failed.find(entry => entry.error)?.error || 'Twitch didn’t accept the event subscriptions.';

@@ -4,7 +4,8 @@ import {resolve} from 'node:path';
 // Loads the repo-root .env (git-ignored) if present. Values already in process.env always win,
 // matching process.loadEnvFile's own precedence, so CI/host environment variables are never overridden.
 export function loadEnv(path:string=resolve(import.meta.dirname,'../../../.env')):void {
-  try { process.loadEnvFile(path); }
+  const files=path===resolve(import.meta.dirname,'../../../.env')?[path,resolve(import.meta.dirname,'../../../.env.images')]:[path];
+  for(const file of files)try { process.loadEnvFile(file); }
   catch (error) { if ((error as NodeJS.ErrnoException)?.code !== 'ENOENT') throw error; }
 }
 

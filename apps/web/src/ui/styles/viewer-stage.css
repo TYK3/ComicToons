@@ -1,0 +1,22 @@
+.ct-viewer-stage{background:transparent;color:var(--ink);width:100%;min-height:120px;overflow:hidden;container-type:inline-size}
+.ct-viewer-content{display:grid;gap:12px;padding:8px;align-content:start}
+.ct-viewer-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+.ct-viewer-panels:not([data-catchup]) .ct-viewer-item:last-child{grid-column:1/-1}
+.ct-viewer-item{min-width:0;animation:ct-viewer-release 600ms cubic-bezier(.18,.8,.22,1) both}
+.ct-viewer-item .ct-bubble{animation:ct-viewer-dialogue 300ms ease-out 350ms both}
+.ct-viewer-banner,.ct-viewer-intro{margin:0;padding:12px;background:var(--hi);color:var(--ink);border:2px solid var(--ink);font-weight:800;animation:ct-viewer-notice 500ms ease-out both}
+.ct-viewer-banner span{display:block;margin-top:6px;font-weight:500}
+.ct-viewer-intro{font:400 clamp(22px,6cqw,46px)/1 var(--f-display)}
+.ct-viewer-participation{border:2px solid var(--ink);padding:12px;background:var(--paper);display:grid;gap:8px;animation:ct-viewer-notice 500ms ease-out both;font-size:clamp(11px,3.2cqw,18px)}
+.ct-viewer-participation h3,.ct-viewer-participation p{margin:0}
+.ct-viewer-choice{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 6px 12px;overflow:hidden}
+.ct-viewer-choice i{position:absolute;left:0;bottom:0;height:5px;background:var(--act);transition:width 350ms ease}
+.ct-viewer-empty{margin:0;min-height:150px;display:grid;place-content:center;text-align:center;padding:24px;border:2px dashed var(--ink);font-weight:700}
+.ct-viewer-cameo{background:var(--hi);padding:6px 10px;margin:0;font-weight:800;animation:ct-viewer-notice 500ms both}
+.ct-viewer-stage[data-hidden]{visibility:hidden}
+.ct-audience-output{min-height:100vh;display:grid;align-content:end;padding:24px;background:transparent}
+.ct-audience-output .ct-viewer-stage{max-width:1100px;margin-left:auto}
+@keyframes ct-viewer-release{from{opacity:0;transform:translateY(24px) scale(.94);clip-path:inset(0 100% 0 0)}to{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes ct-viewer-dialogue{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes ct-viewer-notice{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.ct-viewer-item,.ct-viewer-banner,.ct-viewer-intro,.ct-viewer-cameo,.ct-viewer-participation,.ct-viewer-item .ct-bubble{animation:none}.ct-viewer-choice i{transition:none}}

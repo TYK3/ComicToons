@@ -3,9 +3,11 @@ import type { BindResult, OutputMode } from '../data/adapter';
 import { studioPhase, useAdapter, useUi } from '../data/store';
 import { RetryButton, ScreenState } from '../components/ScreenState';
 import { ReaderBar } from '../components/ReaderBar';
+import {LibraryNav} from '../components/LibraryNav';
 import { LookArt } from '../components/Panel';
 import { Arrow } from '../components/Icons';
-import { href, type Route } from '../router';
+import { href } from '../router';
+import {useStudioMode} from '../data/StudioSession';
 import { useReveal } from '../motion';
 import '../styles/pages.css';
 import '../styles/readers.css';
@@ -18,8 +20,9 @@ const MODES: { id: OutputMode; name: string; line: string }[] = [
 const STEPS = ['Collecting approved panels', 'Laying out the pages', 'Lettering captions', 'Binding the issue'];
 
 /** Output: end the stream, pick what to make, watch it bind, then open the results. */
-export function Output({ route }: { route: Route }) {
+export function Output() {
   const adapter = useAdapter();
+  const {mode}=useStudioMode();
   const ui = useUi();
   const { studio } = ui;
   const [title, setTitle] = useState(studio.issueTitle);
@@ -30,7 +33,7 @@ export function Output({ route }: { route: Route }) {
   const [step, setStep] = useState(-1);
   const [failed, setFailed] = useState('');
   const root = useRef<HTMLDivElement>(null);
-  const done = studio.status === 'ended' || route.params.get('done') === '1';
+  const done = studio.status === 'ended' && !!studio.recapUrl;
   useReveal(root, [done]);
   useEffect(() => {
     if (step < 0 || step >= STEPS.length - 1) return;
@@ -39,9 +42,9 @@ export function Output({ route }: { route: Route }) {
   }, [step]);
   const [bound, setBound] = useState<BindResult | null>(null);
   // The bound issue, else the latest saved one (studio.recapUrl is '/recap/<id>' on the server), else the Sample issue.
-  const id = bound?.recapId ?? studio.recapUrl?.split('/').pop() ?? `sample-${studio.fixtureId}`;
+  const id = bound?.recapId ?? studio.recapUrl?.split('/').pop();
   const panels = studio.panels;
-  const pageCount = Math.max(1, Math.ceil(panels.length / 4)) + 1;
+  const pageCount = Math.max(1, Math.ceil(panels.length / 4)) + 2;
   const bind = async () => {
     binding.current = true;
     setFailed(''); setStep(0);
@@ -63,9 +66,10 @@ export function Output({ route }: { route: Route }) {
 
   return <div className="ct-reader">
     <a className="ct-skip" href="#ct-main">Skip to the outputs</a>
-    <ReaderBar><span className="ct-reader__crumb">Output</span></ReaderBar>
+    <ReaderBar><a href={href('/issues')}>Library</a><span className="ct-reader__crumb">Create & export</span></ReaderBar>
     <main id="ct-main" className="ct-reader__main">
       <div className="ct-output" ref={root}>
+        <LibraryNav current="output"/>
         {phase === 'loading' ? <ScreenState kind="loading" level={1} title="Loading tonight’s issue"><p>Counting your approved panels…</p></ScreenState>
           : phase === 'error' ? <ScreenState kind="error" level={1} title="Can’t reach your studio" actions={<>
             <RetryButton onRetry={() => void adapter.refresh()} busy={ui.busy === 'refresh'}/>
@@ -109,9 +113,9 @@ export function Output({ route }: { route: Route }) {
           </form>
         </> : <>
           <header className="ct-output__head ct-output__head--done" data-reveal="slam">
-            <p className="ct-kicker">Bound · Sample</p>
+            <p className="ct-kicker">Bound · {mode==='sample'?'Sample':'Live'}</p>
             <h1 ref={ready} tabIndex={-1} className="ct-display">“{studio.issueTitle}” is ready</h1>
-            <p className="ct-output__lede">{panels.length} panels · {pageCount} pages including the cover. Open any of them, or share the recap link.</p>
+            <p className="ct-output__lede">{panels.length} panels · {pageCount} pages including the cover and back page. Open any of them, or share the recap link.</p>
           </header>
           <ul className="ct-results">
             {[
@@ -120,7 +124,7 @@ export function Output({ route }: { route: Route }) {
               { name: 'Manga series', line: 'Tonight is the newest episode.', to: `/series/${id}` },
               { name: 'Catch-up', line: 'The “Previously on…” card for raiders.', to: '/catchup' },
             ].map((result, index) => <li key={result.name} data-reveal="up" data-delay={String(index * 70)}>
-              <a className="ct-result" href={href(result.to)}>
+              <a className="ct-result" href={href(result.to,{workspace:mode})}>
                 <span className="ct-result__art">{art(index) && <LookArt panel={art(index)!} look={studio.look}/>}</span>
                 <span className="ct-result__name">{result.name} <Arrow/></span>
                 <span className="ct-result__line">{result.line}</span>
@@ -136,7 +140,7 @@ export function Output({ route }: { route: Route }) {
 
 function ShareLink({ to }: { to: string }) {
   const [copied, setCopied] = useState('');
-  const url = `${location.origin}${location.pathname}#${to}`;
+  const url = `${location.origin}${location.pathname}${href(to)}`;
   return <div className="ct-share">
     <label className="ct-field"><span className="ct-tool__label">Recap link</span><input readOnly value={url} onFocus={event => event.currentTarget.select()}/></label>
     <button type="button" className="ct-btn" onClick={() => { void navigator.clipboard?.writeText(url).then(() => setCopied('Link copied.'), () => setCopied('Copy the link from the box.')); }}>Copy link</button>

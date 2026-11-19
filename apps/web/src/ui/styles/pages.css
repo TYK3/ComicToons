@@ -32,3 +32,8 @@
   .ct-page__grid{gap:8px}
   .ct-page[data-layout=four] .ct-page__p2,.ct-page[data-layout=four] .ct-page__p3{aspect-ratio:1/1}
 }
+
+.ct-page[data-layout] .ct-panel[data-lettered]{aspect-ratio:auto;align-self:start}
+.ct-manga-pages{display:grid;gap:32px}.ct-manga-pages .ct-page{width:100%}
+
+.ct-page[data-layout=five] .ct-panel,.ct-page[data-layout=six] .ct-panel{grid-column:span 3}.ct-page[data-layout=five] .ct-page__p1{grid-column:span 6}@media(max-width:600px){.ct-page[data-layout=five] .ct-panel,.ct-page[data-layout=six] .ct-panel{grid-column:span 6}}

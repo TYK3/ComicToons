@@ -266,7 +266,7 @@ export class ArtPipeline {
   /** Transcodes an arbitrary provider image to PNG so it always matches the frozen
    * /art/generated/:file route's extension allow-list, regardless of source encoding. */
   private async toPng(buffer: Buffer): Promise<Buffer | undefined> {
-    if (!ffmpegAvailable(this.ffmpegPath)) return undefined;
+    if (!this.spawnImpl && !ffmpegAvailable(this.ffmpegPath)) return undefined;
     return runFfmpeg(buffer, ['-hide_banner', '-loglevel', 'error', '-i', '-', '-f', 'image2', '-vframes', '1', '-vcodec', 'png', '-'],
       { ffmpegPath: this.ffmpegPath, timeoutMs: this.timeoutMs, spawnImpl: this.spawnImpl });
   }
@@ -331,7 +331,7 @@ const ART_THEME_WORDS: Record<MangaThemeId, string> = {
 };
 /** Said once, outright: the caption and dialogue are laid over the art later as real text. */
 const ART_NO_TEXT = 'No text of any kind in the image: no letters, words, numbers, speech bubbles, balloons, captions, signs, banners or logos.';
-const ART_LAYOUT = 'Leave clear empty space along the top of the frame for a caption added later, and keep every face clear of the top of the frame so a caption never covers a face.';
+const ART_LAYOUT = 'Leave clear empty space along the top of the frame for a caption added later, and keep every face clear of the top of the frame so a caption never covers a face. Reserve irregular empty background pockets within the composition, including space at the bottom. Keep every face, hand and key action out of those pockets. Compose one scene only, preserving known actors, props, chronology and outcome. Do not infer unseen actions from audience reactions. Keep all important subjects within the frame. Paint skin, hair, clothing and objects in their natural colours; apply the selected palette individually to environmental surfaces and lighting.';
 /** Scene wording that would make a model draw text or bubbles is redrawn as light and colour. */
 const SCENE_REWRITES: readonly [RegExp, string][] = [
   [/\bspeech-shaped bursts\b/gi, 'bursts of colour'],

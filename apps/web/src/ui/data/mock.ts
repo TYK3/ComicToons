@@ -1,3 +1,4 @@
+import { sampleStoryIssue } from './sampleStories';
 /**
  * Mock adapter: the whole UI runs on this with no back end and no network.
  * Timers push fake panels, chat lines, votes and redemptions. Everything here is Sample Data.
@@ -163,7 +164,7 @@ const LOOK_KEY = 'comictoons-ui-look';
 
 export class MockAdapter implements ComicToonsAdapter {
   readonly kind = 'mock' as const;
-  private snapshot: UiSnapshot;
+  protected snapshot: UiSnapshot;
   private listeners = new Set<() => void>();
   private eventHandlers = new Set<{ names: readonly UiEventName[]; handler: (event: UiEvent) => void }>();
   private timers: ReturnType<typeof setInterval>[] = [];
@@ -194,16 +195,16 @@ export class MockAdapter implements ComicToonsAdapter {
     this.eventHandlers.add(entry);
     return () => { this.eventHandlers.delete(entry); };
   }
-  private emit(event: UiEvent) { for (const entry of this.eventHandlers) if (entry.names.includes(event.name)) entry.handler(event); }
-  private set(next: Partial<UiSnapshot>) {
+  protected emit(event: UiEvent) { for (const entry of this.eventHandlers) if (entry.names.includes(event.name)) entry.handler(event); }
+  protected set(next: Partial<UiSnapshot>) {
     this.snapshot = { ...this.snapshot, ...next };
     for (const listener of this.listeners) listener();
   }
-  private patchStudio(next: Partial<UiStudioState>) {
+  protected patchStudio(next: Partial<UiStudioState>) {
     this.set({ studio: { ...this.snapshot.studio, ...next } });
     this.emit({ name: 'state', data: this.snapshot.studio });
   }
-  private patchParticipation(next: Partial<ParticipationStatus>) { this.set({ participation: { ...this.snapshot.participation, ...next } }); }
+  protected patchParticipation(next: Partial<ParticipationStatus>) { this.set({ participation: { ...this.snapshot.participation, ...next } }); }
   private wait(ms = 260) { return new Promise<void>(resolve => setTimeout(resolve, this.options.freeze ? 0 : ms)); }
   private async busyWhile<T>(label: string, work: () => T | Promise<T>): Promise<T> {
     this.set({ busy: label });
@@ -213,27 +214,10 @@ export class MockAdapter implements ComicToonsAdapter {
   // ---- sample data ----------------------------------------------------------------------------
   private stream() { return STREAMS.find(entry => entry.fixture.id === this.snapshot?.studio.fixtureId) ?? STREAMS.find(entry => entry.fixture.id === this.options.fixtureId) ?? STREAMS[0]!; }
   private makePanel(index: number, stream = this.stream()): UiPanel {
-    const beat = stream.beats[index % stream.beats.length]!;
-    const art = stream.art[index % stream.art.length]!;
+    const issue = sampleStoryIssue(`sample-${stream.fixture.id}`, this.snapshot?.studio.look ?? this.options.look ?? 'festival');
+    const panel = issue.storyPanels![index % issue.storyPanels!.length]!;
     this.serial += 1;
-    const lap = Math.floor(index / stream.beats.length);
-    return {
-      id: `sample-${stream.fixture.id}-${index}-${this.serial}`,
-      origin: 'sample',
-      caption: lap ? `${beat.caption} (take ${lap + 1})` : beat.caption,
-      dialogue: [beat.line],
-      altText: beat.alt,
-      imageUrl: art.url,
-      art: { width: art.width, height: art.height, tone: art.tone },
-      sfx: beat.sfx,
-      source: beat.source,
-      cameo: beat.cameo,
-      chosenBy: beat.votes ? { votes: beat.votes, pct: 40 + (beat.votes % 30) } : undefined,
-      generatedCaption: true,
-      at: index * 120,
-      bubblePlacement: (['top-left', 'top-right', 'bottom-left'] as const)[index % 3],
-      provenance: { provider: 'library', asset: art.file, style: 'risograph', fallback: false },
-    };
+    return { ...panel, id: `sample-${stream.fixture.id}-${index}-${this.serial}`, at: index * 120 };
   }
 
   private initial(look: LookId): UiSnapshot {
@@ -423,9 +407,9 @@ export class MockAdapter implements ComicToonsAdapter {
   async useSampleData() {
     this.patchStudio({ source: { requested: 'sample', active: 'sample', connection: 'sample', simulated: false, received: 0 } });
   }
-  async useLiveChat() {
+  async useLiveChat(channel?: string) {
     if (this.snapshot.twitch.state !== 'connected') return;
-    this.patchStudio({ source: { requested: 'twitch', active: 'twitch', connection: 'live', channel: this.snapshot.twitch.login, simulated: true, received: 128 } });
+    this.patchStudio({ source: { requested: 'twitch', active: 'twitch', connection: 'live', channel: channel ?? this.snapshot.twitch.login, simulated: true, received: 128 } });
   }
   async panicHide(hidden: boolean) { this.patchStudio({ hidden }); }
   async endStream(title: string, modes: OutputMode[], look: LookId): Promise<BindResult> {
@@ -513,6 +497,7 @@ export class MockAdapter implements ComicToonsAdapter {
     if (this.unreachable()) throw new Error(MOCK_UNREACHABLE);
   }
   async getIssue(id: string, look: LookId): Promise<IssueView> {
+    if(id==='sample-jynxzi-qa')return sampleStoryIssue(id,look);
     await this.readerGate();
     const fixtureId = id.replace(/^sample-/, '');
     const stream = STREAMS.find(entry => entry.fixture.id === fixtureId);
@@ -522,7 +507,7 @@ export class MockAdapter implements ComicToonsAdapter {
     const panels = this.options.state === 'empty' ? [] : live.length >= 4 ? live : stream.beats.map((_, index) => this.makePanel(index, stream));
     // Empty: an issue bound with nothing in it has no Sample story either, only a placeholder title.
     if (!panels.length) return { id, title: 'Untitled issue', streamTitle: '', channel: '', panels, sample: true, look };
-    return { id, title: stream.fixture.issueTitle, streamTitle: stream.fixture.streamTitle, channel: stream.fixture.channel, panels, sample: true, look };
+    return sampleStoryIssue(id, look);
   }
   async listIssues() {
     await this.readerGate();
@@ -535,7 +520,8 @@ export class MockAdapter implements ComicToonsAdapter {
    */
   async getSeries(id: string, look: LookId): Promise<SeriesView> {
     const issue = await this.getIssue(id, look);
-    const panels = issue.panels.map((panel, index) => ({ ...panel, at: Math.floor(index / 3) * 600 + (index % 3) * 90 }));
+    const panels = (issue.storyPanels ?? issue.panels).map((panel, index) => ({ ...panel, at: Math.floor(index / 3) * 600 + (index % 3) * 90 }));
+    if (issue.storyPanels) return { id, title: issue.title, sample: true, look, highlightCount: 1, episodes: [{ number: 1, title: issue.title, chapter: 'Chapter 1', highlight: panels[0]!, panels }] };
     return { ...buildSeries(panels, { title: issue.title }), id, sample: true, look };
   }
   exportPagePng(issue: IssueView, page: number | 'cover' | 'back', look: LookId) { return exportIssuePage(issue, page, look); }

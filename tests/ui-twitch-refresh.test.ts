@@ -84,3 +84,17 @@ test('a healthy EventSub poll does not add Twitch status reads', async () => {
     assert.equal(adapter.getSnapshot().twitch.state, 'connected');
   } finally { adapter.dispose(); }
 });
+
+test('switching the selected channel clears the previous channel chat preview',async()=>{
+  const {adapter,source}=await setup();
+  try{
+    const state=(channel:string)=>({panels:[],pendingPanels:[],source:{requested:'twitch',active:'twitch',connection:'live',channel,received:1,simulated:false}});
+    source.fire('state',state('tyk_twitch'));
+    source.fire('stream-event',{type:'chat',id:'own-line',user:'viewer',text:'from my channel',t:1});
+    assert.equal(adapter.getSnapshot().chat.length,1);
+    source.fire('state',state('other_streamer'));
+    assert.equal(adapter.getSnapshot().chat.length,0);
+    source.fire('stream-event',{type:'chat',id:'other-line',user:'other',text:'from the selected channel',t:1});
+    assert.deepEqual(adapter.getSnapshot().chat.map(line=>line.text),['from the selected channel']);
+  }finally{adapter.dispose();}
+});

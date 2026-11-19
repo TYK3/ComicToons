@@ -4,12 +4,12 @@
  * chat votes (!1, !2, !3), raids, !previously and !noink work on any channel.
  */
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { isSampleSource, type ChatSourceState } from '@comictoons/core';
+import { type ChatSourceState } from '@comictoons/core';
 import { canUseChannelFeatures, type ChatLine, type InkMeReward } from '../../data/adapter';
 import { useAdapter, useNow, useUi } from '../../data/store';
 import { AffiliateNotice } from '../../components/TwitchConnect';
 import { Sample } from '../../components/Brand';
-import { CHAT_QUIET_MS, INK_CHAT_LABEL, chatSourceChip, chatStateText, inkChatWaiting, isLiveChatQuiet, readInkChat, time24, type InkChatView } from './live';
+import { CHAT_QUIET_MS, INK_CHAT_LABEL, chatStateText, inkChatWaiting, isLiveChatQuiet, readInkChat, time24, type InkChatView } from './live';
 
 const clock = (ms: number) => { const total = Math.max(0, Math.round(ms / 1000)); return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`; };
 const ago = (now: number, at: number) => { const minutes = Math.round((now - at) / 60_000); return minutes < 1 ? 'just now' : `${minutes} min ago`; };
@@ -47,7 +47,7 @@ export function VoteCard() {
   const adapter = useAdapter();
   const { poll, lastPoll } = ui.participation;
   const official = canUseChannelFeatures(ui.twitch);
-  return <Card title="Chat votes the bubble" sample={!poll || poll.id.startsWith('sample')} id="ct-vote-title">
+  return <Card title="Chat votes the bubble" sample={!!adapter.castSampleVote} id="ct-vote-title">
     {poll ? <>
       <p className="ct-note"><strong>{poll.mode === 'twitch' ? 'Twitch poll' : 'Chat vote: type !1, !2 or !3'}</strong> · {poll.total} votes · ends in {clock(poll.endsAt - now)}</p>
       <ol className="ct-vote">
@@ -57,15 +57,16 @@ export function VoteCard() {
             <span className="ct-vote__key">!{choice.key}</span>
             <span className="ct-vote__text">{choice.caption}</span>
             <span className="ct-vote__pct">{pct}%</span>
+            {adapter.castSampleVote&&<button type="button" className="ct-btn ct-btn--sm" onClick={()=>adapter.castSampleVote!(choice.key)}>Vote !{choice.key}</button>}
             <span className="ct-bar" aria-hidden="true"><i style={{ width: `${pct}%` }}/></span>
           </li>;
         })}
       </ol>
       <button type="button" className="ct-btn ct-btn--sm" onClick={() => void adapter.endPoll()}>End vote now</button>
     </> : <>
-      <p className="ct-note">Let chat pick the speech bubble for the next waiting panel. {official ? 'Runs as a Twitch poll.' : 'Viewers type !1, !2 or !3 in chat. No Affiliate needed.'}</p>
-      {lastPoll && <p className="ct-note">Last vote: <strong>“{lastPoll.caption}”</strong> from {lastPoll.voters} voters.</p>}
-      <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => void adapter.startPoll()} disabled={!ui.studio.pendingPanels.length && !ui.studio.panels.length}>Start a 45-second vote</button>
+      <p className="ct-note">Let chat pick the speech bubble for a waiting or released panel. {adapter.castSampleVote?'Sample viewers vote below or type !1, !2 or !3 in Sample chat.':official ? 'Runs as a Twitch poll.' : 'Viewers type !1, !2 or !3 in chat. No Affiliate needed.'}</p>
+      {lastPoll && <p className="ct-note">Last vote: <strong>“{lastPoll.caption}”</strong> from {lastPoll.voters} voters. {lastPoll.outcome==='rendering'?'Rendering the winning line inside the image…':lastPoll.outcome==='image-failed'?'Image revision failed; original image retained.':lastPoll.outcome==='applied'?'Winning lettering applied.':''}</p>}
+      <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => void adapter.startPoll()} disabled={![...ui.studio.pendingPanels,...ui.studio.panels].some(panel=>!panel.releaseBlocked&&!panel.imageRevision)}>Start a 45-second vote</button>
     </>}
     {ui.twitch.state === 'connected' && !official && <p className="ct-note">Twitch polls need Affiliate or Partner, so this uses chat votes instead.</p>}
   </Card>;
@@ -80,7 +81,7 @@ export function PredictionCard() {
   const allowed = canUseChannelFeatures(ui.twitch);
   if (connected && !allowed) return <Card title="Prediction" id="ct-pred-title"><AffiliateNotice feature="Predictions"/></Card>;
   const total = prediction ? prediction.outcomes.reduce((sum, outcome) => sum + outcome.points, 0) : 0;
-  return <Card title="Prediction" sample id="ct-pred-title">
+  return <Card title="Prediction" sample={!!adapter.castSamplePrediction} id="ct-pred-title">
     {prediction ? <>
       <p className="ct-pred__q">{prediction.title}</p>
       <ul className="ct-pred">
@@ -90,6 +91,7 @@ export function PredictionCard() {
           return <li key={outcome.title} data-won={won || undefined}>
             <span><strong>{outcome.title}</strong>{won && ' ✓'}</span>
             <span className="ct-muted">{outcome.users} viewers · {outcome.points.toLocaleString('en-GB')} pts</span>
+            {adapter.castSamplePrediction&&prediction.status==='active'&&<button type="button" className="ct-btn ct-btn--sm" onClick={()=>adapter.castSamplePrediction!(outcome.title)}>Back {outcome.title} · 100 sample points</button>}
             <span className="ct-bar ct-bar--tone" aria-hidden="true"><i style={{ width: `${pct}%` }}/></span>
             {prediction.status !== 'resolved' && <button type="button" className="ct-btn ct-btn--sm" onClick={() => void adapter.resolvePrediction(outcome.title)}>Pay out</button>}
           </li>;
@@ -98,9 +100,9 @@ export function PredictionCard() {
       <p className="ct-note">{prediction.status === 'resolved' ? 'Paid out. The result goes into the next caption.' : prediction.endsAt ? `Locks in ${clock(prediction.endsAt - now)}.` : 'Locked.'}</p>
     </> : <>
       <p className="ct-note">Viewers bet channel points on what happens next. The result gets inked into the next panel.</p>
-      <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => void adapter.startPrediction()}>Start a prediction</button>
+      <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" disabled={!connected} onClick={() => void adapter.startPrediction()}>Start a prediction</button>
     </>}
-    {!connected && <p className="ct-note">Predictions need an Affiliate or Partner channel. Sample until you connect.</p>}
+    {!connected && <p className="ct-note">Connect your own Affiliate or Partner channel to run predictions.</p>}
   </Card>;
 }
 
@@ -153,8 +155,9 @@ export function InkMeCard() {
     });
     void adapter.resolveRedemption(id, kind);
   };
-  const headline = reward.status === 'ready' ? 'Ink me is on Twitch' : reward.status === 'creating' ? 'Creating the reward on Twitch…' : 'Ink me is off';
+  const headline = reward.status === 'ready' ? sample?'Sample reward is on':'Ink me is on Twitch' : reward.status === 'creating' ? 'Creating the reward on Twitch…' : 'Ink me is off';
   return <Card title="Ink me" sample={sample} id="ct-ink-title">
+    {adapter.redeemSampleInk&&<><p className="ct-note">Sample viewer: request a fox cameo, create its panel, then release it to see the On air reveal.</p><button type="button" className="ct-btn ct-btn--ink ct-btn--sm" disabled={reward.status!=='ready'} onClick={()=>adapter.redeemSampleInk!()}>Redeem Ink Me · 500 sample points</button></>}
     <p className="ct-note">Channel-point reward <strong>“{reward.title}”</strong> · {reward.cost} points · {reward.perViewer} per viewer per stream · {reward.cooldownMinutes} min cooldown{cooling ? `, next in ${clock(reward.cooldownEndsAt! - now)}` : ''}.</p>
     {connected && <div className="ct-inkme" data-status={reward.status}>
       <label className="ct-switch">
@@ -171,13 +174,13 @@ export function InkMeCard() {
       {queue.map((entry, index) => <li key={entry.id}>
         <div><strong>@{entry.name}</strong> <span className="ct-chip ct-chip--sm">{entry.status === 'drawing' ? 'Drawing' : 'Queued'}</span><p className="ct-note">{entry.note} · {ago(now, entry.at)}</p></div>
         <div className="ct-queue__actions">
-          <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => resolve(entry.id, 'fulfil', index)}>Fulfil</button>
+          <button type="button" className="ct-btn ct-btn--ink ct-btn--sm" onClick={() => resolve(entry.id, 'fulfil', index)}>{adapter.redeemSampleInk?'Create cameo panel':'Fulfil'}</button>
           <button type="button" className="ct-btn ct-btn--sm" onClick={() => resolve(entry.id, 'cancel', index)}>Refund</button>
         </div>
       </li>)}
     </ul> : <p className="ct-note">No one is waiting. New redemptions appear here.</p>}
     {done.length > 0 && <p className="ct-note">{done.map(entry => `@${entry.name} ${entry.status === 'fulfilled' ? 'inked' : 'refunded'}`).join(' · ')}</p>}
-    {!connected && <p className="ct-note">Channel-point rewards need an Affiliate or Partner channel. Sample until you connect.</p>}
+    {!connected && <p className="ct-note">Connect your own Affiliate or Partner channel to use channel-point rewards.</p>}
     {chatInk}
   </Card>;
 }
@@ -187,6 +190,7 @@ export function InkMeCard() {
  * every note are the server's own; times are UK 24-hour clock times.
  */
 function InkChatRequests({ inkChat, reward, now, modApprove }: { inkChat: InkChatView; reward: InkMeReward; now: number; modApprove: boolean }) {
+  const pending=useUi().studio.pendingPanels;
   const cooling = inkChat.cooldownEndsAt !== undefined && inkChat.cooldownEndsAt > now;
   const waiting = inkChatWaiting(inkChat);
   return <div className="ct-inkme__text" data-ink-chat="active">
@@ -198,7 +202,7 @@ function InkChatRequests({ inkChat, reward, now, modApprove }: { inkChat: InkCha
     <p className="ct-sr" role="status" aria-live="polite">{waiting ? `${waiting} !ink ${waiting === 1 ? 'request' : 'requests'} waiting` : ''}</p>
     {inkChat.requests.length ? <ul className="ct-queue" aria-label="!ink requests from chat">
       {inkChat.requests.map(entry => <li key={entry.id} data-status={entry.status}>
-        <div><strong>{entry.status === 'withdrawn' ? entry.name : `@${entry.name}`}</strong> <span className="ct-chip ct-chip--sm">{INK_CHAT_LABEL[entry.status]}</span>
+        <div><strong>{entry.status === 'withdrawn' ? entry.name : `@${entry.name}`}</strong> <span className="ct-chip ct-chip--sm">{pending.some(panel=>panel.id===entry.panelId&&panel.releaseBlocked)?'Waiting for image':INK_CHAT_LABEL[entry.status]}</span>
           <p className="ct-note">{entry.note ? `${entry.note} · ` : ''}<time dateTime={new Date(entry.at).toISOString()}>{time24(entry.at)}</time></p></div>
       </li>)}
     </ul> : <p className="ct-note">No !ink requests yet.</p>}
@@ -213,7 +217,7 @@ export function SafetyCard() {
   return <Card title="Who sees what" id="ct-safe-title">
     <ul className="ct-rules">
       <li><strong>!noink</strong> Viewers who type it are never drawn or quoted. {adapter.kind === 'mock' && <span className="ct-sample">Sample</span>} {optedOut ? <span className="ct-chip ct-chip--sm">{optedOut} {optedOut === 1 ? 'viewer has' : 'viewers have'} opted out</span> : <span className="ct-muted">No one yet.</span>}</li>
-      <li><strong>Raids</strong> {rules.raidCatchup ? 'Raiders get a three-panel “Previously on” on the overlay.' : 'Off.'}</li>
+      <li><strong>Raids</strong> {rules.raidCatchup ? 'Raiders see the latest accepted panels in “Previously on” on the overlay.' : 'Off.'}</li>
       <li><strong>!previously</strong> {rules.previouslyCommand ? 'Any viewer can replay the catch-up, once a minute.' : 'Off.'}</li>
       <li><strong>Mods</strong> {rules.modApprove ? 'Mods can type !ink yes or !ink no to approve a waiting panel.' : 'Only you approve panels.'}</li>
     </ul>
@@ -242,17 +246,21 @@ function useLiveChatQuiet(source: ChatSourceState, quietMs: number): boolean {
 /** Rebuilt ChatSource.tsx: where chat comes from, and what it is saying. `quietAfterMs`: see CHAT_QUIET_MS. */
 export function ChatCard({ quietAfterMs = CHAT_QUIET_MS }: { quietAfterMs?: number }) {
   const ui = useUi();
+  const adapter=useAdapter();
+  const [message,setMessage]=useState('');
   const { source } = ui.studio;
   const quiet = useLiveChatQuiet(source, quietAfterMs);
-  const sample = isSampleSource(source);
+  const sample = !!adapter.sendSampleChat;
+  const waitingLive=!sample&&source.connection==='stopped';
   // UI-LIVE-B #1, #5, #6: the transport label only when the server gives one, no raw reason tokens, and a count that
   // agrees with the list. The words match the header chip (chatSourceChip).
   const channel = source.channel ? `#${source.channel}` : '';
-  const label = source.active === 'twitch' || source.requested === 'twitch' ? channel || chatSourceChip(source) : 'Sample chat';
+  const label = sample?'Sample chat':channel||'Live chat';
   // CHAT-BANNER-1: lines read stay read when chat goes quiet and the server shows Sample data meanwhile.
   const read = source.active === 'twitch' || source.requested === 'twitch' ? source.received : 0;
-  return <Card title="Chat" sample={sample} id="ct-chat-title">
-    <p className="ct-note" data-chat-state={source.connection}><strong>{label}</strong> · {chatStateText(source, quiet)}{read ? ` · ${read} read` : source.active !== 'twitch' && ui.chat.length ? ` · ${ui.chat.length} lines` : ''}</p>
+  return <Card title={sample?'Sample chat':'Live chat'} sample={sample} id="ct-chat-title">
+    {adapter.sendSampleChat&&<form className="ct-sample-chat-form" onSubmit={event=>{event.preventDefault();adapter.sendSampleChat!(message);setMessage('');}}><label className="ct-field">Act as a sample viewer<input value={message} onChange={event=>setMessage(event.target.value)} placeholder="Say hello, !1, !ink or !previously" maxLength={400}/></label><button type="submit" className="ct-btn ct-btn--sm" disabled={!message.trim()}>Send sample chat</button><p className="ct-note">Local simulation. These messages never go to Twitch.</p></form>}
+    <p className="ct-note" data-chat-state={source.connection}><strong>{label}</strong> · {waitingLive?'Ready for a Twitch channel':chatStateText(source, quiet)}{read ? ` · ${read} read` : source.active !== 'twitch' && ui.chat.length ? ` · ${ui.chat.length} lines` : ''}</p>
     {!ui.chat.length && <p className="ct-note">{read ? 'Lines read before this page opened aren’t listed here. New lines show as they arrive.' : 'No chat yet. Lines show here as they arrive.'}</p>}
     <ol className="ct-chat" aria-live="off">
       {ui.chat.slice(-7).map(line => <li key={line.id} data-kind={line.kind}>

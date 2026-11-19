@@ -33,7 +33,7 @@ export type StreamWithdrawal = 'message' | 'user';
 export interface StreamEvent { id?: string; t: number; type: EventType; user?: string; name?: string; text?: string; from?: string; viewers?: number; level?: number; moderator?: boolean; withdraw?: StreamWithdrawal; targetId?: string; targetUser?: string; banDuration?: number; scope?: 'room' }
 export interface StreamFixture { id: string; streamTitle: string; streamer: { displayName: string; avatarDescription: string }; duration: number; events: StreamEvent[] }
 // clipUrl/frameUrl/voters/cameo are seams for S2 (clip art) and S4 (poll voting, cameo opt-in); unset until those slices fill them in.
-export interface ComicPanel { origin?: 'sample' | 'twitch'; storyCaption?: string; storyBeats?: StoryBeat[]; atlas?: StoryAtlas; sourceId?: string; lettering?: LetteringMap; id: string; caption: string; dialogue: string[]; scene: string; characters: string[]; mood: string; altText: string; imageUrl: string; at: number; provenance?: { provider: string; asset?: string; style: string; fallback: boolean }; composition?: number; sfx?: string; bubblePlacement?: 'top-left' | 'top-right' | 'bottom-left'; clipUrl?: string; frameUrl?: string; voters?: number; cameo?: string; sources?: string[] }
+export interface ComicPanel { releaseBlocked?: string; imageRevision?: {status:'rendering'|'failed';reason?:string}; origin?: 'sample' | 'twitch'; storyCaption?: string; storyBeats?: StoryBeat[]; atlas?: StoryAtlas; sourceId?: string; lettering?: LetteringMap; id: string; caption: string; dialogue: string[]; scene: string; characters: string[]; mood: string; altText: string; imageUrl: string; at: number; provenance?: { provider: string; asset?: string; style: string; fallback: boolean }; composition?: number; sfx?: string; bubblePlacement?: 'top-left' | 'top-right' | 'bottom-left'; clipUrl?: string; frameUrl?: string; voters?: number; cameo?: string; sources?: string[] }
 export interface ComicIssue { id: string; title: string; streamTitle: string; panels: ComicPanel[]; safetyFlags: string[] }
 export type ArtStyle = 'risograph' | 'noir';
 export interface Moment { at: number; score: number; events: StreamEvent[] }
@@ -175,3 +175,6 @@ export function normalizeTwitchEvent(payload: unknown): StreamEvent | null {
   if (envelope.metadata?.subscription_type === 'channel.raid' && typeof event.viewers === 'number') return { id: envelope.metadata.message_id, t: 0, type: 'raid', from: safeText(event.from_broadcaster_user_name ?? 'Anonymous crew'), viewers: event.viewers };
   return null;
 }
+
+export * from './story-flow';
+export * from './watch';

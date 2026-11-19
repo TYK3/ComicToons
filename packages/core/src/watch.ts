@@ -1,0 +1,10 @@
+export type WatchRole='streamer'|'viewer';
+export type GenerationProvider='openai'|'gemini'|'pollinations'|'cloudflare'|'source';
+export interface SourceFrame {id:string;capturedAt:number;videoTime:number;url:string;sha256:string}
+export interface SourceChat {id:string;capturedAt:number;text:string;user:string}
+export interface AuthoredLettering {text:string;attribution:'Author'|'Chat chose'|'Prediction result'}
+export interface ScenePlan {supported:boolean;highlight:boolean;reason:string;title:string;panels:{frameId:string;description:string;chatIds:string[];narration:string}[]}
+export interface ScenePage {id:string;createdAt:number;status:'drawing'|'reviewing'|'ready'|'held'|'failed'|'withdrawn';title:string;reason:string;failureCode?:string;failureStage?:'analysis'|'drawing'|'review'|'publishing';imageUrl?:string;imageFile?:string;authoredLettering?:AuthoredLettering;sourceFrameIds:string[];sourceChatIds:string[];provider:GenerationProvider;model:string;plan?:ScenePlan;released?:boolean}
+export interface GeneratorStatus {provider:GenerationProvider;model:string;configured:boolean;ownKey:boolean;expiresAt?:number;checked:boolean;blocked?:string;maxPages:number;used:number}
+export interface WatchSnapshot {id:string;role:WatchRole;channel?:string;state:'idle'|'connecting'|'running'|'stopped'|'error';startedAt?:number;endsAt?:number;elapsed:number;chatConnection:string;received:number;frames:SourceFrame[];chat:SourceChat[];pages:ScenePage[];generator:GeneratorStatus;events:{at:number;kind:string;detail:string}[];error?:string;analysisMode:'frames-and-chat';transcription:false}
+export const IMAGE_MODELS={openai:['gpt-image-1.5','gpt-image-2','gpt-image-2.5-sunburst'],gemini:['gemini-2.5-flash-image','gemini-3-pro-image','gemini-3.1-flash-image'],pollinations:['google/gemini-3.1-flash-image','google/gemini-2.5-flash-image','black-forest-labs/flux.2-klein-4b'],cloudflare:['@cf/black-forest-labs/flux-2-klein-9b','@cf/black-forest-labs/flux-2-klein-4b'],source:['source-frames']} as const;

@@ -107,6 +107,7 @@ export function chatSourceChip(source: ChatSourceState): string {
   if (source.active === 'twitch' && !source.simulated) return 'Live chat';
   if (source.active === 'twitch') return 'Simulated chat';
   if (source.requested === 'twitch' && source.connection === 'connecting') return 'Connecting to chat…';
+  if (source.requested === 'twitch') return source.connection==='stopped'?'Chat stopped':'Waiting for Twitch chat';
   return 'Sample data';
 }
 
@@ -131,12 +132,13 @@ export function chatStateText(source: ChatSourceState, quiet = false): string {
     case 'sample': return 'Sample replay';
     // 'empty' arrives while Twitch chat is quiet: welcomed on a transport means connected, otherwise still on the way.
     // CHAT-BANNER-1: after the first received line, 'empty' (Sample data while still asking for Twitch) is not "waiting".
-    case 'empty': return source.requested !== 'twitch' ? 'Sample data' : source.received > 0 ? (source.transport ? `Connected · ${source.transport === 'wss' ? 'WSS 443' : 'TLS 6697'} · chat is quiet` : 'Chat is quiet · Sample data meanwhile') : source.transport ? `Connected · ${source.transport === 'wss' ? 'WSS 443' : 'TLS 6697'} · waiting for the first chat line` : 'Waiting for Twitch chat · Sample data meanwhile';
-    case 'unreachable': return 'Twitch chat couldn’t be reached · showing Sample data';
-    case 'disconnected': return 'Twitch chat disconnected · showing Sample data';
-    case 'unauthenticated': return 'Twitch refused the chat sign-in · showing Sample data';
-    case 'paused': return 'Live chat paused · showing Sample data';
-    default: return 'Sample data';
+    case 'empty': return source.requested !== 'twitch' ? 'Sample data' : source.received > 0 ? (source.transport ? `Connected · ${source.transport === 'wss' ? 'WSS 443' : 'TLS 6697'} · chat is quiet` : 'Chat is quiet') : source.transport ? `Connected · ${source.transport === 'wss' ? 'WSS 443' : 'TLS 6697'} · waiting for the first chat line` : 'Waiting for Twitch chat';
+    case 'unreachable': return 'Twitch chat couldn’t be reached';
+    case 'disconnected': return 'Twitch chat disconnected';
+    case 'unauthenticated': return 'Twitch refused the chat sign-in';
+    case 'paused': return 'Live chat paused';
+    case 'stopped': return 'Chat stopped';
+    default: return source.requested==='twitch'?'Waiting for Twitch chat':'Sample data';
   }
 }
 

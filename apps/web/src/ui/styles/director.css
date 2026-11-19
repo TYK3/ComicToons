@@ -30,3 +30,5 @@
 }
 .ct-director__empty{display:grid;gap:10px}
 .ct-director__tiles .ct-skel{min-height:112px}
+
+@media(max-width:600px){.ct-director__bar{gap:6px;padding:8px}.ct-director__bar .ct-logo{font-size:24px}.ct-director__bar .ct-btn--back{padding:8px;gap:4px}}

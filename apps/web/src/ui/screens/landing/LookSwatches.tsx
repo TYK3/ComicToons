@@ -47,14 +47,14 @@ export function LookSwatches() {
     group.current?.querySelector<HTMLButtonElement>(`[data-look-id="${ids[index]}"]`)?.focus();
   };
   return <div className="ct-swatches">
-    <p className="ct-swatches__label" id="ct-swatches-label">Look</p>
+    <p className="ct-swatches__label" id="ct-swatches-label">Palette</p>
     <div ref={group} className="ct-swatches__row" role="radiogroup" aria-labelledby="ct-swatches-label" onKeyDown={onKey}>
       {LOOKS.map(look => {
         const on = look.id === current;
-        const { accent, wash } = paletteOf(look.id);
+        const { accent } = paletteOf(look.id);
         return <button key={look.id} type="button" role="radio" aria-checked={on} tabIndex={on ? 0 : -1} data-look-id={look.id}
           className="ct-swatch" aria-label={`${look.name}, colour`} onClick={() => apply(look.id)}>
-          <span className="ct-swatch__chip" aria-hidden="true" style={{ backgroundImage: `linear-gradient(135deg,${wash.start},${wash.mid},${wash.end})` }}>
+          <span className="ct-swatch__chip" aria-hidden="true" >
             {accent.map(colour => <span key={colour} className="ct-swatch__dot" style={{ backgroundColor: colour }}/>)}
           </span>
           <span className="ct-swatch__name">{look.short}</span>

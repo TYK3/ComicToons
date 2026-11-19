@@ -1,1 +1,1 @@
-{"name":"@comictoons/server","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"tsx watch src/index.ts","build":"tsc --noEmit -p ../../tsconfig.json"},"dependencies":{"@comictoons/core":"*","fastify":"^5.6.1","@playwright/test":"^1.56.1"}}
+{"name":"@comictoons/server","version":"0.1.0","private":true,"type":"module","scripts":{"dev":"tsx watch src/index.ts","build":"tsc --noEmit -p ../../tsconfig.json"},"dependencies":{"@comictoons/core":"*","@playwright/test":"^1.56.1","fastify":"^5.6.1","sharp":"^0.35.5"}}

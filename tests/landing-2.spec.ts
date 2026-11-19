@@ -11,7 +11,7 @@ const SETS = [
 
 async function emptyCells(page: Page) {
   return page.evaluate(() => {
-    const grids = ['.ct-sets__tabs', '#ct-set-panel .ct-catchup__row', '#ct-set-panel .ct-part__leaves', '#ct-set-panel .ct-part__episodes'];
+    const grids = ['.ct-sets__tabs', '#ct-set-panel .ct-catchup__row', '#ct-set-panel .ct-reader-previews'];
     const bad: string[] = [];
     for (const selector of grids) {
       const grid = document.querySelector(selector);
@@ -40,10 +40,10 @@ async function expectCompleteSet(page: Page, fixture: string) {
   await expect(panel.getByRole('heading', { name: 'Manga series', level: 3 })).toBeVisible();
   await expect(panel.locator('.ct-catchup__row > li')).toHaveCount(3);
   await expect(panel.locator('.ct-catchup__raid')).toContainText('raided with');
-  await expect(panel.locator('.ct-book__cover')).toContainText('Sample issue');
-  await expect(panel.locator('.ct-book__end')).toContainText('Sample');
-  expect(await panel.locator('.ct-part__leaves > li').count()).toBeGreaterThanOrEqual(3);
-  expect(await panel.locator('.ct-part__episode').count()).toBeGreaterThanOrEqual(1);
+  await expect(panel.locator('.ct-reader-preview')).toHaveCount(2);
+  await expect(panel.locator('.ct-part__leaves, .ct-part__episodes, .ct-page')).toHaveCount(0);
+  await expect(panel.getByRole('link',{name:'Read full comic book',exact:true})).toHaveAttribute('href',`#/book/sample-${fixture}?workspace=sample`);
+  await expect(panel.getByRole('link',{name:'Read full manga series',exact:true})).toHaveAttribute('href',`#/series/sample-${fixture}?workspace=sample`);
 }
 
 for (const width of [1440, 1080, 390]) {

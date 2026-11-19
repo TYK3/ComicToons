@@ -1,14 +1,11 @@
 # Make a comic from a Twitch link
 
-Paste a Twitch link into the Studio's **Make a comic from a link** card and ComicToons turns it into comic panels. You can then add the result to that channel's manga series as a new chapter. The code is in `apps/server/src/import/` and `apps/server/src/series/`, and the card is `apps/web/src/ui/screens/studio/MakeFromLink.tsx`.
+In Live Studio, open **Live setup → Create pages from a VOD or clip**, then paste a Twitch link into **Make a comic from a link**. This import uses clip titles and thumbnails; it is separate from timed live-video capture and reference-frame illustration. You can add the result to that channel's manga series as a new chapter. The code is in `apps/server/src/import/` and `apps/server/src/series/`, and the card is `apps/web/src/ui/screens/studio/MakeFromLink.tsx`.
 
 ## What you need
 
 - **Twitch app credentials** (`COMICTOONS_TWITCH_CLIENT_ID` and `COMICTOONS_TWITCH_CLIENT_SECRET`, see [Configuration](../README.md#configuration)). Clip and VOD details come from Twitch's read-only Helix API, using an app token. If no credentials are set, the request is refused with 409 ("Twitch app access is not set up on this machine…") and nothing is sent to Twitch.
-- **The Studio wiring.**
-  - The server routes are registered in `apps/server/src/app.ts`.
-  - The card needs two Studio adapter methods, `importLink` and `addSeriesChapter`.
-  - Until the adapter has them, the card says "Making comics from links isn't available in this Studio yet." and **Make comic** stays disabled.
+- **Live Studio:** the server adapter implements `importLink` and `addSeriesChapter`; the routes are registered in `apps/server/src/app.ts`. Use the Live workspace for Twitch imports.
 
 ## Accepted links
 
@@ -62,5 +59,5 @@ Anything else is refused with 400 and a plain message (for example "… is not a
 ## Not covered yet
 
 - Not checked against real Twitch: all tests used a local fake of the Helix API (GAP).
-- No browser end-to-end test of the card, because the card isn't wired into the Studio yet (GAP).
+- The card is wired into Live Studio. The repository includes isolated import-wire browser checks (`npm run e2e:import-wire`); these are not proof of a successful real-Twitch import in the current working tree.
 - Live streams are not added as chapters yet.

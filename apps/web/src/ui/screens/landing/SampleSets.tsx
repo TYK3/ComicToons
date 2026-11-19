@@ -1,13 +1,11 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
-import type { LookId } from '../../data/adapter';
 import { useAdapter, useLoad, useUi } from '../../data/store';
-import { ComicPage } from '../../components/ComicPage';
 import { LookArt, Panel, PanelTags } from '../../components/Panel';
 import { Sample } from '../../components/Brand';
 import { Arrow } from '../../components/Icons';
 import { RetryButton, ScreenState } from '../../components/ScreenState';
 import { href } from '../../router';
-import { loadSampleSets, type SampleSet } from './sampleSets';
+import { loadSampleSets, type SampleSet } from './sampleSetData';
 import { LookSwatches, lookChrome } from './LookSwatches';
 import '../../styles/pages.css';
 import '../../styles/readers.css';
@@ -16,7 +14,7 @@ import '../../styles/readers.css';
  * LANDING-2 "What it makes": three Sample streams (one per fixture), and for the one picked, the complete set it makes:
  * the Catch-up a raider sees mid-stream, the comic book bound when the stream ends, and the manga series.
  * Built from the same parts the readers use (Panel, LookArt, ComicPage and the reader classes in readers.css), fed
- * static Sample data from one loader (./sampleSets.ts). Every set is labelled Sample.
+ * static Sample data from one loader (./sampleSetData.ts). Every set is labelled Sample.
  */
 export function SampleSets() {
   const adapter = useAdapter();
@@ -58,8 +56,10 @@ export function SampleSets() {
     <div className="ct-sets__panel" role="tabpanel" id="ct-set-panel" aria-labelledby={`ct-set-tab-${picked.fixtureId}`} data-set={picked.fixtureId}>
       <p className="ct-sets__intro"><Sample label="Sample set"/> <span>Made from the Sample stream “{picked.streamTitle}” by @{picked.channel}. The streamer, chat and art are all made up.</span></p>
       <CatchUpPart set={picked}/>
-      <BookPart set={picked} look={look}/>
-      <SeriesPart set={picked} look={look}/>
+      <div className="ct-reading-options">
+        <div className="ct-reading-options__story"><p className="ct-kicker">One story, two ways to read</p><div className="ct-reader-preview__art"><LookArt panel={picked.comicBook.cover} look={look}/></div></div>
+        <div className="ct-reader-previews"><BookPart set={picked}/><SeriesPart set={picked}/></div>
+      </div>
     </div>
   </div>;
 }
@@ -92,46 +92,19 @@ function CatchUpPart({ set }: { set: SampleSet }) {
   </section>;
 }
 
-/** The comic book (Readers.tsx Book): the cover, every page, and the back page. */
-function BookPart({ set, look }: { set: SampleSet; look: LookId }) {
-  const { cover, pages } = set.comicBook;
-  const leaves = pages.length + 2;
-  // LANDING-3 MF2: the back page shows the book's last panel as its art, so it reads as a back cover, not an empty card.
-  const endArt = pages.at(-1)?.at(-1) ?? cover;
-  return <section className="ct-part ct-part--book" aria-labelledby="ct-part-book">
-    <PartHead id="ct-part-book" when="When the stream ends" title="Comic book" text={`The whole stream, bound into ${pages.length} ${pages.length === 1 ? 'page' : 'pages'} with a cover and a back page.`} to={`/book/${set.id}`} open="Read the full comic book"/>
-    <ol className="ct-part__leaves" data-count={leaves} aria-label={`${set.title}: cover, ${pages.length} pages and the back page`}>
-      <li><article className="ct-book__cover ct-part__cover" aria-label={`Cover: ${set.title}`}>
-        <LookArt panel={cover} look={look}/>
-        <div className="ct-book__mast"><span className="ct-book__brand">ComicToons</span><span className="ct-book__no">No. 1</span></div>
-        <p className="ct-book__title">{set.title}</p>
-        <p className="ct-book__by">Starring @{set.channel} and chat</p>
-        {cover.sfx && <span className="ct-sfx ct-book__sfx" aria-hidden="true">{cover.sfx}</span>}
-        <span className="ct-book__sample">Sample issue</span>
-      </article></li>
-      {pages.map((page, index) => <li key={index}><ComicPage panels={page} number={index + 1}/></li>)}
-      <li><div className="ct-book__end ct-part__end"><span className="ct-book__endart" aria-hidden="true"><LookArt panel={endArt} look={look}/></span><p className="ct-display">The end</p><p>Drawn live from chat.<br/>Every panel approved by @{set.channel}.</p><Sample/></div></li>
-    </ol>
+/** Landing previews never mount the full page or episode readers. */
+function BookPart({ set }: { set: SampleSet }) {
+  const { pages } = set.comicBook;
+  return <section className="ct-part ct-part--book ct-reader-preview" aria-labelledby="ct-part-book">
+    <PartHead id="ct-part-book" when="One stream, one issue" title="Comic book" text={`The story as a paged book: ${pages.length} pages, with a cover and a back page.`} to={`/book/${set.id}`} open="Read full comic book"/>
+    <p className="ct-note">Sample preview · turn the pages in the full reader.</p>
   </section>;
 }
 
-/** The manga series (Readers.tsx Series): one episode per chapter of the stream, each opening on its highlight. */
-function SeriesPart({ set, look }: { set: SampleSet; look: LookId }) {
+function SeriesPart({ set }: { set: SampleSet }) {
   const { volumes } = set.manga;
-  return <section className="ct-part ct-part--series" aria-labelledby="ct-part-series">
-    <PartHead id="ct-part-series" when="Stream after stream" title="Manga series" text={`${volumes.length === 1 ? 'One episode' : `${volumes.length} episodes`}, one for each chapter of the stream. Each opens on the moment chat liked most.`} to={`/series/${set.id}`} open="Read the full series"/>
-    <ol className="ct-part__episodes" data-count={volumes.length}>
-      {volumes.map(volume => <li key={volume.number} className="ct-part__episode">
-        <div className="ct-part__ephead">
-          <span className="ct-part__epart"><LookArt panel={volume.highlight} look={look}/></span>
-          <span>
-            <span className="ct-episode__no">Episode {volume.number} · {volume.chapter}</span>
-            <h4 className="ct-episode__title">{volume.title}</h4>
-          </span>
-        </div>
-        {volume.pages.map((page, index) => <ComicPage key={index} panels={page} number={index + 1} className="ct-part__page"/>)}
-        <p className="ct-note">Highlight: “{volume.highlight.caption}”{volume.highlight.chosenBy ? ` · chat chose it, ${volume.highlight.chosenBy.votes} votes` : ''}</p>
-      </li>)}
-    </ol>
+  return <section className="ct-part ct-part--series ct-reader-preview" aria-labelledby="ct-part-series">
+    <PartHead id="ct-part-series" when="The same story, in episodes" title="Manga series" text="The same artwork and dialogue, grouped into episodes so you can continue the story over time." to={`/series/${set.id}`} open="Read full manga series"/>
+    <p className="ct-note">Sample preview · {volumes.length} {volumes.length === 1 ? 'episode' : 'episodes'}. Open the series to start reading.</p>
   </section>;
 }

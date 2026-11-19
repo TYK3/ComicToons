@@ -1,3 +1,4 @@
+import type { StoryFlowReport } from '@comictoons/core';
 /**
  * ComicToons UI data adapter.
  *
@@ -36,7 +37,7 @@ export type PanelSource = 'clip' | 'generated' | 'cameo';
 
 /** A studio Panel (types.ts) plus the art facts the UI needs to lay it out without layout shift. */
 export interface UiPanel extends Panel {
-  art: { width: number; height: number; tone: 'grey' | 'colour' };
+  art: { lettered?: boolean; replaceBubble?: boolean; bubbleLabel?: string; bubble?: { x: number; y: number; width: number; height: number }; width: number; height: number; tone: 'grey' | 'colour'; atlas?: { columns: number; rows: number; cell: number; rowEdges?: number[]; colEdges?: number[] }; themes?: Partial<Record<LookId, string>> };
   source: PanelSource;
   /** "Chat chose · 52%" when a vote picked the caption. */
   chosenBy?: { votes: number; pct: number };
@@ -89,7 +90,7 @@ export interface InkMeReward {
 }
 export interface ParticipationStatus {
   poll: PollView | null;
-  lastPoll?: { caption: string; voters: number };
+  lastPoll?: { caption: string; voters: number; outcome?:string };
   prediction: PredictionView | null;
   reward: InkMeReward;
   /** How many viewers typed !noink. A count only, like the server: names are never shown, drawn or quoted. */
@@ -152,12 +153,15 @@ export interface ChatLine { id: string; at: number; user: string; text: string; 
 
 /** The useStudio() return, minus the transport. */
 export interface UiSnapshot {
+  broadcast?: { id: string; kind: 'panel' | 'vote' | 'vote-result' | 'inkme' | 'prediction' | 'prediction-result' | 'catchup' | 'stream-end'; createdAt: number; title?: string; detail?: string; panelIds?: string[] };
+  sampleReplay?: { running: boolean; revealed: number; total: number; runId?:string };
   studio: UiStudioState;
   fixtures: Fixture[];
   loading: boolean;
   offline: boolean;
   error: string;
   busy: string;
+  sampleSimulation?: {guided: boolean;paused?: boolean;viewers: number;events: {id:string;text:string;at:number}[];arrival?: {name:string;at:number;panelIds:string[]}};
   sampleReady: boolean;
   twitch: TwitchAuth;
   requestedScopes?: string[];
@@ -181,7 +185,7 @@ export type UiEvent =
 export type UiEventName = UiEvent['name'];
 
 /** Reader data (GET /api/recaps/:id, /api/book/:id, /api/series/:id, /api/catchup). `look` is the Look it was asked for. */
-export interface IssueView { id: string; title: string; streamTitle: string; channel: string; /** GAP: no issue date on the wire (recap snapshot or series); left out rather than invented. */ date?: string; panels: UiPanel[]; sample: boolean; look: LookId }
+export interface IssueView { id: string; title: string; streamTitle: string; channel: string; /** GAP: no issue date on the wire (recap snapshot or series); left out rather than invented. */ date?: string; panels: UiPanel[]; storyPanels?: UiPanel[]; sample: boolean; look: LookId }
 /**
  * GET /api/series/:id, field for field: buildSeries(panels, {title}) from packages/core/src/manga.ts plus `id` and `sample`.
  * One episode per chapter of the stream; `highlight` is its peak panel and `panels` up to four neighbours around it.
@@ -219,15 +223,27 @@ export interface ComicToonsAdapter {
 
   // Studio
   approve(panelId?: string): Promise<{ undoToken?: string }>;          // POST /api/approve
+  approveAll?(): Promise<{ undoToken?: string }>;
+  pauseReplay?(): void;
+  castSampleVote?(key: number): void;
+  redeemSampleInk?(): void;
+  castSamplePrediction?(outcome: string): void;
+  sendSampleChat?(text: string): void;
+  simulateSampleRaid?(): void;
+  simulateSampleArrival?(): void;
+  startSampleDemo?(fixtureId?: string): Promise<void>;
+  resumeSampleDemo?(): void;
+  stopSampleDemo?(): void;
   reject(panelId?: string): Promise<{ undoToken?: string }>;           // POST /api/reject
   undo(token: string): Promise<void>;                                  // POST /api/undo
+  discardImageRevision?(panelId:string):Promise<void>;
   editCaption(panelId: string, caption: string): Promise<void>;        // POST /api/caption
   setLook(look: LookId): Promise<void>;                                // POST /api/settings {mangaTheme}
   setSpeed(speed: 1 | 10 | 60): Promise<void>;                         // POST /api/settings {speed}
   setApprovalMode(on: boolean): Promise<void>;                         // POST /api/settings {approvalMode}
   replay(fixtureId: string): Promise<void>;                            // POST /api/replay {fixtureId, speed, style}
   useSampleData(): Promise<void>;                                      // POST /api/ingest {mode:'sample'}
-  useLiveChat(): Promise<void>;                                        // POST /api/ingest {mode:'twitch', channel}
+  useLiveChat(channel?: string, chatOnly?: boolean): Promise<void>; // Explicit chat-only ingestion does not create panels.
   panicHide(hidden: boolean): Promise<void>;                           // POST /api/stop (hide) / /api/replay (resume)
   /** The current Look travels with the bind: the server must not reuse the Look locked at first save. */
   endStream(title: string, modes: OutputMode[], look: LookId): Promise<BindResult>; // POST /api/end {look}, then /api/comics/:id/title
@@ -261,6 +277,8 @@ export interface ComicToonsAdapter {
    *  with the speech bubbles and SFX. `page` is a story page index, or the 'cover' or 'back' page of the book. */
   exportPagePng(issue: IssueView, page: number | 'cover' | 'back', look: LookId): Promise<PagePng>;
   getCatchup(minutes: number): Promise<CatchupView>;                   // GET /api/catchup?minutes=
+
+  getStoryFlow?(): Promise<StoryFlowReport>; // GET /api/story-flow, evidence only
 
   // Make a comic from a link (IMPORT-1). Both reject with the server's error text. Optional, so an adapter
   // without them (a test stub) still type-checks; the card then says the feature isn't available.

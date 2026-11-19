@@ -1,3 +1,4 @@
+import { sampleStoryIssue } from '../data/sampleStories';
 import { useRef, useState, type KeyboardEvent } from 'react';
 import { mangaThemes } from '@comictoons/core';
 import { LOOKS, resolveLook, type LookId, type UiPanel } from '../data/adapter';
@@ -9,7 +10,7 @@ import '../styles/lookpicker.css';
  * the card shows its palette even when every thumbnail shows the same art. */
 const paletteBar = (id: LookId) => {
   const [a1, a2, a3] = (mangaThemes.find(theme => theme.id === id) ?? mangaThemes[0]!).palette.accent;
-  return `linear-gradient(90deg,${a1},${a2},${a3})`;
+  return `linear-gradient(90deg,${a1} 0% 33.33%,${a2} 33.33% 66.66%,${a3} 66.66% 100%)`;
 };
 
 /** One Look picker for every view (D1a). Arrow keys, Home and End move and apply at once. */
@@ -20,8 +21,11 @@ export function LookPicker({ compact = false }: { compact?: boolean }) {
   const group = useRef<HTMLDivElement>(null);
   // A stored legacy Look (ink/noir/pop) shows Festival checked, not nothing.
   const current = resolveLook(ui.studio.look);
-  // Thumbnails use the first panel actually in the grid, so the cards never misrepresent it.
-  const sample: UiPanel | undefined = ui.studio.panels[0] ?? ui.studio.pendingPanels[0];
+  // Compare painted versions of one complete scene. Legacy/live stills without
+  // variants cannot demonstrate a palette by repeating the same thumbnail.
+  const candidate = ui.studio.panels[0] ?? ui.studio.pendingPanels[0];
+  const sample: UiPanel | undefined = candidate && LOOKS.every(look => candidate.art.themes?.[look.id])
+    ? candidate : sampleStoryIssue('sample-tabletop-night', current).panels[0];
   const apply = (id: LookId, announce = true) => {
     void adapter.setLook(id);
     const look = LOOKS.find(entry => entry.id === id)!;
@@ -40,7 +44,7 @@ export function LookPicker({ compact = false }: { compact?: boolean }) {
     group.current?.querySelector<HTMLButtonElement>(`[data-look-id="${ids[index]}"]`)?.focus();
   };
   return <div className={`ct-looks${compact ? ' ct-looks--compact' : ''}`}>
-    <p className="ct-tool__label"><span id="ct-look-label">Look</span> <span id="ct-look-hint" className="ct-tool__hint">Changes the grid, overlay, recap and PNGs straight away.</span></p>
+    <p className="ct-tool__label"><span id="ct-look-label">Colour palette</span> <span id="ct-look-hint" className="ct-tool__hint">Painted scenery. Natural character colours.</span></p>
     <div ref={group} className="ct-looks__cards" role="radiogroup" aria-labelledby="ct-look-label" aria-describedby="ct-look-hint" onKeyDown={onKey}>
       {LOOKS.map(look => {
         const on = look.id === current;

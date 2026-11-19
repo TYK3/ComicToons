@@ -117,7 +117,7 @@ export class CatchupTriggers {
 export interface StudioLike {
   state: { panels: ComicPanel[]; pendingPanels: ComicPanel[]; elapsed: number; approvalMode: boolean };
   moderate(kind: 'approve' | 'reject', panelId?: string): unknown;
-  caption(panelId: string, caption: string): unknown;
+  caption(panelId: string, caption: string, attribution?:'Author'|'Chat chose'|'Prediction result'): unknown;
 }
 
 /** A redemption's cameo panel, enough to match it against a panel the director just decided on. */

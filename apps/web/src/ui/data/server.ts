@@ -1,3 +1,5 @@
+import type { StoryFlowReport } from '@comictoons/core';
+import { sampleStoryIssue } from './sampleStories';
 /**
  * Server adapter: ComicToonsAdapter on the real ComicToons API, same origin (the Vite dev server
  * proxies /api, /auth, /exports and /art to the API port).
@@ -39,7 +41,7 @@ interface WireParticipation {
   flags: { polls?: boolean; inkMe?: boolean; catchup?: boolean; director?: boolean; hype?: boolean };
   budget: { perHour: number; used: number; resetAt?: number };
   poll: WirePoll | null;
-  lastPollResult: { caption: string; voters: number } | null;
+  lastPollResult: { outcome?:string; caption: string; voters: number } | null;
   /** T3b adds error, offReason and chatFallback (report-t3b.md R3); the field names are used as they are. */
   reward: { status: InkMeStatus; error?: string; offReason?: InkMeOffReason; chatFallback?: string; title: string; cost: number; maxPerUserPerStream: number; cooldownSeconds: number; cooldownEndsAt?: number; redemptions: WireRedemption[] } | null;
   catchups: { reason: 'raid' | 'command' | 'streamer'; at: number; raider?: string; viewers?: number }[];
@@ -81,11 +83,18 @@ const failedMessage = (status: number) => `The studio couldn’t do that (error 
 
 /** GAP: Panel has no art size or still source. Generated art is square-ish; 4:3 keeps layout stable until the server sends sizes. */
 function toUiPanel(panel: Panel): UiPanel {
+  const legacy = /panel-story-(tabletop|speedrun|cooking)-(\d+)\.png$/.exec(panel.provenance?.asset ?? panel.imageUrl);
+  const fixture = legacy ? ({tabletop: 'tabletop-night', speedrun: 'speedrun-fail', cooking: 'irl-cooking'} as const)[legacy[1] as 'tabletop' | 'speedrun' | 'cooking'] : undefined;
+  const replacement = fixture && panel.provenance?.provider === 'library'
+    ? sampleStoryIssue(`sample-${fixture}`, 'festival').storyPanels![[0, 5, 8, 15, 16, 19][Number(legacy![2])] ?? 0]
+    : undefined;
   return {
     ...panel,
-    art: { width: 1024, height: 768, tone: 'colour' },
+    imageUrl: replacement?.imageUrl ?? panel.imageUrl,
+    art: panel.provenance?.provider.startsWith('scene-')?{width:1024,height:1536,tone:'colour',lettered:true}:replacement?.art ?? (/^panel-\d\d-.*\.webp$/.test(panel.provenance?.asset ?? '')
+      ? { width: 1280, height: 720, tone: 'colour' } : { width: 1024, height: 768, tone: 'colour' }),
     source: panel.provenance?.provider === 'clip' ? 'clip' : 'generated',
-    generatedCaption: true,
+    generatedCaption: !panel.releaseBlocked,
   };
 }
 
@@ -251,6 +260,7 @@ export class ServerAdapter implements ComicToonsAdapter {
   private set(next: Partial<ServerSnapshot>) { this.snapshot = { ...this.snapshot, ...next }; for (const listener of this.listeners) listener(); }
   private patchStudio(next: Partial<UiStudioState>) { this.set({ studio: { ...this.snapshot.studio, ...next } }); this.emit({ name: 'state', data: this.snapshot.studio }); }
   private applyState(state: WireState) {
+    if (state.source?.channel !== this.snapshot.studio.source.channel || state.source?.requested !== this.snapshot.studio.source.requested) this.set({chat: []});
     this.patchStudio({
       ...state, look: this.look, hidden: state.overlayHidden??false, budget: this.budget, source: state.source ?? SAMPLE_SOURCE,
       panels: state.panels.map(toUiPanel), pendingPanels: state.pendingPanels.map(toUiPanel),
@@ -296,7 +306,7 @@ export class ServerAdapter implements ComicToonsAdapter {
     const last = wire.catchups[0];
     const participation: ServerParticipation = {
       poll: wire.poll ? { id: wire.poll.id, panelId: wire.poll.panelId, mode: wire.poll.mode, endsAt: wire.poll.endsAt, total: wire.poll.total, choices: wire.poll.choices.map(({ key, caption, votes }) => ({ key, caption, votes })) } : null,
-      lastPoll: wire.lastPollResult ? { caption: wire.lastPollResult.caption, voters: wire.lastPollResult.voters } : undefined,
+      lastPoll: wire.lastPollResult ? { caption: wire.lastPollResult.caption, voters: wire.lastPollResult.voters, outcome:wire.lastPollResult.outcome } : undefined,
       // GAP: points per outcome and the lock time are not in the status.
       prediction: prediction ? { id: prediction.id, title: prediction.title, status: predictionStatus[prediction.status], winner: prediction.outcomes.find(outcome => outcome.id === prediction.winner)?.title ?? prediction.winner, outcomes: prediction.outcomes.map(outcome => ({ title: outcome.title, users: outcome.users, points: 0 })) } : null,
       reward: reward ? {
@@ -315,6 +325,7 @@ export class ServerAdapter implements ComicToonsAdapter {
 
   }
   /** In flight (T3): GET /api/participation/eventsub. A 404 before T3 lands reads as 'off'. New revocations become 'eventsub-revoked' events. */
+  async getStoryFlow(): Promise<StoryFlowReport> { return this.read('/api/story-flow'); }
   async getEventSub(): Promise<EventSubStatus> {
     let next: EventSubStatus;
     try { next = await this.read<EventSubStatus>('/api/participation/eventsub'); }
@@ -341,6 +352,7 @@ export class ServerAdapter implements ComicToonsAdapter {
 
   // ---- studio writes --------------------------------------------------------------------------
   async approve(panelId?: string) { const state = await this.busyWhile('approve', () => this.write<WireState>('/api/approve', { panelId })); this.applyState(state); return { undoToken: state.undoToken }; }
+  async approveAll(){const state=await this.busyWhile('approve-all',()=>this.write<WireState>('/api/approve',{all:true}));this.applyState(state);return {undoToken:state.undoToken};}
   async reject(panelId?: string) { const state = await this.busyWhile('reject', () => this.write<WireState>('/api/reject', { panelId })); this.applyState(state); return { undoToken: state.undoToken }; }
   async undo(token: string) { this.applyState(await this.write<WireState>('/api/undo', { token })); }
   // IMPORT-1: a Twitch link to a comic, and a chapter in the channel's manga series. Plain writes: the director key comes from write().
@@ -349,6 +361,7 @@ export class ServerAdapter implements ComicToonsAdapter {
     return this.write<{ chapter: SavedChapter }>(`/api/channel-series/${encodeURIComponent(channel)}/chapters`, body);
   }
   /** Exists for waiting panels only: the server answers 409 for a panel already on air (GAP for on-air edits). */
+  async discardImageRevision(panelId:string){this.applyState(await this.write<WireState>('/api/caption/revision/discard',{panelId}));}
   async editCaption(panelId: string, caption: string) { this.applyState(await this.busyWhile('caption', () => this.write<WireState>('/api/caption', { panelId, caption }))); }
   /** The Look is client state; every pick is also saved server-side via mangaTheme, for all 4 Looks. */
   async setLook(look: LookId) {
@@ -364,9 +377,11 @@ export class ServerAdapter implements ComicToonsAdapter {
     this.applyState(await this.busyWhile('replay', () => this.write<WireState>('/api/replay', { fixtureId, speed, style: this.look === 'noir' ? 'noir' : 'risograph' })));
   }
   async useSampleData() { this.applyState(await this.write<WireState>('/api/ingest', { mode: 'sample' })); }
-  async useLiveChat() {
-    const channel = this.snapshot.twitch.login;
-    this.applyState(await this.write<WireState>('/api/ingest', channel ? { mode: 'twitch', channel } : { mode: 'twitch' }));
+  async useLiveChat(selectedChannel?: string, chatOnly = false) {
+    const channel = selectedChannel ?? (this.snapshot.studio.source.requested === 'twitch' ? this.snapshot.studio.source.channel : undefined) ?? this.snapshot.twitch.login;
+    const state=await this.write<WireState>('/api/ingest',{mode:'twitch',...(channel?{channel,fresh:!!selectedChannel}:{}),...(chatOnly?{chatOnly:true}:{})});
+    try{if(channel)sessionStorage.setItem('comictoons-studio-live-channel-v1',channel);}catch{/* this window */}
+    this.set({chat:[]});this.applyState(state);
   }
   async panicHide(hidden: boolean) { this.applyState(await this.write<WireState>('/api/hide',{hidden})); }
   async endStream(title: string, modes: OutputMode[], look: LookId): Promise<BindResult> {

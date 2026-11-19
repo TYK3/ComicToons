@@ -20,7 +20,7 @@ const ISSUE_IDS = ['sample-tabletop-night', 'sample-speedrun-fail', 'sample-irl-
  * L-FB: a fresh server has no approved panels, so the hero plate, the Featured page and the What it makes cards
  * borrow the library art bundled with the app (fixtures/art/generated, 1280×720, no network). Always shown as Sample.
  * Order matters: [1] is the hero plate; the Featured page shows them all. (LANDING-2: What it makes now shows the
- * full Sample sets from ./landing/sampleSets.ts instead of cards.)
+ * full Sample sets from ./landing/sampleSetData.ts instead of cards.)
  */
 const SAMPLE_ART = [
   { file: 'panel-02-clutch-comeback.webp', caption: 'Clutch comeback', line: 'One hit point. Still counts!', sfx: 'YES!', alt: 'Sample art: a streamer in a purple hoodie cheers with both arms up while her cat celebrates beside the desk.' },
@@ -50,26 +50,12 @@ export function Landing() {
   const adapter = useAdapter();
   const root = useRef<HTMLDivElement>(null);
   const look = ui.studio.look;
-  // UI3: the shelf comes from the adapter's issue list, so it can be empty or fail, and says so instead of making covers up.
-  const issues = useLoad(async () => {
-    const listed = await adapter.listIssues();
-    // L-FB: the server adapter seeds its snapshot from the mock, so a fresh server reports one Sample recap
-    // (latestRecapUrl) and listIssues returns only that id. When every id is a Sample, show the full Sample shelf.
-    const ids = listed.length && listed.every(id => id.startsWith('sample-')) ? [...new Set([...listed, ...ISSUE_IDS])] : listed;
-    const list = (await Promise.all(ids.slice(0, 3).map(id => adapter.getIssue(id, look)))).filter(issue => issue.panels.length);
-    // LANDING-2 (b): the shelf is a row of three, so with one or two real issues the Sample issues fill the gaps
-    // (labelled Sample on the cover). With no issues at all the empty state stays: that says something true.
-    if (!list.length || list.length >= 3) return list;
-    const fill = await Promise.all(ISSUE_IDS.filter(id => !list.some(issue => issue.id === id)).slice(0, 3 - list.length).map(id => adapter.getIssue(id, look)));
-    return [...list, ...fill.filter(issue => issue.panels.length)];
-  }, [adapter, look]);
+  // The landing page previews bundled stories; saved live issues stay in the workspace/readers.
+  const issues = useLoad(async () => (await Promise.all(ISSUE_IDS.map(id => adapter.getIssue(id, look)))).filter(issue => issue.panels.length), [adapter, look]);
   const retryShelf = () => { void adapter.refresh().finally(issues.retry); };
   useReveal(root, [issues.data]);
-  // L-FB: no approved or waiting panels yet, so use the bundled Sample art, labelled where it shows.
-  // LANDING-2: the same with fewer than three, so the Featured page never reads "panel 1 of 1" on a fresh replay.
-  const live = ui.studio.panels.length ? ui.studio.panels : ui.studio.pendingPanels;
-  const fromSample = live.length < 3;
-  const panels = fromSample ? SAMPLE_PANELS : live;
+  const fromSample = true;
+  const panels = SAMPLE_PANELS;
   const plate = panels[1] ?? panels[0];
   return <div className="ct-landing" ref={root}>
     <a className="ct-skip" href="#ct-main">Skip to content</a>
@@ -84,8 +70,8 @@ export function Landing() {
         <nav className="ct-pill" aria-label="Main">
           <a href="#ct-how">How it works</a>
           <a href="#ct-makes">What it makes</a>
-          <a href={href('/connect')}>Sign in</a>
-          <a className="ct-pill__cta" href={href('/studio')}>Open Studio</a>
+          <a href={href('/connect')}>Connect Twitch</a>
+          <a className="ct-pill__cta" href={href('/studio',{workspace:'live'})}>Live Studio</a>
         </nav>
       </header>
       <div className="ct-hero__copy" id="ct-main">
@@ -94,9 +80,9 @@ export function Landing() {
         <p className="ct-hero__sub" data-reveal="up" data-delay="120">Chat’s best moments become comic panels on your overlay as they happen. You approve every one. When you log off, the whole night is a comic you can share.</p>
         <div className="ct-hero__cta" data-reveal="up" data-delay="200">
           <ConnectButton/>
-          <a className="ct-btn ct-btn--paper" href={href('/studio')}>Open Studio <Arrow/></a>
+          <a className="ct-btn ct-btn--paper" href={href('/studio',{workspace:'sample'})}>Try Sample demo <Arrow/></a>
         </div>
-        <p className="ct-hero__note" data-reveal="up" data-delay="240">No sign-in needed: the Studio runs on a Sample stream until you connect.</p>
+        <p className="ct-hero__note" data-reveal="up" data-delay="240">No sign-in needed: try the Sample stream, or connect your Twitch account.</p>
       </div>
       <div className="ct-issues" aria-label="Sample issues" aria-busy={!issues.data && !issues.error ? true : undefined}>
         {issues.error ? <ScreenState kind="error" compact className="ct-issues__state" title="The issues didn’t load" actions={<>
@@ -157,7 +143,7 @@ export function Landing() {
     <section className="ct-makes" id="ct-makes" aria-labelledby="ct-makes-title">
       <div className="ct-makes__head">
         <h2 id="ct-makes-title" className="ct-display" data-reveal="up">What it makes</h2>
-        <p className="ct-makes__lede">Pick a Sample stream to see the complete set it makes: the Catch-up during the stream, the comic book when it ends, and the manga series.</p>
+        <p className="ct-makes__lede">Choose a Sample story. See the catch-up, then pick how to read the same panels: a paged comic book or an episodic manga series. Open the full reader when you’re ready.</p>
       </div>
       <SampleSets/>
     </section>
@@ -169,9 +155,10 @@ export function Landing() {
       <div className="ct-footer__inner">
         <Logo/>
         <nav aria-label="Footer">
-          <a href={href('/studio')}>Studio</a>
-          <a href={href('/overlay')}>Overlay</a>
-          <a href={href('/director')}>Director</a>
+          <a href={href('/studio',{workspace:'sample'})}>Sample Studio</a>
+          <a href={href('/studio',{workspace:'live'})}>Live Studio</a>
+          <a href={href('/overlay',{workspace:'sample'})}>Sample overlay</a>
+          <a href={href('/director',{workspace:'sample'})}>Sample director</a>
           <a href={href('/connect')}>Sign in</a>
         </nav>
         <p className="ct-footer__note">Everything on this page is Sample data. ComicToons is not made by or affiliated with Twitch.</p>
@@ -187,6 +174,7 @@ function Cover({ issue, index, look }: { issue: IssueView; index: number; look: 
     <span className="ct-cover__no">No. {index + 1}</span>
     <span className="ct-cover__title">{issue.title}</span>
     <span className="ct-cover__by"><span>@{issue.channel}</span><span className="ct-sample">Sample</span></span>
+    <span className="ct-cover__read">Read full <Arrow/></span>
   </a>;
 }
 
