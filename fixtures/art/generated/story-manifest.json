@@ -1,0 +1,146 @@
+﻿[
+    {
+        "file":  "panel-story-cooking-0.png",
+        "width":  684,
+        "height":  384,
+        "sha256":  "b28382bbe2e87abd5eb81fd5d66f719ff024b0b8a0c26a1278571d15dc7a4e90",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-cooking-1.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "a81d5ab91ca2fba4db14b79181b0185fac3aa51595b7c2d78651b42473784f3f",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-cooking-2.png",
+        "width":  684,
+        "height":  383,
+        "sha256":  "c88942d7fab9705fd5b2cb99d6252c24614ef45242e2f6b5c8262f55317d724b",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-cooking-3.png",
+        "width":  683,
+        "height":  383,
+        "sha256":  "b26ba3f41cd350814e45d062f5093e410a54ba482b33e2c402cb3d23b55a237e",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-cooking-4.png",
+        "width":  684,
+        "height":  384,
+        "sha256":  "b1e9dde9f7b71ac9d32bf4e8b28eb1f4c7973bb4f0a5c0978dd8ca54e97f7a51",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-cooking-5.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "4dbe23ed46b6ead30ed97f3b84ed9fcb89d4bf15794cc2844afb11a26aafa9d8",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-0.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "3d027defb05b32bb9e2547f027db4809ad3e0506fc704ef350bdc5337b560856",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-1.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "08e51b54ec0cf696c99ebd8ec33fe7f1cfe2b0df87ce67cf75e79b0765e6ce3c",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-2.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "d1986ec7fc239e322c56dfd5d8a5651788faf7e1d30ae2d775ab71e9a2b3b0dc",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-3.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "9997b2a10fe58fc604027ce0ff600346a27c65ff48eca65fa52a985df38ab2be",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-4.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "267edebd691ed3d8d0e2f0826212910b2dbfe633601aa6c66d609b94d29a9409",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-speedrun-5.png",
+        "width":  683,
+        "height":  384,
+        "sha256":  "a965ea05e61ad172222553f179f6509ccc85ab35ce5f75a2e1efeb1c4e981cff",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-0.png",
+        "width":  682,
+        "height":  384,
+        "sha256":  "96ab3a98783550693c20c225dc72d2d2cd21dc797b2d155860ddd87d28aece2b",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-1.png",
+        "width":  682,
+        "height":  384,
+        "sha256":  "3a17e255887372d547d56e6171303ea8747f35b5e9454a19dcb7a348e84be591",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-2.png",
+        "width":  682,
+        "height":  385,
+        "sha256":  "b1cc329365c3670393d5389fdeffda3cd64fd5023fc818ccabe350eeb0e5507c",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-3.png",
+        "width":  682,
+        "height":  385,
+        "sha256":  "5c9f1f4c48c44d1dd35d3fad3e63db58d160358bdda78616167e531e69be543f",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-4.png",
+        "width":  682,
+        "height":  384,
+        "sha256":  "e87e5e178e5ed91fb29bc9b091df5857f00f11ba85f7598f3a78f5b5cb5e4ea7",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    },
+    {
+        "file":  "panel-story-tabletop-5.png",
+        "width":  682,
+        "height":  384,
+        "sha256":  "6ab6601d64a2c8b269d648c7ad10c524b810cc8d06830f48497ae5965a7c4590",
+        "origin":  "Original image-generation artwork, storyboard cell extraction",
+        "generated":  "2026-10-29"
+    }
+]

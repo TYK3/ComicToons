@@ -1,0 +1,139 @@
+{
+  "kind": "story",
+  "title": "Chapter 2",
+  "panels": [
+    {
+      "id": "tabletop-night-panel-1",
+      "caption": "One close call sends the whole chat into suspense.",
+      "dialogue": [
+        "Nobody move. I think it heard us.",
+        "CHAT: Behind you. BEHIND YOU!"
+      ],
+      "scene": "A crystal guardian wakes behind Juniper.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "A crystal guardian wakes behind Juniper.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+      "at": 240,
+      "composition": 1,
+      "sfx": "GASP!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 2,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+          "scene": "A crystal guardian wakes behind Juniper.",
+          "dialogue": [
+            "Nobody move. I think it heard us.",
+            "CHAT: Behind you. BEHIND YOU!"
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "One close call sends the whole chat into suspense.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-2.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    },
+    {
+      "id": "tabletop-night-panel-2",
+      "caption": "The comeback roll lands—and the studio erupts.",
+      "dialogue": [
+        "One roll. Please work...",
+        "CHAT: We believe. Roll it!"
+      ],
+      "scene": "Juniper bets everything on one roll.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "triumphant",
+      "altText": "Juniper bets everything on one roll.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+      "at": 480,
+      "composition": 2,
+      "sfx": "POW!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 3,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+          "scene": "Juniper bets everything on one roll.",
+          "dialogue": [
+            "One roll. Please work...",
+            "CHAT: We believe. Roll it!"
+          ],
+          "sfx": "CLACK",
+          "climax": false
+        },
+        {
+          "frame": 4,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-4.png",
+          "scene": "The roll opens the vault. The party is safe.",
+          "dialogue": [
+            "YES! The vault is open!",
+            "CHAT: NAT TWENTY! WE LIVED!"
+          ],
+          "sfx": "KRA-KOOM!",
+          "climax": true
+        }
+      ],
+      "storyCaption": "The comeback roll lands—and the studio erupts.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-3.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    },
+    {
+      "id": "tabletop-night-panel-3",
+      "caption": "A new crew arrives just in time to celebrate.",
+      "dialogue": [
+        "Next time, YOU carry the key.",
+        "CHAT: New crew, same chaos."
+      ],
+      "scene": "Pixel returns the key as new friends arrive.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Pixel returns the key as new friends arrive.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-5.png",
+      "at": 720,
+      "composition": 3,
+      "sfx": "WHOOSH!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 5,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-5.png",
+          "scene": "Pixel returns the key as new friends arrive.",
+          "dialogue": [
+            "Next time, YOU carry the key.",
+            "CHAT: New crew, same chaos."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "A new crew arrives just in time to celebrate.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-5.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 8,
+  "chapter": 2
+}

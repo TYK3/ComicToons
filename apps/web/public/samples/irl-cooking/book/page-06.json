@@ -1,0 +1,48 @@
+{
+  "kind": "chapter",
+  "title": "Chapter 2",
+  "panels": [
+    {
+      "id": "irl-cooking-panel-1",
+      "caption": "A small mishap becomes chat’s favourite moment.",
+      "dialogue": [
+        "...That is not a plate.",
+        "CHAT: Ceiling pancake. Five stars."
+      ],
+      "scene": "The pancake sticks to the range hood.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "The pancake sticks to the range hood.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+      "at": 240,
+      "composition": 2,
+      "sfx": "GASP!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 2,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+          "scene": "The pancake sticks to the range hood.",
+          "dialogue": [
+            "...That is not a plate.",
+            "CHAT: Ceiling pancake. Five stars."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "A small mishap becomes chat’s favourite moment.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-2.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 6,
+  "chapter": 2
+}

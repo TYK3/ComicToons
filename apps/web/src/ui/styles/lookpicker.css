@@ -1,0 +1,20 @@
+/* Look picker */
+.ct-looks{display:grid;gap:6px}
+.ct-looks__cards{display:flex;gap:8px}
+.ct-look{position:relative;width:112px;min-width:0;grid-template-columns:minmax(0,1fr);padding:3px;border:var(--b-hair);background:var(--paper);display:grid;gap:4px;text-align:left;box-shadow:var(--sh-1);transition:transform var(--m-fast) var(--ease-out)}
+.ct-look:hover{transform:translate(-1px,-1px)}
+.ct-look[aria-checked=true]{background:var(--ink);color:var(--paper);box-shadow:none;transform:translate(2px,2px)}
+.ct-look__thumb{position:relative;display:block;height:42px;overflow:hidden;border:1.5px solid var(--ink)}
+.ct-look[aria-checked=true] .ct-look__thumb{border-color:var(--paper)}
+/* Flat theme gradient while no sample panel is on the grid yet. No dots, no radial-gradient. */
+.ct-look__blank{position:absolute;inset:0}
+.ct-look__blank[data-look=festival]{background:linear-gradient(135deg,#1da2b3,#ffc258,#ee6471)}
+.ct-look__blank[data-look=sunset]{background:linear-gradient(135deg,#e4407a,#ff8a3d,#ffd166)}
+.ct-look__blank[data-look=lagoon]{background:linear-gradient(135deg,#2f6fdf,#2ec4d6,#a8e063)}
+.ct-look__blank[data-look=blossom]{background:linear-gradient(135deg,#8e5cf6,#ff7ac6,#7fe3c4)}
+.ct-look__bar{display:block;height:6px}
+/* CRIT-NICE N1: the "Colour" tag is gone (every card said the same thing and it overflowed the card); the name
+ * now shrinks with the card and ends in an ellipsis rather than spilling into its neighbour. */
+.ct-look__name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px 1px;font:700 12px/1.1 var(--f-ui)}
+.ct-look__tick{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--paper);color:var(--ink);border:2px solid var(--ink);display:none;place-items:center;font:700 13px/1 var(--f-ui)}
+.ct-look[aria-checked=true] .ct-look__tick{display:grid}

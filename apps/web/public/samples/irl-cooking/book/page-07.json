@@ -1,0 +1,59 @@
+{
+  "kind": "peak",
+  "title": "The peak",
+  "panels": [
+    {
+      "id": "irl-cooking-panel-2",
+      "caption": "The crew turns the chaos into a celebration.",
+      "dialogue": [
+        "Smaller flip. Bigger belief.",
+        "CHAT: We believe in the comeback."
+      ],
+      "scene": "Clover steadies the pan for a second attempt.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "triumphant",
+      "altText": "Clover steadies the pan for a second attempt.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+      "at": 480,
+      "composition": 1,
+      "sfx": "POW!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 3,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+          "scene": "Clover steadies the pan for a second attempt.",
+          "dialogue": [
+            "Smaller flip. Bigger belief.",
+            "CHAT: We believe in the comeback."
+          ],
+          "sfx": "",
+          "climax": false
+        },
+        {
+          "frame": 4,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-4.png",
+          "scene": "The pancake lands perfectly in the pan.",
+          "dialogue": [
+            "Breakfast is SAVED!",
+            "CHAT: CHEF CLOVER! CHEF CLOVER!"
+          ],
+          "sfx": "PAT!",
+          "climax": true
+        }
+      ],
+      "storyCaption": "The crew turns the chaos into a celebration.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-3.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 7,
+  "chapter": 2
+}

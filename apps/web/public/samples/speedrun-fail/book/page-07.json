@@ -1,0 +1,48 @@
+{
+  "kind": "peak",
+  "title": "The peak",
+  "panels": [
+    {
+      "id": "speedrun-fail-panel-3",
+      "caption": "The comeback lands. Chat can finally breathe.",
+      "dialogue": [
+        "Never doubted us. Not even a little.",
+        "CHAT: We all aged ten years."
+      ],
+      "scene": "Orbit catches their breath while Pip celebrates.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Orbit catches their breath while Pip celebrates.",
+      "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+      "at": 720,
+      "composition": 3,
+      "sfx": "WHOOSH!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 5,
+          "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+          "scene": "Orbit catches their breath while Pip celebrates.",
+          "dialogue": [
+            "Never doubted us. Not even a little.",
+            "CHAT: We all aged ten years."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "The comeback lands. Chat can finally breathe.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-speedrun-5.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 7,
+  "chapter": 2
+}

@@ -1,0 +1,139 @@
+{
+  "kind": "story",
+  "title": "Chapter 2",
+  "panels": [
+    {
+      "id": "irl-cooking-panel-1",
+      "caption": "A small mishap becomes chat’s favourite moment.",
+      "dialogue": [
+        "...That is not a plate.",
+        "CHAT: Ceiling pancake. Five stars."
+      ],
+      "scene": "The pancake sticks to the range hood.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "The pancake sticks to the range hood.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+      "at": 240,
+      "composition": 2,
+      "sfx": "GASP!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 2,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+          "scene": "The pancake sticks to the range hood.",
+          "dialogue": [
+            "...That is not a plate.",
+            "CHAT: Ceiling pancake. Five stars."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "A small mishap becomes chat’s favourite moment.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-2.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    },
+    {
+      "id": "irl-cooking-panel-2",
+      "caption": "The crew turns the chaos into a celebration.",
+      "dialogue": [
+        "Smaller flip. Bigger belief.",
+        "CHAT: We believe in the comeback."
+      ],
+      "scene": "Clover steadies the pan for a second attempt.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "triumphant",
+      "altText": "Clover steadies the pan for a second attempt.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+      "at": 480,
+      "composition": 1,
+      "sfx": "POW!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 3,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+          "scene": "Clover steadies the pan for a second attempt.",
+          "dialogue": [
+            "Smaller flip. Bigger belief.",
+            "CHAT: We believe in the comeback."
+          ],
+          "sfx": "",
+          "climax": false
+        },
+        {
+          "frame": 4,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-4.png",
+          "scene": "The pancake lands perfectly in the pan.",
+          "dialogue": [
+            "Breakfast is SAVED!",
+            "CHAT: CHEF CLOVER! CHEF CLOVER!"
+          ],
+          "sfx": "PAT!",
+          "climax": true
+        }
+      ],
+      "storyCaption": "The crew turns the chaos into a celebration.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-3.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    },
+    {
+      "id": "irl-cooking-panel-3",
+      "caption": "One last wave before the kitchen closes.",
+      "dialogue": [
+        "Same time tomorrow? Bring a helmet.",
+        "CHAT: Worth every chaotic minute."
+      ],
+      "scene": "Clover shares the finished pancake celebration with Miso.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Clover shares the finished pancake celebration with Miso.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-5.png",
+      "at": 720,
+      "composition": 3,
+      "sfx": "WHOOSH!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 5,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-5.png",
+          "scene": "Clover shares the finished pancake celebration with Miso.",
+          "dialogue": [
+            "Same time tomorrow? Bring a helmet.",
+            "CHAT: Worth every chaotic minute."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "One last wave before the kitchen closes.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-5.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 8,
+  "chapter": 2
+}

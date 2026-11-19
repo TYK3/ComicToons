@@ -1,0 +1,95 @@
+{
+  "number": 1,
+  "heroId": "speedrun-fail-panel-0-shot-0-0",
+  "summary": "The story, moment by moment.",
+  "panels": [
+    {
+      "panel": {
+        "id": "speedrun-fail-panel-0-shot-0-0",
+        "caption": "Orbit studies the final clockwork platform.",
+        "dialogue": [
+          "One clean jump. That is all we need.",
+          "CHAT: PB pace. Nobody breathe."
+        ],
+        "scene": "Orbit studies the final clockwork platform.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Orbit studies the final clockwork platform.",
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-0.png",
+        "at": 0,
+        "composition": 4,
+        "sfx": "",
+        "bubblePlacement": "bottom-left",
+        "storyCaption": "The record is in sight. Every second counts.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-speedrun-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "speedrun-fail-panel-0",
+        "atlas": {
+          "frame": 0,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 1,
+      "hero": true,
+      "span": 12
+    },
+    {
+      "panel": {
+        "id": "speedrun-fail-panel-0-shot-1-0",
+        "caption": "Orbit misses the shortcut jump.",
+        "dialogue": [
+          "Wait. That platform MOVES?!",
+          "CHAT: NOOO THE SHORTCUT!"
+        ],
+        "scene": "Orbit studies the final clockwork platform.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Orbit misses the shortcut jump.",
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-1.png",
+        "at": 0,
+        "composition": 4,
+        "sfx": "WHIFF!",
+        "bubblePlacement": "bottom-left",
+        "storyCaption": "The record is in sight. Every second counts.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-speedrun-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "speedrun-fail-panel-0",
+        "atlas": {
+          "frame": 1,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 2,
+      "hero": false,
+      "span": 12
+    }
+  ]
+}

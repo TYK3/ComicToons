@@ -1,0 +1,260 @@
+/* Studio (design D1a): app bar, sticky toolbar, panel desk, reflowing grid, sticky side column. */
+.ct-studio{--tool-h:112px;min-height:100vh}
+.ct-banner--paper{background:var(--paper);color:var(--ink);border:var(--b);box-shadow:inset 10px 0 0 var(--hi),var(--sh-1);margin:12px 24px 0}
+.ct-banner--paper .ct-btn{border-color:var(--ink)}
+.ct-banner--paper .ct-btn--ghost{border-color:transparent}
+.ct-banner--hidden{border-top:3px solid var(--paper)}
+
+/* toolbar */
+.ct-toolbar{position:sticky;top:var(--bar-h);z-index:50;display:flex;align-items:flex-start;gap:12px 28px;padding:10px 24px 12px;background:var(--paper-2);border-bottom:var(--b);box-shadow:0 4px 0 var(--act);min-height:var(--tool-h)}
+.ct-tool{display:grid;gap:6px;align-content:start;min-width:0}
+.ct-tool--look{margin-left:auto}
+.ct-tool__row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ct-tool__stats{gap:16px;font-size:14px;min-height:44px}
+.ct-account{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:var(--b-hair);background:var(--paper);font:700 15px/1 var(--f-ui)}
+.ct-account .ct-sample{font-size:9px}
+.ct-menu__list{position:absolute;z-index:80;top:calc(100% + 6px);left:0;min-width:220px;background:var(--paper);border:var(--b);box-shadow:var(--sh-2);display:grid}
+.ct-menu__list button{min-height:44px;border:0;background:none;text-align:left;padding:0 14px;font-weight:700}
+.ct-menu__list button:hover,.ct-menu__list button:focus-visible{background:var(--act);color:var(--ink)}
+.ct-toolbar #ct-stream{max-width:230px}
+
+/* layout */
+.ct-studio__layout{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;padding:20px 24px 48px;align-items:start}
+.ct-studio__main{display:grid;gap:20px;min-width:0}
+.ct-studio__main:focus{outline:none}
+.ct-side{position:sticky;top:calc(var(--bar-h) + var(--tool-h) + 16px);max-height:calc(100vh - var(--bar-h) - var(--tool-h) - 32px);overflow:auto;display:grid;gap:16px;padding:0 10px 10px 0;scrollbar-width:thin;scrollbar-color:var(--ink) transparent;overscroll-behavior:contain}
+.ct-side-card .ct-card__head{padding:8px 14px}
+.ct-side-card .ct-card__head h2{font-size:22px}
+.ct-side-card .ct-card__body{padding:14px;gap:10px}
+.ct-head-link{color:var(--ink);font:700 13px/1 var(--f-ui);text-underline-offset:4px;min-height:44px;display:inline-flex;align-items:center}
+
+/* header */
+.ct-studio__head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.ct-studio__head .ct-kicker{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ct-studio__head h1{font-size:clamp(40px,5vw,64px)}
+.ct-stats{display:flex;margin:0;border:var(--b);background:var(--hi);box-shadow:var(--sh-1)}
+.ct-stats div{padding:6px 14px;border-right:2px solid var(--ink);min-width:78px}
+.ct-stats div:last-child{border-right:0}
+.ct-stats dt{font:700 10px/1.2 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.ct-stats dd{margin:0;font:400 26px/1 var(--f-display);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+
+/* desk: the next panel waiting for approval */
+.ct-desk{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,1fr);gap:20px;padding:16px;border:var(--b);box-shadow:var(--sh-act);background:var(--paper)}
+.ct-desk__body{display:grid;gap:12px;align-content:center}
+.ct-desk__cap{font:700 clamp(22px,2.2vw,30px)/1.15 var(--f-letter);text-transform:uppercase}
+.ct-desk__acts{display:flex;flex-wrap:wrap;gap:12px}
+.ct-desk__acts .ct-btn{min-height:52px;font-size:17px}
+kbd{font:700 11px/1 var(--f-ui);border:1.5px solid currentColor;padding:2px 5px;margin-left:4px;opacity:.75}
+.ct-desk--idle{display:flex;align-items:center;gap:14px;padding:14px 18px;border-style:dashed;box-shadow:none}
+.ct-desk__pip{width:14px;height:14px;flex:none;border-radius:50%;background:var(--act);border:2px solid var(--ink);animation:ct-pulse 1.4s infinite}
+.ct-skel--panel{aspect-ratio:16/9}
+.ct-desk__body>.ct-kicker[data-next-up]{justify-self:start;background:var(--hi);color:var(--ink);border:2px solid var(--ink);padding:5px 8px}
+.ct-skel--line{height:22px;border-width:2px}
+.ct-skel--short{width:60%}
+
+/* grid */
+.ct-grid-wrap{display:grid;gap:12px}
+.ct-grid-head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.ct-grid-head h2{font-size:36px}
+.ct-filters button{font-size:13px;padding:0 10px}
+.ct-count{display:inline-block;min-width:20px;font-variant-numeric:tabular-nums;opacity:.7}
+.ct-grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
+/* Columns (S6 #10): data-cols comes from gridColumns(n) (ui/gridColumns.ts): n up to 4 uses n; otherwise 4 when
+   n%4 is 0 or 3, else 3. One rule per column count, so any panel count (14, 15, ...) is covered. */
+.ct-grid[data-cols="1"]{grid-template-columns:minmax(0,720px)}
+.ct-grid[data-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ct-grid[data-cols="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ct-grid[data-cols="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}
+.ct-cell{display:grid;gap:6px;align-content:start}
+.ct-cell[data-status=Waiting] .ct-panel{border-style:dashed}
+.ct-cell__meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px}
+.ct-cell__time{font:700 11px/1.2 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.ct-cell__acts{display:flex;gap:6px}
+.ct-cell .ct-btn--ghost{padding:0 4px}
+.ct-empty{border:2px dashed var(--ink);padding:16px 18px;font-size:15px;color:var(--ink-3)}
+
+/* side cards */
+.ct-minipage{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;background:var(--ink);box-shadow:inset 0 0 0 3px var(--act)}
+.ct-minipage .ct-mini--lead{grid-column:1/-1}
+.ct-minipage[data-count="2"] .ct-mini{grid-column:1/-1}
+.ct-minipage .ct-panel{border-width:2px}
+.ct-minipage__hidden{grid-column:1/-1;aspect-ratio:16/9;display:grid;place-items:center;color:var(--paper);font:400 24px/1 var(--f-display);letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:12px;border:2px dashed var(--paper)}
+.ct-vote{display:grid;gap:8px}
+.ct-vote li{display:grid;grid-template-columns:auto 1fr auto;gap:2px 8px;align-items:center}
+.ct-vote .ct-bar{grid-column:1/-1;height:10px}
+.ct-vote__key{font:400 18px/1 var(--f-display);letter-spacing:.04em}
+.ct-vote__text{font:700 14px/1.25 var(--f-letter);text-transform:uppercase}
+.ct-vote__pct{font:700 13px/1 var(--f-ui);font-variant-numeric:tabular-nums}
+.ct-pred__q{font:700 17px/1.25 var(--f-letter);text-transform:uppercase}
+.ct-pred{display:grid;gap:10px}
+.ct-pred li{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:14px}
+.ct-pred li .ct-muted{grid-column:1;font-size:12px}
+.ct-pred li .ct-bar{grid-column:1;height:10px}
+.ct-pred li .ct-btn{grid-column:2;grid-row:1/4}
+.ct-pred li[data-won] strong{text-decoration:underline;text-decoration-thickness:3px}
+.ct-queue{display:grid;gap:8px}
+.ct-queue li{display:grid;gap:8px;border:2px solid var(--ink);padding:10px}
+.ct-queue__actions{display:flex;gap:8px}
+.ct-rules{display:grid;gap:10px;font-size:14px;line-height:1.45}
+.ct-rules li{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.ct-rules li>strong:first-child{min-width:92px;font-family:var(--f-ui)}
+.ct-chat{display:grid;gap:6px;font-size:14px;line-height:1.35;max-height:220px;overflow:hidden}
+.ct-chat li{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.ct-chat li[data-kind=command] span:last-child{font-weight:700}
+.ct-chat li[data-kind=raid]{border:2px solid var(--ink);padding:4px 6px}
+.ct-switch{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;cursor:pointer;min-height:44px}
+.ct-switch input{position:absolute;opacity:0;width:1px;height:1px}
+.ct-switch__track{width:52px;height:30px;border:var(--b-hair);background:var(--paper);position:relative}
+.ct-switch__track::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:var(--ink);transition:transform var(--m-fast) var(--ease-out)}
+.ct-switch input:checked+.ct-switch__track{background:var(--act)}
+.ct-switch input:checked+.ct-switch__track::after{background:var(--ink);transform:translateX(22px)}
+.ct-switch input:focus-visible+.ct-switch__track{outline:3px solid var(--ink);outline-offset:3px}
+
+/* dialogs */
+.ct-dialog__form{display:grid;gap:14px}
+.ct-dialog__form .ct-panel{max-width:100%}
+.ct-checks{border:var(--b-hair);padding:8px 14px 12px;display:grid;gap:2px;margin:0}
+.ct-checks legend{font:700 12px/1 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;padding:0 6px}
+.ct-checks label{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}
+.ct-checks input{width:22px;height:22px;accent-color:var(--ink)}
+
+/* mobile bottom bar */
+.ct-mobilebar{display:none}
+.ct-btn--ghost-ink{background:transparent;color:var(--paper);border-color:var(--paper);box-shadow:none}
+
+/* The Twitch events chip (part 3) takes ~120px, so the compact Look cards start earlier; wrap is the safety net. */
+.ct-toolbar{flex-wrap:wrap}
+@media (max-width:1560px){.ct-toolbar .ct-look{width:96px}.ct-toolbar{gap:12px 20px}}
+/* FESTIVAL-UI: at 96px the name and the COLOUR tag do not fit on one line (the tag was clipped to "COLOU"), so the tag wraps under the name. */
+.ct-toolbar .ct-look__name{flex-wrap:wrap;row-gap:3px}
+.ct-toolbar .ct-look__name>span{white-space:nowrap}
+@media (max-width:1240px){
+  .ct-studio{--tool-h:0px}
+  .ct-toolbar{position:static;flex-wrap:wrap}
+  .ct-tool--look{margin-left:0;flex-basis:100%}
+  .ct-toolbar .ct-look{width:112px}
+}
+@media (max-width:1100px){
+  .ct-studio__layout{grid-template-columns:1fr}
+  .ct-side{position:static;max-height:none;overflow:visible;padding:0;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+}
+@media (max-width:1024px){
+  .ct-toolbar{flex-direction:column;align-items:stretch}
+  .ct-toolbar .ct-looks__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ct-toolbar .ct-look{width:auto}
+  .ct-toolbar .ct-look__thumb{height:56px}
+  .ct-desk{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .ct-studio{padding-bottom:84px}
+  .ct-toolbar{padding:12px}
+  .ct-tool--channel .ct-tool__row>.ct-btn--twitch{width:100%;min-height:52px}
+  .ct-toolbar #ct-stream{max-width:none;flex:1 1 100%}
+  .ct-studio__layout{padding:16px 12px 32px;gap:16px}
+  .ct-banner--paper{margin:12px 12px 0}
+  .ct-grid,.ct-grid[data-count]{grid-template-columns:1fr}
+  .ct-stats{width:100%}
+  .ct-stats div{flex:1;min-width:0;padding:6px 8px}
+  .ct-desk{padding:12px;box-shadow:var(--sh-1)}
+  .ct-desk__acts .ct-btn{flex:1 1 auto}
+  .ct-desk__acts kbd{display:none}
+  .ct-side{grid-template-columns:1fr}
+  .ct-appbar .ct-panic-top{display:none}
+  .ct-mobilebar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:90;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--act);border-top:var(--b)}
+  .ct-mobilebar .ct-btn{min-height:52px;justify-content:center}
+  .ct-mobilebar .ct-btn:not(.ct-btn--panic){box-shadow:none}
+  .ct-mobilebar{grid-template-columns:1.25fr 1fr 1fr}
+  .ct-mobilebar .ct-btn--panic{padding:0 8px;white-space:nowrap}
+  .ct-toast{bottom:92px;width:calc(100vw - 24px)}
+  .ct-grid-head .ct-filters{width:100%;display:grid;grid-template-columns:repeat(4,1fr)}
+  .ct-filters button{padding:0 4px;font-size:12px}
+}
+
+/* EventSub chip (Twitch events) and the revocation warning. The state is in the mark and the word, never colour alone. */
+.ct-tool--events{position:relative}
+.ct-evs{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:700 14px/1 var(--f-ui);box-shadow:var(--sh-1);cursor:pointer;white-space:nowrap}
+.ct-evs:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.ct-evs__mark{display:inline-grid;place-items:center;width:16px;height:16px;border:2px solid var(--ink);border-radius:50%;font:800 12px/1 var(--f-ui)}
+.ct-evs__count{font:600 12px/1 var(--f-ui);letter-spacing:.04em;border-left:2px solid currentColor;padding-left:8px}
+.ct-evs[data-health=connected] .ct-evs__mark{background:var(--act)}
+.ct-evs[data-health=partial] .ct-evs__mark{background:linear-gradient(90deg,var(--ink) 50%,var(--paper) 50%)}
+.ct-evs[data-health=connecting] .ct-evs__mark,.ct-evs[data-health=off] .ct-evs__mark{border-style:dashed}
+.ct-evs[data-health=off]{border-style:dashed;box-shadow:none}
+.ct-evs[data-health=failed]{border-width:3px}
+.ct-evs[data-health=revoked]{background:var(--hot);color:var(--ink)}
+.ct-evs[data-health=revoked] .ct-evs__mark{border-color:var(--ink);border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%);background:var(--ink);color:var(--paper);width:20px;height:18px;border:0;padding-top:4px}
+.ct-evs__pop{position:absolute;top:calc(100% + 8px);left:0;z-index:60;width:min(380px,calc(100vw - 24px));display:grid;gap:10px;padding:14px 16px;background:var(--paper);border:var(--b);box-shadow:var(--sh-2)}
+.ct-evs__head{display:flex;align-items:center;gap:10px;justify-content:space-between;font-size:15px}
+.ct-evs__list{list-style:none;margin:0;padding:0;display:grid;border-top:2px solid var(--ink)}
+.ct-evs__list li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:6px 0;border-bottom:1px solid var(--ink);font-size:14px}
+.ct-evs__state{font:700 11px/1.6 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;padding:0 6px;border:1.5px dashed var(--ink)}
+.ct-evs__list li[data-on] .ct-evs__state{border-style:solid;background:var(--ink);color:var(--paper)}
+.ct-evs__why{grid-column:1/-1;font-size:13px;color:var(--ink-3)}
+.ct-banner--warn{border-width:3px;background:linear-gradient(var(--hi),var(--hi)) left/14px 100% no-repeat,var(--paper);padding-left:34px;box-shadow:var(--sh-1)}
+.ct-banner__sign{display:grid;place-items:center;width:36px;height:32px;background:var(--hot);color:var(--ink);clip-path:polygon(50% 0,100% 100%,0 100%);font:800 18px/1 var(--f-ui);padding-top:8px;flex:none}
+@media (max-width:720px){
+  .ct-evs__pop{position:static;width:auto;margin-top:4px;box-shadow:var(--sh-1)}
+  .ct-evs{width:100%;justify-content:flex-start}
+  .ct-evs__count{margin-left:auto}
+  .ct-banner--warn{padding-left:28px}
+}
+
+/* Ink me switch (part 3, T3b R3): the off reason and chat fallback sit right under the switch. */
+.ct-inkme{display:grid;gap:8px;margin:8px 0 12px}
+.ct-inkme__why{border:var(--b-hair);border-left:8px solid var(--hot);padding:8px 12px;background:var(--paper)}
+.ct-inkme__why p{margin:0}
+.ct-inkme__why p+p{margin-top:4px}
+.ct-inkme[data-status=creating] .ct-switch{cursor:progress}
+.ct-inkme .ct-switch input:disabled+.ct-switch__track{border-style:dashed}
+.ct-inkme__plain{margin:0}
+
+/* UI2 W8: on phones the replay controls fold into "Replay settings" and the Look picker becomes a 4-up switch. */
+.ct-tool__fold{border:var(--b);background:var(--paper)}
+.ct-tool__fold>summary{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;font:700 14px/1 var(--f-ui);cursor:pointer;list-style:none}
+.ct-tool__fold>summary::-webkit-details-marker{display:none}
+.ct-tool__fold>summary::after{content:'+';margin-left:auto;font:700 24px/1 var(--f-ui)}
+.ct-tool__fold[open]>summary::after{content:'–'}
+.ct-tool__fold>summary:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.ct-tool__foldbody{display:grid;gap:8px;padding:0 12px 12px}
+.ct-toolbar .ct-lookswitch{display:grid;gap:6px}
+.ct-toolbar .ct-lookswitch__label{font:700 11px/1 var(--f-ui);letter-spacing:.12em;text-transform:uppercase}
+.ct-toolbar .ct-lookswitch .ct-seg{display:grid;grid-template-columns:repeat(4,1fr)}
+.ct-toolbar .ct-lookswitch .ct-seg button{font-size:13px;padding:0 4px;min-height:44px}
+@media (max-width:640px){
+  /* On a phone the vote is the first side card (W8: "vote buried at 390"). */
+  .ct-side>section:has(#ct-vote-title){order:-1}
+}
+
+/* UI2 W6: the sticky box moves to the wrapper; the side column fades and counts the cards below while it can scroll. */
+.ct-side-wrap{position:sticky;top:calc(var(--bar-h) + var(--tool-h) + 16px);min-width:0}
+.ct-side-wrap>.ct-side{position:relative;top:auto}
+.ct-side-wrap[data-more]>.ct-side{-webkit-mask-image:linear-gradient(#000 calc(100% - 56px),transparent);mask-image:linear-gradient(#000 calc(100% - 56px),transparent)}
+.ct-side__more{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);margin:0;padding:6px 10px;background:var(--hi);color:var(--ink);border:2px solid var(--ink);font:700 12px/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;pointer-events:none}
+@media (max-width:1100px){.ct-side-wrap{position:static}.ct-side__more{display:none}.ct-side-wrap[data-more]>.ct-side{-webkit-mask-image:none;mask-image:none}}
+/* UI2 W3: stat skeletons while loading. */
+.ct-skel--stat{display:inline-block;width:3.2ch;height:.9em;border-width:2px;vertical-align:middle}
+.ct-inkme__text{display:grid;gap:6px;min-width:0}.ct-inkme__text p{margin:0}
+.ct-studio__state{padding:8px 24px 48px}
+@media (max-width:640px){.ct-studio__state{padding:0 0 96px}}
+
+/* FESTIVAL-UI: Studio accents. Side card heads cycle teal, amber, coral (ink text on each, 4.7:1 or more). */
+.ct-side>.ct-card:nth-child(3n+2)>.ct-card__head{background:var(--hi)}
+.ct-side>.ct-card:nth-child(3n+3)>.ct-card__head{background:var(--hot)}
+.ct-side>.ct-card:nth-child(3n+2){box-shadow:var(--sh-2)}
+.ct-cell[data-next] .ct-panel{border-color:var(--ink);box-shadow:5px 5px 0 var(--hi)}
+.ct-cell[data-next] .ct-cell__time strong{background:var(--hi);color:var(--ink);padding:2px 6px;border:1.5px solid var(--ink)}
+.ct-cell[data-status=Approved] .ct-panel,.ct-cell[data-status="On air"] .ct-panel{box-shadow:4px 4px 0 var(--act)}
+.ct-queue li{background:var(--paper)}
+.ct-queue li:nth-child(odd){box-shadow:3px 3px 0 var(--act)}
+.ct-queue li:nth-child(even){box-shadow:3px 3px 0 var(--hi)}
+.ct-chat li[data-kind=raid]{background:var(--fest-coral-soft)}
+.ct-tool__fold>summary{background:var(--paper)}
+.ct-studio__head h1{text-shadow:3px 3px 0 var(--hi)}
+/* POLISH-1 N7: studio tiles keep the art clear. Source and Sample tags sit under the art, the status is in the meta line
+   (no stamp on the art), and the generated-caption note moves into the tags. On wide screens the undo toast sits
+   bottom right, clear of the tile footers; while it shows, the page gets room to scroll the last row above it. */
+.ct-cell__tags{display:flex;flex-wrap:wrap;gap:4px;margin:0}
+.ct-cell__tags .ct-tag{font-size:11px}
+.ct-grid .ct-cell .ct-panel .ct-bubble .ct-gen{display:none}
+.ct-app:has(.ct-toast) .ct-grid-wrap{padding-bottom:88px}
+@media (min-width:1101px){.ct-toast{left:auto;right:24px;transform:none;max-width:min(560px,calc(100vw - 48px))}}

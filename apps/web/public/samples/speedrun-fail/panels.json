@@ -1,0 +1,184 @@
+[
+  {
+    "id": "speedrun-fail-panel-0",
+    "caption": "The record is in sight. Every second counts.",
+    "dialogue": [
+      "One clean jump. That is all we need.",
+      "CHAT: PB pace. Nobody breathe."
+    ],
+    "scene": "Orbit studies the final clockwork platform.",
+    "characters": [
+      "Stargazer1"
+    ],
+    "mood": "playful",
+    "altText": "Orbit studies the final clockwork platform.",
+    "imageUrl": "speedrun-fail/art/panel-story-speedrun-0.png",
+    "at": 0,
+    "composition": 4,
+    "sfx": "GO!",
+    "bubblePlacement": "bottom-left",
+    "storyBeats": [
+      {
+        "frame": 0,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-0.png",
+        "scene": "Orbit studies the final clockwork platform.",
+        "dialogue": [
+          "One clean jump. That is all we need.",
+          "CHAT: PB pace. Nobody breathe."
+        ],
+        "sfx": "",
+        "climax": false
+      },
+      {
+        "frame": 1,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-1.png",
+        "scene": "Orbit misses the shortcut jump.",
+        "dialogue": [
+          "Wait. That platform MOVES?!",
+          "CHAT: NOOO THE SHORTCUT!"
+        ],
+        "sfx": "WHIFF!",
+        "climax": false
+      }
+    ],
+    "storyCaption": "The record is in sight. Every second counts.",
+    "provenance": {
+      "provider": "library",
+      "asset": "panel-story-speedrun-0.png",
+      "style": "pop-ink",
+      "fallback": false
+    },
+    "origin": "sample"
+  },
+  {
+    "id": "speedrun-fail-panel-1",
+    "caption": "One tiny mistake becomes a legendary detour.",
+    "dialogue": [
+      "I meant to do that. Obviously.",
+      "CHAT: New scenic route unlocked."
+    ],
+    "scene": "Orbit clings to the ledge, stunned.",
+    "characters": [
+      "Stargazer1"
+    ],
+    "mood": "playful",
+    "altText": "Orbit clings to the ledge, stunned.",
+    "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+    "at": 240,
+    "composition": 0,
+    "sfx": "GASP!",
+    "bubblePlacement": "top-left",
+    "storyBeats": [
+      {
+        "frame": 2,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+        "scene": "Orbit clings to the ledge, stunned.",
+        "dialogue": [
+          "I meant to do that. Obviously.",
+          "CHAT: New scenic route unlocked."
+        ],
+        "sfx": "",
+        "climax": false
+      }
+    ],
+    "storyCaption": "One tiny mistake becomes a legendary detour.",
+    "provenance": {
+      "provider": "library",
+      "asset": "panel-story-speedrun-2.png",
+      "style": "pop-ink",
+      "fallback": false
+    },
+    "origin": "sample"
+  },
+  {
+    "id": "speedrun-fail-panel-2",
+    "caption": "The crew rallies behind one more attempt.",
+    "dialogue": [
+      "Okay. One more try. Together.",
+      "CHAT: Reset the nerves. You got this."
+    ],
+    "scene": "Orbit and Pip line up one last attempt.",
+    "characters": [
+      "Stargazer1"
+    ],
+    "mood": "triumphant",
+    "altText": "Orbit and Pip line up one last attempt.",
+    "imageUrl": "speedrun-fail/art/panel-story-speedrun-3.png",
+    "at": 480,
+    "composition": 2,
+    "sfx": "POW!",
+    "bubblePlacement": "top-left",
+    "storyBeats": [
+      {
+        "frame": 3,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-3.png",
+        "scene": "Orbit and Pip line up one last attempt.",
+        "dialogue": [
+          "Okay. One more try. Together.",
+          "CHAT: Reset the nerves. You got this."
+        ],
+        "sfx": "",
+        "climax": false
+      },
+      {
+        "frame": 4,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-4.png",
+        "scene": "Orbit clears the gap and reaches the finish.",
+        "dialogue": [
+          "LANDED! Stop the clock!",
+          "CHAT: THAT IS THE RUN!"
+        ],
+        "sfx": "WHOOSH!",
+        "climax": true
+      }
+    ],
+    "storyCaption": "The crew rallies behind one more attempt.",
+    "provenance": {
+      "provider": "library",
+      "asset": "panel-story-speedrun-3.png",
+      "style": "pop-ink",
+      "fallback": false
+    },
+    "origin": "sample"
+  },
+  {
+    "id": "speedrun-fail-panel-3",
+    "caption": "The comeback lands. Chat can finally breathe.",
+    "dialogue": [
+      "Never doubted us. Not even a little.",
+      "CHAT: We all aged ten years."
+    ],
+    "scene": "Orbit catches their breath while Pip celebrates.",
+    "characters": [
+      "Stargazer1"
+    ],
+    "mood": "playful",
+    "altText": "Orbit catches their breath while Pip celebrates.",
+    "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+    "at": 720,
+    "composition": 3,
+    "sfx": "WHOOSH!",
+    "bubblePlacement": "top-right",
+    "storyBeats": [
+      {
+        "frame": 5,
+        "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+        "scene": "Orbit catches their breath while Pip celebrates.",
+        "dialogue": [
+          "Never doubted us. Not even a little.",
+          "CHAT: We all aged ten years."
+        ],
+        "sfx": "",
+        "climax": false
+      }
+    ],
+    "storyCaption": "The comeback lands. Chat can finally breathe.",
+    "provenance": {
+      "provider": "library",
+      "asset": "panel-story-speedrun-5.png",
+      "style": "pop-ink",
+      "fallback": false
+    },
+    "origin": "sample"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "kind": "chapter",
+  "title": "Chapter 2",
+  "panels": [
+    {
+      "id": "tabletop-night-panel-1",
+      "caption": "One close call sends the whole chat into suspense.",
+      "dialogue": [
+        "Nobody move. I think it heard us.",
+        "CHAT: Behind you. BEHIND YOU!"
+      ],
+      "scene": "A crystal guardian wakes behind Juniper.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "A crystal guardian wakes behind Juniper.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+      "at": 240,
+      "composition": 1,
+      "sfx": "GASP!",
+      "bubblePlacement": "top-right",
+      "storyBeats": [
+        {
+          "frame": 2,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+          "scene": "A crystal guardian wakes behind Juniper.",
+          "dialogue": [
+            "Nobody move. I think it heard us.",
+            "CHAT: Behind you. BEHIND YOU!"
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "One close call sends the whole chat into suspense.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-2.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 6,
+  "chapter": 2
+}

@@ -1,0 +1,59 @@
+{
+  "kind": "chapter",
+  "title": "Chapter 1",
+  "panels": [
+    {
+      "id": "speedrun-fail-panel-0",
+      "caption": "The record is in sight. Every second counts.",
+      "dialogue": [
+        "One clean jump. That is all we need.",
+        "CHAT: PB pace. Nobody breathe."
+      ],
+      "scene": "Orbit studies the final clockwork platform.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Orbit studies the final clockwork platform.",
+      "imageUrl": "speedrun-fail/art/panel-story-speedrun-0.png",
+      "at": 0,
+      "composition": 4,
+      "sfx": "GO!",
+      "bubblePlacement": "bottom-left",
+      "storyBeats": [
+        {
+          "frame": 0,
+          "imageUrl": "speedrun-fail/art/panel-story-speedrun-0.png",
+          "scene": "Orbit studies the final clockwork platform.",
+          "dialogue": [
+            "One clean jump. That is all we need.",
+            "CHAT: PB pace. Nobody breathe."
+          ],
+          "sfx": "",
+          "climax": false
+        },
+        {
+          "frame": 1,
+          "imageUrl": "speedrun-fail/art/panel-story-speedrun-1.png",
+          "scene": "Orbit misses the shortcut jump.",
+          "dialogue": [
+            "Wait. That platform MOVES?!",
+            "CHAT: NOOO THE SHORTCUT!"
+          ],
+          "sfx": "WHIFF!",
+          "climax": false
+        }
+      ],
+      "storyCaption": "The record is in sight. Every second counts.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-speedrun-0.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 3,
+  "chapter": 1
+}

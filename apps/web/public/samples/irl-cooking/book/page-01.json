@@ -1,0 +1,58 @@
+{
+  "kind": "cover",
+  "title": "The great pancake comeback",
+  "panels": [
+    {
+      "id": "irl-cooking-panel-0",
+      "caption": "The pancake experiment gets a little too ambitious.",
+      "dialogue": [
+        "Easy recipe. What could possibly go wrong?",
+        "CHAT: Miso is supervising."
+      ],
+      "scene": "Clover mixes pancake batter as Miso watches.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Clover mixes pancake batter as Miso watches.",
+      "imageUrl": "irl-cooking/art/panel-story-cooking-0.png",
+      "at": 0,
+      "composition": 5,
+      "sfx": "GO!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 0,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-0.png",
+          "scene": "Clover mixes pancake batter as Miso watches.",
+          "dialogue": [
+            "Easy recipe. What could possibly go wrong?",
+            "CHAT: Miso is supervising."
+          ],
+          "sfx": "",
+          "climax": false
+        },
+        {
+          "frame": 1,
+          "imageUrl": "irl-cooking/art/panel-story-cooking-1.png",
+          "scene": "Clover attempts an ambitious pancake flip.",
+          "dialogue": [
+            "Watch this. Chef technique.",
+            "CHAT: That is a LOT of airtime."
+          ],
+          "sfx": "FWOOP!",
+          "climax": false
+        }
+      ],
+      "storyCaption": "The pancake experiment gets a little too ambitious.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-cooking-0.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 1
+}

@@ -1,0 +1,183 @@
+{
+  "number": 1,
+  "heroId": "tabletop-night-panel-2-shot-1-0",
+  "summary": "The story, moment by moment.",
+  "panels": [
+    {
+      "panel": {
+        "id": "tabletop-night-panel-1-shot-0-0",
+        "caption": "A crystal guardian wakes behind Juniper.",
+        "dialogue": [
+          "Nobody move. I think it heard us.",
+          "CHAT: Behind you. BEHIND YOU!"
+        ],
+        "scene": "A crystal guardian wakes behind Juniper.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "A crystal guardian wakes behind Juniper.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+        "at": 240,
+        "composition": 1,
+        "sfx": "",
+        "bubblePlacement": "top-right",
+        "storyCaption": "One close call sends the whole chat into suspense.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-2.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-1",
+        "atlas": {
+          "frame": 2,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 1,
+      "hero": false,
+      "span": 7
+    },
+    {
+      "panel": {
+        "id": "tabletop-night-panel-2-shot-0-0",
+        "caption": "Juniper bets everything on one roll.",
+        "dialogue": [
+          "One roll. Please work...",
+          "CHAT: We believe. Roll it!"
+        ],
+        "scene": "Juniper bets everything on one roll.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "triumphant",
+        "altText": "Juniper bets everything on one roll.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+        "at": 480,
+        "composition": 2,
+        "sfx": "CLACK",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The comeback roll lands—and the studio erupts.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-3.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-2",
+        "atlas": {
+          "frame": 3,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 2,
+      "hero": false,
+      "span": 5
+    },
+    {
+      "panel": {
+        "id": "tabletop-night-panel-2-shot-1-0",
+        "caption": "The roll opens the vault. The party is safe.",
+        "dialogue": [
+          "YES! The vault is open!",
+          "CHAT: NAT TWENTY! WE LIVED!"
+        ],
+        "scene": "Juniper bets everything on one roll.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "triumphant",
+        "altText": "The roll opens the vault. The party is safe.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-4.png",
+        "at": 480,
+        "composition": 2,
+        "sfx": "KRA-KOOM!",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The comeback roll lands—and the studio erupts.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-3.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-2",
+        "atlas": {
+          "frame": 4,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 3,
+      "hero": true,
+      "span": 5
+    },
+    {
+      "panel": {
+        "id": "tabletop-night-panel-3-shot-0-0",
+        "caption": "Pixel returns the key as new friends arrive.",
+        "dialogue": [
+          "Next time, YOU carry the key.",
+          "CHAT: New crew, same chaos."
+        ],
+        "scene": "Pixel returns the key as new friends arrive.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Pixel returns the key as new friends arrive.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-5.png",
+        "at": 720,
+        "composition": 3,
+        "sfx": "",
+        "bubblePlacement": "top-right",
+        "storyCaption": "A new crew arrives just in time to celebrate.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-5.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-3",
+        "atlas": {
+          "frame": 5,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 4,
+      "hero": false,
+      "span": 7
+    }
+  ]
+}

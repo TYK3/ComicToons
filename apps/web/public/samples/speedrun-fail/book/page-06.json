@@ -1,0 +1,48 @@
+{
+  "kind": "chapter",
+  "title": "Chapter 2",
+  "panels": [
+    {
+      "id": "speedrun-fail-panel-1",
+      "caption": "One tiny mistake becomes a legendary detour.",
+      "dialogue": [
+        "I meant to do that. Obviously.",
+        "CHAT: New scenic route unlocked."
+      ],
+      "scene": "Orbit clings to the ledge, stunned.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Orbit clings to the ledge, stunned.",
+      "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+      "at": 240,
+      "composition": 0,
+      "sfx": "GASP!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 2,
+          "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+          "scene": "Orbit clings to the ledge, stunned.",
+          "dialogue": [
+            "I meant to do that. Obviously.",
+            "CHAT: New scenic route unlocked."
+          ],
+          "sfx": "",
+          "climax": false
+        }
+      ],
+      "storyCaption": "One tiny mistake becomes a legendary detour.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-speedrun-2.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 6,
+  "chapter": 2
+}

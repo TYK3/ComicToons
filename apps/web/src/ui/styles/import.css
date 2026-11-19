@@ -1,0 +1,42 @@
+/* The "Make a comic from a link" result: a manga panel in the studio Look. One comic frame holds the caption bar,
+   the art and the chat bubbles; every word sits outside the art itself (docs/LETTERING_MAPS.md placement policy;
+   Young 00:20: no text box covers a face), but inside the panel frame, so the chat reads as part of the comic. */
+.ct-import-panels{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:16px}
+.ct-import-panel{display:grid;min-width:0;border:var(--b);background:var(--paper);box-shadow:var(--sh-2)}
+.ct-import-cap{margin:0;background:#fff;color:var(--ink);border-bottom:var(--b);padding:6px 10px;font:700 14px/1.25 var(--f-letter);text-transform:uppercase;letter-spacing:.02em;overflow-wrap:anywhere}
+.ct-panel.ct-import-art{aspect-ratio:auto;width:100%;min-width:0;border:0;box-shadow:none}
+.ct-import-art .ct-art{position:relative;inset:auto}
+.ct-import-art .ct-art>img{display:block;width:100%;height:auto}
+.ct-import-rail{display:flex;flex-direction:column;align-items:flex-start;gap:14px;border-top:var(--b);padding:18px 12px 14px;
+  background:radial-gradient(color-mix(in srgb,var(--ink) 14%,transparent) 1px,transparent 1.4px) 0 0/8px 8px,var(--paper)}
+.ct-import-rail .ct-bubble{position:relative;inset:auto;max-width:88%;font-size:15px;box-shadow:2px 2px 0 var(--ink)}
+.ct-import-rail .ct-bubble:nth-child(even){align-self:flex-end}
+/* Tails point up at the art, never into it. */
+.ct-import-rail .ct-bubble::after{bottom:auto;top:-8px;transform:rotate(225deg) skew(12deg,12deg)}
+.ct-import-rail .ct-bubble:nth-child(even)::after{left:auto;right:26%}
+
+/* IMPORT-UI-1 layout: the card fills the studio's main column (it lines up with the panel grid above it), the
+   form lines up, the gaps are even, and nothing is wider than its column (390 px: no page overflow). */
+.ct-import-card{container-type:inline-size;min-width:0}
+.ct-import-card .ct-card__body{gap:14px}
+.ct-import-form{display:grid;gap:12px;min-width:0}
+.ct-import-form .ct-note{margin:0}
+.ct-import-card textarea,.ct-import-card input{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+.ct-import-card input[type=file]{padding:9px 10px;font-size:14px}
+.ct-import-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;min-width:0}
+.ct-import-row>.ct-field{flex:1 1 260px;min-width:0;margin:0}
+/* IMPORT-UI-1 r1: the button may wrap and shrink, so "Add to #<25-character channel>'s manga series" never runs past
+   its row (verdict-import-ui-1.md: 364 px at 360). */
+.ct-import-go{flex:0 0 auto;min-height:44px;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center}
+.ct-import-preview{display:grid;gap:12px;min-width:0}
+.ct-import-preview>.ct-note{margin:0}
+.ct-import-preview .ct-import-panels{margin:0;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.ct-import-preview .ct-import-panels[data-count="1"]{grid-template-columns:minmax(0,560px)}
+.ct-import-acts{margin:0}
+@container (max-width:560px){.ct-import-go{flex:1 1 100%}}
+/* The reader: one column at reading size, words outside the art as in the card. */
+.ct-import-reader{position:fixed;inset:0;z-index:80;overflow:auto;padding:24px 12px;background:color-mix(in srgb,var(--ink) 72%,transparent)}
+.ct-import-reader__sheet{max-width:760px;margin:0 auto;background:var(--paper);border:var(--b);box-shadow:var(--sh-2);padding:16px;display:grid;gap:16px}
+.ct-import-reader__bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.ct-import-reader__bar h2{margin:0;font-size:24px}
+.ct-import-reader .ct-import-panels{margin:0;grid-template-columns:minmax(0,1fr)}

@@ -1,0 +1,95 @@
+{
+  "number": 1,
+  "heroId": "irl-cooking-panel-0-shot-0-0",
+  "summary": "The story, moment by moment.",
+  "panels": [
+    {
+      "panel": {
+        "id": "irl-cooking-panel-0-shot-0-0",
+        "caption": "Clover mixes pancake batter as Miso watches.",
+        "dialogue": [
+          "Easy recipe. What could possibly go wrong?",
+          "CHAT: Miso is supervising."
+        ],
+        "scene": "Clover mixes pancake batter as Miso watches.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Clover mixes pancake batter as Miso watches.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-0.png",
+        "at": 0,
+        "composition": 5,
+        "sfx": "",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The pancake experiment gets a little too ambitious.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-0",
+        "atlas": {
+          "frame": 0,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 1,
+      "hero": true,
+      "span": 12
+    },
+    {
+      "panel": {
+        "id": "irl-cooking-panel-0-shot-1-0",
+        "caption": "Clover attempts an ambitious pancake flip.",
+        "dialogue": [
+          "Watch this. Chef technique.",
+          "CHAT: That is a LOT of airtime."
+        ],
+        "scene": "Clover mixes pancake batter as Miso watches.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Clover attempts an ambitious pancake flip.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-1.png",
+        "at": 0,
+        "composition": 5,
+        "sfx": "FWOOP!",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The pancake experiment gets a little too ambitious.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-0",
+        "atlas": {
+          "frame": 1,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 2,
+      "hero": false,
+      "span": 12
+    }
+  ]
+}

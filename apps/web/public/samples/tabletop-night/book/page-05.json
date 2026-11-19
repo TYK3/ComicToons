@@ -1,0 +1,59 @@
+{
+  "kind": "story",
+  "title": "Chapter 1",
+  "panels": [
+    {
+      "id": "tabletop-night-panel-0",
+      "caption": "The vault run begins. Chat settles in for the ride.",
+      "dialogue": [
+        "We made it. Where is the key?",
+        "CHAT: This place is HUGE."
+      ],
+      "scene": "Juniper and Pixel enter the crystal vault.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "playful",
+      "altText": "Juniper and Pixel enter the crystal vault.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-0.png",
+      "at": 0,
+      "composition": 0,
+      "sfx": "GO!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 0,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-0.png",
+          "scene": "Juniper and Pixel enter the crystal vault.",
+          "dialogue": [
+            "We made it. Where is the key?",
+            "CHAT: This place is HUGE."
+          ],
+          "sfx": "",
+          "climax": false
+        },
+        {
+          "frame": 1,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-1.png",
+          "scene": "Pixel runs off with the vault key.",
+          "dialogue": [
+            "Pixel! Drop the key!",
+            "CHAT: The fox has the key!!"
+          ],
+          "sfx": "ZIP!",
+          "climax": false
+        }
+      ],
+      "storyCaption": "The vault run begins. Chat settles in for the ride.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-0.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 5,
+  "chapter": 1
+}

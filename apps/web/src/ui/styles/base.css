@@ -1,0 +1,269 @@
+/* ComicToons UI: tokens and shared components. Festival colour chrome (FESTIVAL-UI); Twitch purple only on .ct-btn--twitch. */
+:root{
+  /* FESTIVAL-UI palette (theme.ts id "festival"). Raw values live here only; everything else uses the roles below. */
+  --fest-teal:#1da2b3;--fest-amber:#ffc258;--fest-coral:#ee6471;--fest-cream:#fff5e8;--fest-ink:#142b36;
+  /* Derived shades (contrast table in report-festival-ui.md). Deep shades are for text on cream; soft ones are fills. */
+  --fest-teal-deep:#0f6e7a;--fest-coral-deep:#b23a4a;
+  --fest-teal-soft:#d4eff2;--fest-amber-soft:#ffe7bd;--fest-coral-soft:#fbd9dc;
+  /* The Festival art wash (theme.ts festival wash stops), used as a flat page fill instead of screentone dots. */
+  --fest-wash:linear-gradient(145deg,#4cc3cf 0%,#ffd27a 50%,#ff8a8a 100%);
+  /* Roles. Ink text and outlines on cream paper; teal is the main action, amber and coral are accents. */
+  --ink:var(--fest-ink);--ink-2:#2a4553;--ink-3:#4b6370;--ink-4:#4b6370;
+  --paper:var(--fest-cream);--paper-2:#fbe8cc;--paper-3:#f2d7b0;
+  --white:#fff;
+  --act:var(--fest-teal);--act-text:var(--ink);--primary:var(--fest-amber);
+  --hi:var(--fest-amber);--hot:var(--fest-coral);
+  --link:var(--fest-teal-deep);
+  --sh-act:6px 6px 0 var(--fest-teal);--sh-hot:6px 6px 0 var(--fest-coral);--sh-hi:6px 6px 0 var(--fest-amber);
+  --twitch:#9146ff;
+  --f-display:'Bangers',Impact,'Arial Narrow',sans-serif;
+  --f-letter:'Comic Neue','Comic Sans MS',cursive;
+  --f-ui:'Space Grotesk',system-ui,sans-serif;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:72px;
+  --b:3px solid var(--ink);--b-hair:2px solid var(--ink);
+  --sh-1:3px 3px 0 var(--ink);--sh-2:6px 6px 0 var(--ink);--sh-3:10px 10px 0 var(--ink);
+  --ease-out:cubic-bezier(.23,1,.32,1);--ease-slam:cubic-bezier(.2,1.4,.4,1);
+  --m-fast:140ms;--m:220ms;--m-slam:460ms;
+  --bar-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip;-webkit-text-size-adjust:100%}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:500 16px/1.5 var(--f-ui);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3,h4,p,ol,ul,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.ct-on-ink :focus-visible,.ct-on-ink:focus-visible{outline-color:var(--paper)}
+.ct-sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ct-skip{position:absolute;left:-999px;top:8px;z-index:200;background:var(--ink);color:var(--paper);padding:12px 16px;font-weight:700}
+.ct-skip:focus{left:8px}
+
+/* type */
+.ct-display{font-family:var(--f-display);font-weight:400;letter-spacing:.03em;line-height:.92;text-transform:uppercase}
+.ct-kicker{font:700 12px/1.2 var(--f-ui);letter-spacing:.14em;text-transform:uppercase}
+.ct-muted{color:var(--ink-3)}
+.ct-letter{font-family:var(--f-letter);font-weight:700;text-transform:uppercase}
+
+/* sample badge */
+.ct-sample{display:inline-flex;align-items:center;font:700 10px/1 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;border:1.5px dashed currentColor;padding:4px 6px;white-space:nowrap;background:var(--paper);color:var(--ink)}
+.ct-on-ink .ct-sample,.ct-sample--ink{background:var(--ink);color:var(--paper)}
+
+/* buttons: hard shadow, press-in */
+.ct-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 18px;border:var(--b);background:var(--paper);color:var(--ink);font:700 15px/1.1 var(--f-ui);text-decoration:none;box-shadow:var(--sh-1);transition:transform var(--m-fast) var(--ease-out),box-shadow var(--m-fast) var(--ease-out);white-space:nowrap;cursor:pointer}
+.ct-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.ct-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.ct-btn[disabled],.ct-btn[aria-disabled=true]{opacity:.55;cursor:not-allowed;transform:none;box-shadow:var(--sh-1)}
+.ct-btn--ink{background:var(--primary);color:var(--ink)}
+.ct-btn--ghost{border-color:transparent;box-shadow:none;background:transparent;text-decoration:underline;text-underline-offset:4px;padding:0 10px}
+.ct-btn--ghost:hover{box-shadow:none;transform:none;text-decoration-thickness:3px}
+.ct-btn--sm{min-height:44px;padding:0 12px;font-size:14px;border-width:2px}
+.ct-btn--twitch{background:var(--twitch);color:var(--white);border-color:var(--ink)}
+.ct-btn--twitch[aria-busy=true]{cursor:progress;opacity:1}
+.ct-btn--panic{background:var(--hot);color:var(--ink);border:3px solid var(--paper);box-shadow:none}
+.ct-btn--panic:hover{box-shadow:none;transform:none;background:var(--fest-coral-soft)}
+.ct-btn--panic[aria-pressed=true]{background:var(--paper);color:var(--ink);border-color:var(--ink)}
+.ct-btn--end{background:transparent;color:var(--paper);border:2px dashed var(--paper);box-shadow:none}
+.ct-btn--end:hover{box-shadow:none;transform:none;border-style:solid}
+.ct-btn--back{background:transparent;color:var(--paper);border:2px solid var(--paper);box-shadow:none}
+.ct-btn--back:hover{box-shadow:none;transform:none;background:var(--paper);color:var(--ink)}
+.ct-spin{width:16px;height:16px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:ct-spin .8s linear infinite;flex:none}
+@keyframes ct-spin{to{transform:rotate(360deg)}}
+.ct-glyph{width:20px;height:20px;flex:none}
+
+/* chips & segmented */
+.ct-chip{display:inline-flex;align-items:center;gap:6px;border:2px solid currentColor;padding:5px 10px;font:700 12px/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.ct-chip--fill{background:var(--hi);color:var(--ink);border-color:var(--hi)}
+.ct-dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.ct-live .ct-dot{animation:ct-pulse 1.4s infinite}
+@keyframes ct-pulse{50%{opacity:.2}}
+.ct-seg{display:inline-flex;border:var(--b-hair);background:var(--paper)}
+.ct-seg button{min-width:48px;min-height:44px;padding:0 12px;border:0;border-right:2px solid var(--ink);background:transparent;font:700 14px/1 var(--f-ui)}
+.ct-seg button:last-child{border-right:0}
+.ct-seg button[aria-checked=true],.ct-seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.ct-select{min-height:44px;border:var(--b-hair);background:var(--paper);padding:0 36px 0 12px;font:600 14px/1 var(--f-ui);appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px;background-repeat:no-repeat;max-width:100%}
+
+/* cards */
+.ct-card{border:var(--b);background:var(--paper);box-shadow:var(--sh-2)}
+.ct-card__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--act);color:var(--ink);border-bottom:var(--b)}
+.ct-card__head h2,.ct-card__head h3{font-family:var(--f-display);font-weight:400;font-size:24px;letter-spacing:.04em;line-height:1;text-transform:uppercase}
+.ct-card__body{padding:16px;display:grid;gap:12px}
+.ct-note{font-size:14px;line-height:1.45;color:var(--ink-3)}
+.ct-note strong{color:var(--ink)}
+.ct-notice{display:flex;gap:12px;align-items:flex-start;border:var(--b-hair);border-style:dashed;padding:12px 14px;background:var(--paper);font-size:14px;line-height:1.45}
+.ct-notice__mark{font-family:var(--f-display);font-size:26px;line-height:1}
+.ct-notice strong{display:block}
+.ct-banner{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:12px 24px;background:var(--ink);color:var(--paper);border-bottom:var(--b);box-shadow:inset 10px 0 0 var(--hot)}
+.ct-banner p{flex:1 1 420px;font-size:15px}
+.ct-banner .ct-btn{border-color:var(--paper);box-shadow:none}
+.ct-bar{height:12px;border:2px solid var(--ink);background:var(--paper)}
+.ct-bar>i{display:block;height:100%;background:var(--act);border-right:2px solid var(--ink)}
+.ct-bar--tone>i{background:var(--fest-teal-soft)}
+.ct-link{font-weight:700;text-underline-offset:4px;display:inline-flex;align-items:center;min-height:44px}
+
+/* logo */
+.ct-logo{display:inline-flex;align-items:center;gap:8px;min-height:44px;text-decoration:none;font-family:var(--f-display);font-size:28px;letter-spacing:.04em;line-height:1;color:inherit}
+.ct-logo svg{width:32px;height:28px;flex:none}
+
+/* app bar */
+.ct-appbar{position:sticky;top:0;z-index:60;height:var(--bar-h);display:flex;align-items:center;gap:16px;padding:0 24px;background:var(--act);color:var(--ink);border-bottom:var(--b)}
+.ct-appbar nav{display:flex;gap:4px}
+.ct-appbar nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;text-decoration:none;font:700 14px/1 var(--f-ui);border:2px solid transparent}
+.ct-appbar nav a[aria-current=page]{border-color:var(--ink);background:var(--hi);color:var(--ink)}
+.ct-appbar nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.ct-appbar__right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.ct-appbar__clock{font:700 13px/1 var(--f-ui);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.ct-appbar .ct-end{margin-left:24px}
+.ct-menu{position:relative}
+@media (max-width:1100px){.ct-appbar nav a.ct-nav-extra{display:none}}
+@media (max-width:820px){
+  .ct-appbar{padding:0 12px;gap:8px}
+  .ct-appbar nav{display:none}
+  .ct-appbar .ct-hide-sm{display:none}
+  .ct-logo{font-size:24px}
+}
+
+/* ---------- panels (art + lettering) ---------- */
+.ct-panel{position:relative;margin:0;border:var(--b);background:var(--paper);overflow:hidden;container-type:inline-size;aspect-ratio:16/9}
+.ct-art{position:absolute;inset:0;isolation:isolate;background:#fff}
+.ct-art>img{width:100%;height:100%;object-fit:cover;transition:filter var(--m) ease}
+.ct-panel__tags{position:absolute;left:6px;bottom:6px;display:flex;flex-wrap:wrap;gap:4px;z-index:3;max-width:calc(100% - 12px)}
+.ct-tag{font:700 10px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:4px 6px;white-space:nowrap}
+.ct-tag--paper{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);padding:3px 5px}
+.ct-tag--dash{background:var(--paper);color:var(--ink);border:1.5px dashed var(--ink);padding:3px 5px}
+.ct-bubble{position:absolute;z-index:2;max-width:46%;background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:50%/46%;padding:.65em 1.15em;font:700 clamp(9px,3.4cqw,18px)/1.15 var(--f-letter);text-align:center;text-transform:uppercase;box-shadow:2px 2px 0 var(--ink)}
+.ct-bubble::after{content:'';position:absolute;z-index:-1;width:14px;height:14px;background:#fff;border-right:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);bottom:-8px;left:26%;transform:rotate(45deg) skew(12deg,12deg)}
+.ct-bubble[data-at=top-left]{top:7%;left:5%}
+.ct-bubble[data-at=top-right]{top:7%;right:5%}
+.ct-bubble[data-at=top-right]::after{left:auto;right:26%}
+.ct-bubble[data-at=bottom-left]{bottom:22%;left:5%}
+.ct-bubble[data-at=bottom-left]::after{bottom:auto;top:-8px;transform:rotate(225deg) skew(12deg,12deg)}
+.ct-gen{display:block;margin-top:3px;font:700 11px/1.1 var(--f-ui);letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+.ct-sfx{position:absolute;z-index:2;right:6%;bottom:18%;font-family:var(--f-display);font-size:clamp(18px,11cqw,72px);color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);transform:rotate(-8deg);letter-spacing:.04em;pointer-events:none;line-height:1}
+.ct-caption{position:absolute;z-index:2;top:0;left:0;max-width:50%;background:#fff;color:var(--ink);border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:5px 9px;font:700 clamp(9px,2.9cqw,14px)/1.2 var(--f-letter);text-transform:uppercase}
+.ct-stamp{position:absolute;z-index:4;top:50%;left:50%;translate:-50% -50%;font-family:var(--f-display);font-size:clamp(16px,6cqw,26px);letter-spacing:.06em;padding:1px 10px;border:4px double var(--ink);background:color-mix(in srgb,var(--paper) 94%,transparent);color:var(--ink);transform:rotate(-6deg);pointer-events:none;line-height:1.1}
+.ct-stamp--rejected{text-decoration:line-through;text-decoration-thickness:3px}
+/* small panels: labels move to the tag row and SFX shrink so captions stay readable */
+@container (max-width:359px){.ct-bubble .ct-gen{display:none}.ct-panel .ct-gen-tag{display:inline-block}}
+@container (max-width:259px){.ct-bubble{max-width:60%;font-size:clamp(9px,4.6cqw,13px)}}
+.ct-gen-tag{display:none}
+/* W2: small grid cells (40-panel Studio) keep the comic readable: the caption box goes when there is a bubble,
+   the extra tags (Chat chose, cameo) go, and the stamp moves to the corner. Source, Sample and Generated caption stay. */
+@container (max-width:259px){
+  .ct-panel:has(.ct-bubble) .ct-caption{display:none}
+  .ct-panel__tags>.ct-tag--extra{display:none}
+  .ct-stamp{top:6px;left:auto;right:6px;translate:none;font-size:13px;border-width:3px;padding:0 6px}
+}
+/* W7: phone reader panels (120–180px) keep their speech bubble, smaller; only the caption box and SFX go.
+   Below 120px nothing fits, so the bubble goes too. */
+@container (max-width:180px){.ct-sfx,.ct-caption{display:none}.ct-bubble{max-width:78%;font-size:9px;padding:.45em .7em;border-width:2px}.ct-bubble::after{width:9px;height:9px;bottom:-5px}.ct-bubble[data-at=bottom-left]::after{top:-5px}}
+@container (max-width:120px){.ct-bubble{display:none}}
+/* W9: with no tag row (Landing featured panel), the Generated caption label stays inside the bubble at every size. */
+@container (max-width:359px){.ct-panel:not(:has(.ct-panel__tags)) .ct-bubble .ct-gen{display:block;font-size:9px}}
+
+/* skeleton */
+.ct-skel{position:relative;background:var(--paper-2);border:var(--b);overflow:hidden}
+.ct-skel::after{content:'';position:absolute;inset:0;background:var(--fest-teal-soft);opacity:.25;animation:ct-tonepan 1.2s linear infinite}
+/* POLISH-1 NTH4: the fill is flat now, so the cue pulses its opacity instead of panning a pattern. */
+@keyframes ct-tonepan{50%{opacity:.06}}
+
+/* dialogs */
+.ct-dialog{border:var(--b);box-shadow:10px 10px 0 var(--act);padding:0;max-width:min(520px,calc(100vw - 24px));background:var(--paper);color:var(--ink)}
+.ct-dialog::backdrop{background:color-mix(in srgb,var(--ink) 60%,transparent)}
+.ct-dialog__body{padding:20px;display:grid;gap:14px}
+.ct-dialog h2{font-family:var(--f-display);font-weight:400;font-size:32px;line-height:1;text-transform:uppercase;letter-spacing:.03em}
+.ct-dialog__actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.ct-field{display:grid;gap:6px;font:700 13px/1.2 var(--f-ui)}
+.ct-field textarea,.ct-field input{border:var(--b-hair);background:var(--white);padding:10px 12px;font:600 15px/1.4 var(--f-ui);min-height:44px}
+
+/* toast */
+.ct-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:120;display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);border:3px solid var(--hi);box-shadow:6px 6px 0 var(--hi);padding:6px 6px 6px 16px;font-weight:700;font-size:14px;max-width:calc(100vw - 24px)}
+.ct-toast .ct-btn{border-color:var(--paper);box-shadow:none}
+/* MOBILE-1: the toast is ink, so its Undo needs a paper focus ring (the default ink ring measured 1:1). */
+.ct-toast :focus-visible{outline-color:var(--paper)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important}
+}
+.ct-src-short{display:none}
+@container (max-width:200px){.ct-src-long{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.ct-src-short{display:inline}}
+.ct-logo{--ct-logo-cut:var(--paper)}
+.ct-on-ink .ct-logo{--ct-logo-cut:var(--ink)}
+.ct-appbar .ct-logo,.ct-appbar.ct-on-ink .ct-logo{--ct-logo-cut:var(--act)}
+
+/* shared small pieces */
+.ct-tool__label{font:700 11px/1.2 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;display:flex;gap:10px;align-items:center;flex-wrap:wrap;min-height:20px}
+.ct-tool__hint{font-weight:500;letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink-3)}
+.ct-hintchip{display:inline-flex;align-items:center;border:1.5px dashed var(--ink);padding:3px 8px;font:700 12px/1.2 var(--f-ui);color:var(--ink);background:var(--fest-amber-soft)}
+.ct-btn--wide{width:100%}
+.ct-chip--sm{font-size:10px;padding:3px 6px;border-width:1.5px}
+.ct-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ct-inline-link{font-weight:700;text-underline-offset:3px;padding:12px 0;display:inline-block;margin:-12px 0}
+
+/* UI3: loading, empty and error states (components/ScreenState.tsx). Error uses coral with ink text, never red. */
+.ct-state{max-width:640px;margin:48px auto;padding:24px;border:var(--b);box-shadow:var(--sh-act);background:var(--paper);color:var(--ink);display:grid;gap:16px}
+.ct-state__top{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;align-items:start}
+.ct-state__say{display:grid;gap:6px;min-width:0}
+.ct-state__mark{width:44px;height:44px;display:grid;place-items:center;border:var(--b);background:var(--hi);font:400 24px/1 var(--f-display);position:relative;overflow:hidden}
+.ct-state--error .ct-state__mark{background:var(--hot);color:var(--ink)}
+.ct-state--loading .ct-state__mark::after{content:'';position:absolute;inset:0;background:var(--fest-teal-soft);opacity:.6;animation:ct-tonepan 1.2s linear infinite}
+.ct-state--empty{border-style:dashed;box-shadow:none}
+.ct-state__title{font:400 32px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.03em;min-height:44px;display:flex;align-items:center}
+h1.ct-state__title{font-size:40px}
+.ct-state__text{color:var(--ink-2);line-height:1.5;max-width:56ch}
+.ct-state__text p+p{margin-top:6px}
+.ct-state__acts{padding-left:60px}
+.ct-state--compact{margin:0;padding:16px;box-shadow:none;max-width:none}
+.ct-state--compact .ct-state__title{font-size:22px}
+.ct-on-ink .ct-state{color:var(--ink)}
+@media (max-width:640px){.ct-state{margin:24px 12px;padding:18px}.ct-state__title,h1.ct-state__title{font-size:26px}.ct-state__acts{padding-left:0}.ct-state__acts .ct-btn{flex:1 1 100%}}
+
+/* FESTIVAL-UI: colour on the shared pieces. Text on teal, amber and coral is always ink (4.7:1 or more). */
+.ct-card{box-shadow:var(--sh-2)}
+.ct-card__head .ct-sample{background:var(--paper);color:var(--ink)}
+/* Card heads are teal now, so focus there is an ink ring (4.8:1 on teal), not the cream one used on ink. */
+.ct-card__head.ct-on-ink :focus-visible,.ct-card__head :focus-visible{outline-color:var(--ink)}
+.ct-card__head.ct-on-ink .ct-logo{--ct-logo-cut:var(--act)}
+.ct-btn--ink:hover{box-shadow:5px 5px 0 var(--ink)}
+.ct-btn--paper:hover,.ct-btn:not(.ct-btn--ghost):not(.ct-btn--twitch):not(.ct-btn--ink):not(.ct-btn--panic):not(.ct-btn--end):not(.ct-btn--back):hover{background:var(--fest-amber-soft)}
+.ct-seg button[aria-checked=true],.ct-seg button[aria-pressed=true]{box-shadow:inset 0 -4px 0 var(--hi)}
+.ct-link,.ct-inline-link{text-decoration-color:var(--act);text-decoration-thickness:2px}
+.ct-appbar .ct-live{background:var(--hi);color:var(--ink);border-color:var(--hi)}
+.ct-appbar nav a:hover{color:var(--ink);text-decoration-thickness:3px}
+.ct-appbar nav a[aria-current=page]:hover{color:var(--ink)}
+.ct-appbar nav a[aria-current=page]:focus-visible{outline-color:var(--ink)}
+/* FESTIVAL-UI M1: the app bar (Studio, Connect, every screen with it) is teal with ink text, ink focus rings (4.8:1 on teal) and ink-edged buttons. */
+.ct-appbar.ct-on-ink :focus-visible,.ct-appbar.ct-on-ink:focus-visible{outline-color:var(--ink)}
+.ct-appbar .ct-btn--end,.ct-appbar .ct-btn--back{color:var(--ink);border-color:var(--ink)}
+.ct-appbar .ct-btn--back:hover{background:var(--paper);color:var(--ink)}
+/* POLISH-1 N6: Panic is the loudest control in the bar: coral fill, 3px ink border, hard ink shadow, larger and heavier than its neighbours (ink on coral 4.69:1). */
+.ct-appbar .ct-btn--panic{min-height:48px;padding:0 20px;font-size:16px;font-weight:800;letter-spacing:.02em;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.ct-appbar .ct-btn--panic:hover{background:var(--fest-coral-soft)}
+.ct-appbar .ct-chip:not(.ct-chip--fill):not(.ct-live){color:var(--ink)}
+.ct-btn--panic[aria-pressed=true]{background:var(--paper);color:var(--ink);border-color:var(--hot)}
+/* POLISH-1 NTH2: pressed Panic on the teal bar keeps an ink edge (coral on teal was 1.03:1). */
+.ct-appbar .ct-btn--panic[aria-pressed=true]{border-color:var(--ink)}
+.ct-banner[data-connection=lost]{box-shadow:inset 10px 0 0 var(--hot)}
+.ct-banner[data-connection=reconnecting]{box-shadow:inset 10px 0 0 var(--hi)}
+.ct-skel{background:var(--fest-teal-soft)}
+.ct-dialog h2{color:var(--ink)}
+.ct-dialog__body{border-top:8px solid var(--hi)}
+
+/* FESTIVAL-UI p2: the director bar, the reader bar (recap, book, series, catch-up) and the Studio mobile action bar join the app bar: teal with ink text, ink focus rings (4.8:1 on teal), ink-edged buttons, amber primary. */
+.ct-director__bar.ct-on-ink :focus-visible,.ct-readerbar.ct-on-ink :focus-visible,.ct-mobilebar.ct-on-ink :focus-visible{outline-color:var(--ink)}
+.ct-director__bar .ct-logo,.ct-readerbar .ct-logo{--ct-logo-cut:var(--act)}
+.ct-director__bar .ct-btn--back,.ct-readerbar .ct-btn--back{color:var(--ink);border-color:var(--ink)}
+.ct-director__bar .ct-btn--back:hover,.ct-readerbar .ct-btn--back:hover{background:var(--paper);color:var(--ink)}
+.ct-director__bar .ct-chip:not(.ct-chip--fill){color:var(--ink)}
+.ct-readerbar .ct-lookswitch--ink .ct-seg{border-color:var(--ink)}
+.ct-readerbar .ct-lookswitch--ink .ct-seg button{color:var(--ink);border-right-color:var(--ink)}
+.ct-readerbar .ct-lookswitch--ink .ct-seg button[aria-checked=true]{background:var(--hi);color:var(--ink)}
+.ct-mobilebar .ct-btn--panic{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font-weight:800}
+.ct-mobilebar .ct-btn--panic[aria-pressed=true]{border-color:var(--ink)}
+/* MOBILE-1 (verdict-polish-1 N6 nit 2): on the phone bar Approve takes the bar colour with an ink edge, like Reject, so coral Panic
+   (the only fill and the only shadow) is the loudest. */
+.ct-mobilebar .ct-btn:nth-child(2){background:transparent;color:var(--ink);border-color:var(--ink)}
+.ct-mobilebar .ct-btn--ghost-ink{color:var(--ink);border-color:var(--ink)}

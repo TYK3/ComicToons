@@ -1,0 +1,278 @@
+/* Landing. Structure: hero plate + drift, about line, featured page + how it works, streamer × chat, what it makes (Sample sets), footer. */
+.ct-landing{background:var(--paper)}
+.ct-hero{position:relative;min-height:min(100vh,980px);display:grid;grid-template-rows:auto 1fr auto;gap:32px;padding:20px 32px 40px;overflow:hidden;background:var(--ink);color:var(--paper);isolation:isolate}
+.ct-hero__plate{position:absolute;inset:0;z-index:-1}
+.ct-hero__plate .ct-art{position:absolute;inset:-4%}
+.ct-hero__plate .ct-art>img{object-position:50% 40%}
+.ct-hero__plate::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--ink) 74%,transparent) 0%,color-mix(in srgb,var(--ink) 46%,transparent) 38%,color-mix(in srgb,var(--ink) 58%,transparent) 62%,color-mix(in srgb,var(--ink) 94%,transparent) 100%),linear-gradient(120deg,color-mix(in srgb,var(--act) 40%,transparent),transparent 45%,color-mix(in srgb,var(--hot) 34%,transparent))}
+/* FESTIVAL-UI M3: the hero dot layer is gone; the ink plate stays. */
+.ct-hero__tone{display:none}
+/* FESTIVAL-UI p2: the rotating halftone ray overlay on the hero is gone; the hero is flat ink under the art. */
+.ct-hero__lines{display:none}
+@keyframes ct-drift{to{transform:translate(54px,27px)}}
+@keyframes ct-turn{to{transform:rotate(360deg)}}
+.ct-hero__plate .ct-art{animation:ct-breathe 18s ease-in-out infinite alternate}
+@keyframes ct-breathe{to{transform:scale(1.05) translate(-1%,1%)}}
+.ct-hero__nav{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2}
+.ct-pill{display:flex;gap:2px;padding:4px;border:2px solid var(--paper);border-radius:999px;background:color-mix(in srgb,var(--ink) 78%,transparent);backdrop-filter:blur(6px)}
+.ct-pill a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;text-decoration:none;font:700 14px/1 var(--f-ui)}
+.ct-pill a:hover,.ct-pill a:focus-visible{background:var(--paper);color:var(--ink)}
+.ct-pill a.ct-pill__cta{background:var(--hi);color:var(--ink);margin-left:4px}
+.ct-pill a.ct-pill__cta:hover,.ct-pill a.ct-pill__cta:focus-visible{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--paper)}
+.ct-hero__copy{position:relative;z-index:2;align-self:center;justify-self:center;max-width:940px;text-align:center;display:grid;gap:20px;justify-items:center}
+.ct-hero__copy .ct-kicker{display:flex;gap:10px;align-items:center}
+.ct-hero__title{font-size:clamp(64px,10.5vw,168px);line-height:.86;color:var(--hi);text-shadow:6px 6px 0 var(--ink)}
+.ct-hero__title span{display:block}
+.ct-hero__title span+span{-webkit-text-stroke:3px var(--paper);color:transparent;text-shadow:none}
+.ct-hero__sub{font-size:clamp(17px,1.6vw,21px);line-height:1.5;max-width:640px;color:var(--paper-2)}
+.ct-hero__cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.ct-hero__cta .ct-btn{min-height:56px;font-size:17px;padding:0 24px}
+.ct-btn--paper{background:var(--paper);color:var(--ink);border-color:var(--ink)}
+.ct-hero__note{font-size:14px;color:var(--paper-2);text-align:center}
+.ct-issues{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,260px));gap:24px;justify-content:center}
+.ct-cover{position:relative;display:grid;grid-template-rows:auto auto auto;background:var(--paper);color:var(--ink);border:var(--b);box-shadow:6px 6px 0 var(--act);text-decoration:none;padding:8px;gap:4px;transition:transform var(--m) var(--ease-out)}
+.ct-cover:nth-child(2){transform:rotate(-1.5deg)}
+.ct-cover:nth-child(3){transform:rotate(1.2deg)}
+.ct-cover:hover{transform:translate(-3px,-3px) rotate(0)}
+.ct-cover.ct-skel{min-height:200px}
+.ct-cover__art{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;border:2px solid var(--ink)}
+.ct-cover__no{position:absolute;top:14px;left:14px;background:var(--hi);color:var(--ink);border:1.5px solid var(--ink);font:700 11px/1 var(--f-ui);letter-spacing:.1em;padding:4px 6px;text-transform:uppercase}
+.ct-cover__title{font:400 28px/1 var(--f-display);letter-spacing:.03em;text-transform:uppercase}
+.ct-cover__by{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--ink-3)}
+
+.ct-about{padding:96px 32px;max-width:1240px;margin:0 auto}
+.ct-about__line{font:400 clamp(40px,5.6vw,84px)/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase}
+.ct-about__soft{color:var(--fest-teal-deep)}
+
+.ct-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;padding:0 32px 96px;max-width:1320px;margin:0 auto;align-items:start}
+.ct-featured{border:var(--b);box-shadow:10px 10px 0 var(--hot);background:var(--paper);padding:14px;display:grid;gap:12px;margin:0}
+.ct-featured__stack{display:grid}
+.ct-featured__slide{grid-area:1/1;opacity:0;transition:opacity 700ms ease}
+.ct-featured__slide[data-on]{opacity:1}
+.ct-featured__bar{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:center;font-size:14px}
+.ct-featured__bar>span:first-child{display:flex;gap:8px;align-items:center}
+.ct-glass{position:sticky;top:24px;padding:28px;border:var(--b);background:var(--fest-teal-soft);backdrop-filter:blur(4px);box-shadow:var(--sh-2);display:grid;gap:18px}
+.ct-glass h2{font-size:48px}
+.ct-steps{counter-reset:step;display:grid;gap:14px}
+.ct-steps li{counter-increment:step;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;font-size:16px;line-height:1.45}
+.ct-steps li::before{content:counter(step);width:44px;height:44px;display:grid;place-items:center;background:var(--act);color:var(--ink);border:var(--b-hair);box-shadow:var(--sh-1);font:400 26px/1 var(--f-display)}
+.ct-steps strong{display:block}
+/* B1: one grid item per step (number + body), so the text never drops into the 44px number column. */
+.ct-steps__body{min-width:0;padding-top:8px}
+.ct-glass__look{border-top:var(--b-hair);padding-top:14px}
+.ct-glass__look .ct-looks__cards{flex-wrap:wrap}
+
+.ct-versus{padding:0 32px 96px;max-width:1320px;margin:0 auto;display:grid;gap:28px}
+.ct-versus h2{font-size:clamp(56px,8vw,112px);text-align:center}
+.ct-versus__cols{display:grid;grid-template-columns:1fr 1fr;gap:0;border:var(--b);box-shadow:10px 10px 0 var(--act)}
+.ct-versus__col{padding:32px;display:grid;gap:16px;align-content:start;background:var(--fest-amber-soft)}
+.ct-versus__col--ink{background:var(--ink);color:var(--paper)}
+.ct-versus__col h3{font:400 36px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.ct-versus__col ul{display:grid;gap:12px}
+.ct-versus__col li{font-size:18px;line-height:1.45;padding-left:28px;position:relative}
+.ct-versus__col li::before{content:'';position:absolute;left:0;top:.45em;width:14px;height:14px;background:currentColor;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+code{font:700 .9em/1 ui-monospace,Menlo,monospace;border:1.5px solid currentColor;padding:1px 4px}
+
+.ct-makes{padding:0 32px 112px;max-width:1320px;margin:0 auto;display:grid;gap:28px}
+.ct-makes h2{font-size:clamp(48px,6vw,88px)}
+
+.ct-footer{position:relative;background:var(--ink);color:var(--paper);padding:72px 32px 40px;border-top:6px solid var(--act)}
+.ct-footer__edge{position:absolute;left:0;right:0;top:-1px;height:48px;background:var(--fest-wash);-webkit-mask:linear-gradient(180deg,var(--ink),transparent);mask:linear-gradient(180deg,var(--ink),transparent)}
+.ct-footer__inner{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center}
+.ct-footer nav{display:flex;flex-wrap:wrap;gap:4px 8px}
+.ct-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px;font-weight:700;text-underline-offset:4px}
+.ct-footer__note{flex-basis:100%;color:var(--paper-3);font-size:14px}
+
+@media (max-width:1024px){
+  .ct-feature{grid-template-columns:1fr}
+  .ct-glass{position:static}
+  .ct-issues{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+}
+@media (max-width:720px){
+  .ct-hero{padding:12px 16px 32px;gap:24px;min-height:0}
+  .ct-pill a:nth-child(-n+2){display:none}
+  .ct-pill a{padding:0 12px}
+  .ct-hero__copy{padding-top:24px}
+  .ct-hero__title span+span{-webkit-text-stroke:2px var(--paper)}
+  .ct-hero__cta{width:100%;display:grid}
+  .ct-hero__cta .ct-btn{width:100%;justify-content:center;min-height:52px}
+  .ct-issues{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+  .ct-cover{padding:4px;box-shadow:var(--sh-1)}
+  .ct-cover__art{aspect-ratio:1/1}
+  .ct-cover__no{top:8px;left:8px;font-size:9px;padding:3px 4px}
+  .ct-cover__title{font-size:17px}
+  .ct-cover__by{flex-wrap:wrap;font-size:11px;gap:2px 4px}
+  .ct-cover:nth-child(n){transform:none}
+  .ct-about{padding:64px 16px}
+  .ct-feature,.ct-versus,.ct-makes{padding-left:16px;padding-right:16px;padding-bottom:64px}
+  .ct-featured{padding:8px;box-shadow:var(--sh-2)}
+  .ct-glass{padding:18px}
+  .ct-glass .ct-looks__cards{display:grid;grid-template-columns:1fr 1fr}
+  .ct-glass .ct-look{width:auto}
+  .ct-versus__cols{grid-template-columns:1fr;box-shadow:var(--sh-2)}
+  .ct-versus__col{padding:20px}
+  .ct-footer{padding:56px 16px 32px}
+}
+@media (prefers-reduced-motion:reduce){.ct-hero__tone,.ct-hero__lines,.ct-hero__plate .ct-art{animation:none}.ct-featured__slide{transition:none}}
+/* UI3: the shelf's empty and error states take the whole row. */
+.ct-issues__state{grid-column:1/-1;width:100%;max-width:640px;justify-self:center;text-align:left}
+/* L-FB: bundled Sample art stands in until the studio has panels. The label sits where the art shows. */
+.ct-hero__sample{position:absolute;right:32px;top:84px;z-index:2;margin:0}
+@media (max-width:720px){.ct-hero__sample{right:16px;top:72px}}
+
+/* FESTIVAL-UI: landing accents. The hero's main button is amber with ink text; covers and cards carry coloured comic shadows. */
+.ct-hero .ct-btn--paper{background:var(--primary);color:var(--ink);border-color:var(--ink);box-shadow:4px 4px 0 var(--act)}
+.ct-hero .ct-btn--paper:hover{background:var(--paper);box-shadow:6px 6px 0 var(--act)}
+.ct-hero .ct-btn:not(.ct-btn--paper){box-shadow:4px 4px 0 var(--hot)}
+.ct-hero :focus-visible{outline-color:var(--hi)}
+.ct-cover:nth-child(2){box-shadow:6px 6px 0 var(--hi)}
+.ct-cover:nth-child(3){box-shadow:6px 6px 0 var(--hot)}
+.ct-steps li:nth-child(2)::before{background:var(--hi)}
+.ct-steps li:nth-child(3)::before{background:var(--hot)}
+.ct-versus__col--ink{background:var(--ink)}
+.ct-versus__col--ink h3{color:var(--hi)}
+.ct-versus__col:not(.ct-versus__col--ink) li::before{color:var(--fest-coral-deep)}
+.ct-versus__col--ink li::before{color:var(--act)}
+.ct-footer :focus-visible{outline-color:var(--hi)}
+.ct-about__line{text-shadow:3px 3px 0 var(--hi)}
+/* FESTIVAL-UI p3: the hero, its header pill and the footer leave navy ink for Festival colour, with ink text.
+   Hero: the Festival wash at 90% over the art, so ink text holds at least 4.8:1 even over the darkest art pixel. Footer: flat teal with ink text (4.81:1). */
+.ct-hero{background:var(--fest-wash);color:var(--ink)}
+.ct-hero__plate::after{background:linear-gradient(145deg,color-mix(in srgb,#4cc3cf 90%,transparent) 0%,color-mix(in srgb,#ffd27a 90%,transparent) 50%,color-mix(in srgb,#ff8a8a 90%,transparent) 100%)}
+.ct-hero__title{color:var(--ink);text-shadow:5px 5px 0 var(--paper)}
+.ct-hero__title span+span,.ct-hero .ct-hero__title span+span{-webkit-text-stroke:0;color:var(--ink);text-shadow:5px 5px 0 var(--hot)}
+.ct-hero__sub,.ct-hero__note{color:var(--ink)}
+.ct-pill{border-color:var(--ink);background:color-mix(in srgb,var(--paper) 88%,transparent)}
+.ct-pill a{color:var(--ink)}
+.ct-pill a:hover,.ct-pill a:focus-visible{background:var(--ink);color:var(--paper)}
+.ct-pill a.ct-pill__cta:hover,.ct-pill a.ct-pill__cta:focus-visible{background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 2px var(--hi)}
+.ct-hero.ct-on-ink :focus-visible,.ct-hero :focus-visible{outline-color:var(--ink)}
+.ct-hero.ct-on-ink .ct-sample{background:var(--paper);color:var(--ink)}
+.ct-hero.ct-on-ink .ct-logo{--ct-logo-cut:var(--paper)}
+.ct-footer{background:var(--act);color:var(--ink);border-top:6px solid var(--ink)}
+.ct-footer__note{color:var(--ink)}
+.ct-footer.ct-on-ink :focus-visible,.ct-footer :focus-visible{outline-color:var(--ink)}
+.ct-footer.ct-on-ink .ct-sample{background:var(--paper);color:var(--ink)}
+.ct-footer.ct-on-ink .ct-logo{--ct-logo-cut:var(--act)}
+
+/* LANDING-2 (a): the moving hero background. Three strips of paper panel frames drift sideways behind the copy.
+   Only transform animates, each strip on its own compositor layer (will-change), inside a contained, absolutely
+   placed box: no layout, no paint per frame, no shift. The frames are paper on the wash, so they only lighten what is
+   behind the ink text (contrast goes up, never down). Each strip is one tile (480px) wider than the hero and moves by
+   exactly one tile, so the loop is seamless. Paused off screen and with ?freeze=1; off under reduced motion. */
+.ct-drift{position:absolute;inset:0;z-index:-1;overflow:hidden;contain:strict;pointer-events:none;opacity:.6}
+.ct-drift__row{position:absolute;left:-480px;width:calc(100% + 960px);height:160px;rotate:-6deg;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='160' fill='%23fff5e8' stroke='%23fff5e8' stroke-width='5'%3E%3Crect x='6' y='10' width='150' height='140' fill-opacity='.3'/%3E%3Crect x='170' y='10' width='112' height='62' fill-opacity='.18'/%3E%3Crect x='170' y='86' width='112' height='64' fill-opacity='.42'/%3E%3Crect x='296' y='10' width='178' height='140' fill-opacity='.22'/%3E%3Cellipse cx='392' cy='52' rx='54' ry='24' fill-opacity='.85' stroke='none'/%3E%3Cpath d='M372 70l-10 22 28-20z' fill-opacity='.85' stroke='none'/%3E%3C/svg%3E") 0 0/480px 160px repeat-x;will-change:transform;animation:ct-drift-x 30s linear infinite}
+.ct-drift__row--a{top:4%}
+.ct-drift__row--b{top:calc(50% - 80px);animation-duration:42s;animation-direction:reverse;opacity:.7}
+.ct-drift__row--c{bottom:4%;animation-duration:36s}
+@keyframes ct-drift-x{from{transform:translate3d(0,0,0)}to{transform:translate3d(-480px,0,0)}}
+.ct-drift[data-still='1'] .ct-drift__row,.ct-drift[data-off='1'] .ct-drift__row{animation-play-state:paused}
+@media (max-width:720px){.ct-drift__row{height:112px;background-size:336px 112px;width:calc(100% + 672px);left:-336px;animation-name:ct-drift-x-sm}.ct-drift__row--b{top:calc(50% - 56px)}}
+@keyframes ct-drift-x-sm{from{transform:translate3d(0,0,0)}to{transform:translate3d(-336px,0,0)}}
+@media (prefers-reduced-motion:reduce){.ct-drift__row{animation:none;will-change:auto}}
+
+/* LANDING-2 (b, c): What it makes. Three Sample streams as tabs (always a full row of three), then the picked stream's
+   complete set: Catch-up, comic book, manga series. The parts reuse the reader classes (readers.css, pages.css). */
+.ct-makes__head{display:grid;gap:12px;max-width:760px}
+.ct-makes__lede{font-size:18px;line-height:1.5;color:var(--ink-2)}
+.ct-sets{display:grid;gap:40px}
+.ct-sets__state{width:100%;max-width:640px}
+.ct-sets__tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.ct-sets__tab{display:grid;gap:8px;align-content:start;text-align:left;padding:10px 10px 14px;border:var(--b);background:var(--paper);color:var(--ink);box-shadow:6px 6px 0 var(--set-a1,var(--act));font:inherit;cursor:pointer;min-height:44px;transition:transform var(--m) var(--ease-out),box-shadow var(--m) var(--ease-out)}
+.ct-sets__tab:nth-child(3n+2){box-shadow:6px 6px 0 var(--set-a3,var(--hot))}
+.ct-sets__tab:nth-child(3n){box-shadow:6px 6px 0 var(--set-a2,var(--fest-teal-deep))}
+.ct-sets__tab:hover{transform:translate(-2px,-2px)}
+.ct-sets__tab[aria-selected=true]{background:var(--set-a2,var(--hi));box-shadow:8px 8px 0 var(--ink);transform:translate(-2px,-2px)}
+.ct-sets__tab.ct-skel{min-height:220px;box-shadow:none}
+.ct-sets__thumb{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border:2px solid var(--ink)}
+.ct-sets__thumb .ct-art{position:absolute;inset:0}
+.ct-sets__name{font:400 32px/1 var(--f-display);letter-spacing:.03em;text-transform:uppercase}
+.ct-sets__by{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:14px;font-weight:700}
+.ct-sets__panel{display:grid;gap:64px}
+.ct-sets__intro{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:15px;color:var(--ink-2);margin:0}
+.ct-sets img{background-color:var(--fest-amber-soft);background-image:repeating-linear-gradient(-45deg,rgba(20,43,54,.12) 0 6px,transparent 6px 18px),var(--fest-wash)}
+.ct-part{display:grid;gap:24px}
+.ct-part__head{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:24px;row-gap:6px;align-items:end;border-bottom:var(--b);padding-bottom:14px}
+.ct-part__head>:not(.ct-part__open){grid-column:1}
+.ct-part__when{font:700 15px/1.2 var(--f-ui);color:var(--fest-teal-deep);margin:0}
+.ct-part__title{font-size:clamp(44px,5vw,64px);margin:0}
+.ct-part__text{font-size:16px;line-height:1.45;color:var(--ink-2);max-width:620px;margin:0}
+.ct-part__open{grid-column:2;grid-row:1/span 3;align-self:end;background:var(--set-a2,var(--primary));color:var(--ink)}
+.ct-part--catchup .ct-part__head{border-bottom-color:var(--set-a1,var(--act))}
+.ct-part--book .ct-part__head{border-bottom-color:var(--set-a2,var(--hi))}
+.ct-part--series .ct-part__head{border-bottom-color:var(--set-a3,var(--hot))}
+.ct-part__frame{border:var(--b);background:var(--paper);box-shadow:10px 10px 0 var(--set-a1,var(--act));padding:28px;gap:20px}
+.ct-part__frame .ct-catchup__head{gap:4px}
+.ct-part__prev{font-size:clamp(44px,6vw,80px);margin:0}
+.ct-part .ct-catchup__row[data-count='3']{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ct-part .ct-catchup__row[data-count='2']{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.ct-part__foot{font-size:14px;color:var(--ink-3);margin:0}
+.ct-part__leaves,.ct-part__episodes{list-style:none;margin:0;padding:0;display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+/* LANDING-3 MF1, MF2: the book reads as spreads, two leaves a row (cover + page 1, page 2 + back page), so each page
+   panel stays wide enough to keep its caption box and bubble (base.css container rules). Leaves keep their own
+   height (align-items:start) and the cover and back page are 3/4 cards, so no leaf stretches into a half-blank page. */
+.ct-part__leaves[data-count]{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+/* LANDING-4 (crit-landing-3 MF1): from 721 to 1279px two columns leave page panels at 143-256px, under base.css's
+   259px rule, so their caption boxes hide. One centred column, capped at 640px, keeps every panel at 260px or more. */
+@media (min-width:721px) and (max-width:1279px){.ct-part__leaves[data-count]{grid-template-columns:minmax(0,640px);justify-content:center}}
+.ct-part__leaves>li{display:grid}
+.ct-part__leaves .ct-page{box-shadow:6px 6px 0 var(--ink)}
+.ct-part__cover{aspect-ratio:3/4;box-shadow:6px 6px 0 var(--ink);padding:14px;gap:10px}
+.ct-part__cover .ct-book__brand{font-size:22px}
+.ct-part__cover .ct-book__title{font-size:clamp(34px,3.2vw,48px);margin:0}
+.ct-part__cover .ct-book__by{margin:0;font-size:14px}
+.ct-part__cover .ct-book__sfx{top:38%;bottom:auto;right:14px;font-size:40px}
+.ct-part__cover .ct-book__sample{top:64px;left:14px}
+.ct-part__end{aspect-ratio:3/4;align-self:start;background:var(--set-tint,var(--fest-teal-soft));box-shadow:6px 6px 0 var(--ink);padding:20px}
+.ct-part__end>.ct-book__endart{justify-self:stretch;align-self:stretch;background:none}
+.ct-part__end .ct-display{font-size:48px;margin:0}
+.ct-part__end p{margin:0}
+.ct-part__episodes[data-count='1']{grid-template-columns:minmax(0,560px)}
+.ct-part__episodes[data-count='2']{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ct-part__episodes[data-count='3']{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ct-part__episode{display:grid;gap:14px;align-content:start}
+.ct-part__ephead{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:center}
+.ct-part__epart{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border:2px solid var(--ink)}
+.ct-part__epart .ct-art{position:absolute;inset:0}
+.ct-part__ephead .ct-episode__title{font-size:26px;line-height:1.05;margin:2px 0 0}
+.ct-part__episode .ct-note{margin:0;font-size:14px}
+/* An odd number of leaves (a one- or three-page book): the back page closes the book as a full-width strip, so the
+   last row has no empty cell. */
+@media (min-width:721px){
+  .ct-part__leaves[data-count='3']>li:last-child,.ct-part__leaves[data-count='5']>li:last-child{grid-column:1/-1}
+  .ct-part__leaves[data-count='3']>li:last-child .ct-part__end,.ct-part__leaves[data-count='5']>li:last-child .ct-part__end{aspect-ratio:auto;min-height:240px}
+}
+/* LANDING-3 MF4: panel 1's tags as a line under the art (Panel.tsx outside variant), not over the art and its SFX. */
+.ct-part__tags{display:flex;flex-wrap:wrap;gap:4px;margin:0}
+/* LANDING-3 MF3: the Look swatches beside the Sample stream tabs. Each swatch shows its own wash and three accents. */
+.ct-swatches{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px 12px;margin-bottom:-16px}
+.ct-swatches__label{font:700 15px/1 var(--f-ui);margin:0}
+.ct-swatches__row{display:flex;flex-wrap:wrap;gap:10px}
+.ct-swatch{display:inline-flex;align-items:center;gap:8px;min-height:44px;min-width:44px;padding:4px 14px 4px 4px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:700 15px/1 var(--f-ui);cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform var(--m) var(--ease-out),box-shadow var(--m) var(--ease-out)}
+.ct-swatch:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.ct-swatch[aria-checked=true]{background:var(--set-a2,var(--hi));box-shadow:5px 5px 0 var(--ink);transform:translate(-2px,-2px)}
+.ct-swatch:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.ct-swatch__chip{display:flex;align-items:flex-end;justify-content:flex-end;gap:2px;padding:2px;width:34px;height:34px;border:2px solid var(--ink);flex:none}
+.ct-swatch__dot{display:block;width:8px;height:8px;border:1px solid var(--ink);border-radius:50%}
+@media (max-width:720px){
+  .ct-sets{gap:28px}
+  .ct-sets__tabs{gap:8px}
+  .ct-sets__tab{padding:4px 4px 8px;gap:4px;box-shadow:var(--sh-1)}
+  .ct-sets__tab:nth-child(n){box-shadow:3px 3px 0 var(--ink)}
+  .ct-sets__tab[aria-selected=true]{box-shadow:4px 4px 0 var(--ink)}
+  .ct-sets__thumb{aspect-ratio:1/1}
+  .ct-sets__name{font-size:18px}
+  .ct-sets__by{font-size:11px;gap:2px 4px}
+  .ct-sets__by>span:first-child{overflow-wrap:anywhere}
+  .ct-sets__panel{gap:48px}
+  .ct-part__head{grid-template-columns:1fr}
+  .ct-part__open{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}
+  .ct-part__frame{padding:14px;box-shadow:var(--sh-2)}
+  .ct-part .ct-catchup__row[data-count]{grid-template-columns:1fr}
+  .ct-part__leaves[data-count],.ct-part__episodes[data-count]{grid-template-columns:1fr}
+  .ct-swatches{justify-content:flex-start;margin-bottom:-8px}
+  .ct-swatches__row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
+  .ct-swatch{flex-direction:column;gap:4px;padding:4px 2px 6px;font-size:13px}
+  .ct-part__end .ct-display{font-size:40px}
+}
+@media (prefers-reduced-motion:reduce){.ct-sets__tab,.ct-swatch{transition:none}.ct-sets__tab:hover,.ct-swatch:hover,.ct-swatch[aria-checked=true]{transform:none}}

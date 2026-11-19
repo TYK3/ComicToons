@@ -1,0 +1,63 @@
+html[data-screen=overlay],html[data-screen=overlay] body{background:transparent;overflow:hidden}
+.ct-overlay-root{position:fixed;inset:0;overflow:hidden}
+.ct-overlay-root[data-backdrop]{background:var(--ink)}
+.ct-stage{position:absolute;top:0;left:0;width:1920px;height:1080px;transform-origin:0 0;font-size:24px}
+.ct-stage__backdrop{position:absolute;inset:0}
+.ct-stage__backdrop .ct-art{position:absolute;inset:0;filter:blur(2px) brightness(.7)}
+.ct-stage__backdrop span{position:absolute;left:40px;top:36px;font:700 22px/1 var(--f-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--paper);background:color-mix(in srgb,var(--ink) 80%,transparent);padding:10px 14px;border:2px dashed var(--hi)}
+.ct-ov-strip{position:absolute;right:48px;bottom:48px;width:720px;display:grid;gap:14px}
+.ct-ov-earlier{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ct-ov-earlier .ct-panel{border-width:4px;box-shadow:6px 6px 0 var(--act)}
+.ct-ov-lead .ct-panel{border-width:6px;box-shadow:12px 12px 0 var(--hi)}
+/* POLISH-1 N2: stream-scale lettering on the lead panel. The stage is 1920 px wide, so a 1280×720 source shows it at 2/3:
+   caption 28 → 19 px, bubble 30 → 20 px, generated label 18 → 12 px, credit 24 → 16 px on screen. Ink on white stays 14.7:1. */
+.ct-ov-lead .ct-caption{max-width:54%;font-size:28px;line-height:1.15;padding:10px 16px;border-right-width:4px;border-bottom-width:4px}
+.ct-ov-lead .ct-bubble{max-width:44%;font-size:30px;line-height:1.1;border-width:4px;padding:.55em 1em}
+.ct-ov-lead .ct-bubble::after{width:24px;height:24px;bottom:-14px;border-right-width:4px;border-bottom-width:4px}
+.ct-ov-lead .ct-bubble[data-at=bottom-left]::after{bottom:auto;top:-14px}
+.ct-ov-lead .ct-gen{font-size:18px;margin-top:6px;color:var(--ink-3)}
+.ct-ov-credit{justify-self:end;background:var(--hi);color:var(--ink);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);font:700 24px/1 var(--f-ui);letter-spacing:.1em;text-transform:uppercase;padding:8px 12px}
+/* W1: the poll bubble sits left of the strip (48 + 720 + 24), so it never covers the earlier panels. */
+.ct-ov-poll{position:absolute;right:792px;top:48px;width:620px;background:var(--paper);border:6px solid var(--ink);border-radius:50%/44%;padding:56px 72px 64px;box-shadow:10px 10px 0 var(--act)}
+.ct-ov-poll::after{content:'';position:absolute;bottom:-34px;right:120px;width:56px;height:56px;background:var(--paper);border-right:6px solid var(--ink);border-bottom:6px solid var(--ink);transform:rotate(40deg) skew(14deg,14deg)}
+.ct-ov-poll__q{font:400 44px/1 var(--f-display);text-transform:uppercase;letter-spacing:.04em;text-align:center;margin-bottom:16px}
+.ct-ov-poll ol{display:grid;gap:10px}
+.ct-ov-poll li{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:6px 10px;border:3px solid var(--ink);overflow:hidden;z-index:0}
+.ct-ov-poll li i{position:absolute;inset:0 auto 0 0;background:var(--act);border-right:3px solid var(--ink);z-index:-1}
+.ct-ov-poll__key{font:400 30px/1 var(--f-display)}
+.ct-ov-poll__text{font:700 22px/1.15 var(--f-letter);text-transform:uppercase}
+.ct-ov-poll__pct{font:700 22px/1 var(--f-ui)}
+.ct-ov-poll__hint{text-align:center;margin-top:12px;font:700 18px/1 var(--f-ui);letter-spacing:.06em;text-transform:uppercase}
+.ct-ov-catchup{position:absolute;left:96px;right:96px;top:120px;display:grid;gap:18px;justify-items:center}
+.ct-ov-catchup__title{font:400 120px/.9 var(--f-display);text-transform:uppercase;letter-spacing:.03em;color:var(--hi);-webkit-text-stroke:5px var(--ink);paint-order:stroke fill;text-shadow:10px 10px 0 var(--ink)}
+.ct-ov-catchup__raid{background:var(--hot);color:var(--ink);font:700 28px/1.2 var(--f-ui);padding:12px 20px;border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.ct-ov-catchup__row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%}
+.ct-ov-catchup__cell .ct-panel{border-width:6px;box-shadow:12px 12px 0 var(--act)}
+.ct-ov-catchup__cell:nth-child(2) .ct-panel{box-shadow:12px 12px 0 var(--hi)}
+.ct-ov-catchup__cell:nth-child(3) .ct-panel{box-shadow:12px 12px 0 var(--hot)}
+/* POLISH-1 N2: the catch-up cells are about 560 px on the stage, so they get their own stream-scale lettering (13-15 px on a 720p source). */
+.ct-ov-catchup__cell .ct-caption{max-width:58%;font-size:20px;line-height:1.15;padding:6px 10px}
+.ct-ov-catchup__cell .ct-bubble{max-width:48%;font-size:22px;line-height:1.1;border-width:3px}
+.ct-ov-catchup__cell .ct-gen{font-size:14px}
+.ct-ov-catchup__cell{animation:ct-ov-in .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes ct-ov-in{from{opacity:0;transform:translateY(40px) rotate(-2deg)}}
+@media (prefers-reduced-motion:reduce){.ct-ov-catchup__cell{animation:none}}
+
+.ct-overlay-note{position:absolute;left:16px;right:16px;bottom:16px;color:var(--paper);font:600 14px/1.45 var(--f-ui);text-align:center}
+.ct-overlay-note code{background:color-mix(in srgb,var(--paper) 14%,transparent);padding:2px 6px}
+@media (min-aspect-ratio:16/10){.ct-overlay-note{display:none}}
+/* m12: preview-only stamp while the overlay is hidden. */
+.ct-stage__hidden{position:absolute;top:50%;left:50%;translate:-50% -50%;rotate:-6deg;margin:0;padding:8px 40px;font:400 120px/1.1 var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--hi);border:12px double var(--ink)}
+/* UI3: preview-only note for the loading, error and empty states. Ink glass with an amber edge; never red, never on stream. */
+.ct-stage__state{position:absolute;left:40px;bottom:40px;max-width:1000px;margin:0;padding:18px 24px;font:500 30px/1.35 var(--f-ui);color:var(--paper);background:color-mix(in srgb,var(--ink) 88%,transparent);border:2px dashed var(--hi)}
+.ct-stage__state strong{display:block;font:400 44px/1.05 var(--f-display);letter-spacing:.04em;text-transform:uppercase}
+.ct-stage__backdrop:not(:has(.ct-art)){background:var(--ink)}
+/* HYPE-SPLASH: a short splash, bottom left of the stage, clear of the panel strip (bottom right) and the poll (top).
+   Bangers in amber with an ink stroke on a coral burst; 150 px on the stage is 100 px on a 720p source.
+   It never takes clicks, and the catch-up replaces it. Reduced motion: it simply appears and goes. */
+.ct-ov-hype{position:absolute;left:110px;bottom:130px;display:grid;justify-items:start;gap:14px;pointer-events:none;z-index:5;animation:ct-ov-hype 4s cubic-bezier(.2,1.4,.4,1) both}
+.ct-ov-hype::before{content:'';position:absolute;inset:-60px -90px -50px -70px;z-index:-1;background:var(--hot);border:6px solid var(--ink);clip-path:polygon(0 18%,14% 10%,20% 0,34% 8%,50% 0,62% 9%,80% 2%,86% 16%,100% 20%,94% 40%,100% 58%,88% 70%,92% 92%,72% 88%,58% 100%,44% 90%,26% 100%,18% 86%,2% 90%,8% 66%,0 50%,6% 34%);filter:drop-shadow(14px 14px 0 var(--act))}
+.ct-ov-hype__title{margin:0;font:400 150px/.9 var(--f-display);letter-spacing:.03em;text-transform:uppercase;color:var(--hi);-webkit-text-stroke:6px var(--ink);paint-order:stroke fill;text-shadow:8px 8px 0 var(--ink)}
+.ct-ov-hype__level{margin:0;background:var(--act);color:var(--ink);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);font:400 56px/1 var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:10px 22px}
+@keyframes ct-ov-hype{0%{opacity:0;transform:scale(.6) rotate(-6deg)}10%{opacity:1;transform:scale(1.06) rotate(-2deg)}16%{transform:scale(1) rotate(-2deg)}86%{opacity:1;transform:scale(1) rotate(-2deg)}100%{opacity:0;transform:scale(1) rotate(-2deg)}}
+@media (prefers-reduced-motion:reduce){.ct-ov-hype{animation:none;transform:rotate(-2deg)}}

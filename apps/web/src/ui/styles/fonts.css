@@ -1,0 +1,5 @@
+/* Self-hosted fonts (SIL Open Font Licence 1.1, see ../fonts/OFL-<font>.txt, one upstream licence per family). Downloaded once from Google Fonts; nothing loads from a CDN at runtime. Latin subset. */
+@font-face{font-family:'Bangers';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/bangers-400-latin.woff2') format('woff2')}
+@font-face{font-family:'Comic Neue';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/comic-neue-400-latin.woff2') format('woff2')}
+@font-face{font-family:'Comic Neue';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/comic-neue-700-latin.woff2') format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('../fonts/space-grotesk-var-latin.woff2') format('woff2')}

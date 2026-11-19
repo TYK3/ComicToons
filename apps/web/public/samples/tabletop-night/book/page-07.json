@@ -1,0 +1,59 @@
+{
+  "kind": "peak",
+  "title": "The peak",
+  "panels": [
+    {
+      "id": "tabletop-night-panel-2",
+      "caption": "The comeback roll lands—and the studio erupts.",
+      "dialogue": [
+        "One roll. Please work...",
+        "CHAT: We believe. Roll it!"
+      ],
+      "scene": "Juniper bets everything on one roll.",
+      "characters": [
+        "Stargazer1"
+      ],
+      "mood": "triumphant",
+      "altText": "Juniper bets everything on one roll.",
+      "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+      "at": 480,
+      "composition": 2,
+      "sfx": "POW!",
+      "bubblePlacement": "top-left",
+      "storyBeats": [
+        {
+          "frame": 3,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+          "scene": "Juniper bets everything on one roll.",
+          "dialogue": [
+            "One roll. Please work...",
+            "CHAT: We believe. Roll it!"
+          ],
+          "sfx": "CLACK",
+          "climax": false
+        },
+        {
+          "frame": 4,
+          "imageUrl": "tabletop-night/art/panel-story-tabletop-4.png",
+          "scene": "The roll opens the vault. The party is safe.",
+          "dialogue": [
+            "YES! The vault is open!",
+            "CHAT: NAT TWENTY! WE LIVED!"
+          ],
+          "sfx": "KRA-KOOM!",
+          "climax": true
+        }
+      ],
+      "storyCaption": "The comeback roll lands—and the studio erupts.",
+      "provenance": {
+        "provider": "library",
+        "asset": "panel-story-tabletop-3.png",
+        "style": "pop-ink",
+        "fallback": false
+      },
+      "origin": "sample"
+    }
+  ],
+  "number": 7,
+  "chapter": 2
+}

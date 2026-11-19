@@ -1,0 +1,35 @@
+import { useEffect, useState } from 'react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, MessageSquare, Pause, Play, ShieldCheck, Square } from 'lucide-react';
+import manifest from '../../../../fixtures/art/generated/manifest.json';
+import type { Panel } from '../types';
+import { Brand } from './ui';
+import { ComicPanel } from './ComicPanel';
+
+function panel(asset: number, caption: string, dialogue: string, sfx: string): Panel {
+  const entry = manifest[asset]!;
+  return { id: `preview-${asset}`, imageUrl: `/art/generated/${entry.file}`, altText: entry.sceneSummary, caption, dialogue: [dialogue], sfx, at: ({0:60,2:120,1:180} as Record<number, number>)[asset] ?? (asset + 1) * 60, provenance: { provider: 'library', asset: entry.file, style: entry.style, fallback: false } };
+}
+const pop = [panel(0, 'The crew settles in. One more run?', 'Nova: This is absolutely the last attempt.', 'GO!'), panel(2, 'One hit left. A whole chat holding its breath.', 'Moss: Wait for it. Wait for it…', 'GASP!'), panel(1, 'The comeback that became stream lore.', 'Nova: Okay. Maybe one more.', 'POW!')];
+const noir = [panel(7, 'Rain on the window. The night crew arrives.', 'Nova: Stay a little longer.', 'HUSH'), panel(12, 'A quiet melody turns into a midnight jam.', 'Moss: This one goes on the record.', 'RIFF!'), panel(15, 'The next chapter is already waiting.', 'Nova: Same time tomorrow?', 'TO BE…')];
+const chats = ['Moss: one more run?', 'Orbit: !ink', 'Juniper: ONE HIT LEFT', 'Moss: THE COMEBACK'];
+
+export function Landing() {
+  const [style, setStyle] = useState<'pop' | 'noir'>('pop');
+  const [step, setStep] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    if (paused || media.matches) { setStep(3); return; }
+    const timer = setInterval(() => setStep(value => { if (value >= 2) clearInterval(timer); return Math.min(3, value + 1); }), 1100);
+    return () => clearInterval(timer);
+  }, [paused]);
+  const panels = style === 'pop' ? pop : noir;
+  return <div className="landing"><a className="skip-link" href="#main-content">Skip to content</a><header className="landing-nav"><Brand/><nav aria-label="Main navigation"><a href="#how">How it works</a><a href="#styles">Art direction</a><a href="/studio">Open studio<ArrowUpRight size={16}/></a></nav></header>
+    <main id="main-content"><section className="landing-hero"><div className="hero-copy"><h1>Make your stream <em>comic history.</em></h1><div className="hero-intro"><p>The clutch. The chaos. The chat that lost it.<br/>Turn the moments they missed into a comic they’ll remember.</p><div className="hero-actions"><a className="button button-primary" href={`/studio?demo=1&style=${style === 'noir' ? 'noir' : 'risograph'}`}>Watch the demo<Play size={17} fill="currentColor"/></a><a className="hero-secondary" href="#recap">See the recap<ArrowDown size={17}/></a></div></div></div>
+    <div className="story-machine"><aside className="sample-chat" aria-label="Invented sample chat"><header><MessageSquare size={17}/><strong>The chat goes wild.</strong><span>Sample stream</span></header><div className="chat-lines">{chats.map((line, i) => <p className={step >= i ? 'chat-visible' : ''} key={line}><span>{line.split(':')[0]}</span>{line.split(':')[1]}</p>)}</div><div className="highlight-signal"><Check size={17}/>{step ? 'Highlight detected: clutch comeback' : 'Listening for the next great moment…'}</div><button className="inline-button" onClick={() => { if (paused) setStep(0); setPaused(value => !value); }}>{paused ? <Play size={14}/> : <Pause size={14}/>} {paused ? 'Replay assembly' : 'Pause assembly'}</button></aside><div className="assembling-strip" aria-label="Comic assembled from sample moments">{panels.map((item, i) => <div key={item.id} className={`assembly-panel ${step > i ? 'is-assembled' : ''}`}><ComicPanel panel={item} index={i}/></div>)}</div></div>
+    <div className="trust-strip"><span><Check size={17}/>No keys. Just press play.</span><span><ShieldCheck size={17}/>You approve every panel.</span><span><Square size={16}/>Panic hide. Always in reach.</span></div></section>
+    <section className="landing-how" id="how"><h2>From “you had to be there”<br/><em>to “here’s what happened.”</em></h2><ol><li><span>01</span><h3>Stream.</h3><p>Chat, cheers and raids enter a rolling window. Opt in with <strong>!ink</strong> to join the cast.</p><small>Ingest → Normalize → Dedupe</small></li><li><span>02</span><h3>Find the spark.</h3><p>Highlights become a script. Original comic art meets your final editorial say.</p><small>Highlights → Script → Approval</small></li><li><span>03</span><h3>Keep the issue.</h3><p>Give late arrivals context in OBS. End the stream with a recap worth sharing.</p><small>Overlay → Recap → Share card</small></li></ol><p className="sample-disclosure">Try the local sample pipeline today. Real Twitch connection is planned; this demo uses invented chat.</p></section>
+    <section className="landing-recap" id="recap"><div className="recap-pitch"><h2>A good night.<br/><em>A great issue.</em></h2><p>Not a wall of chat. A story with a beginning, a comeback, and a very loud ending.</p><p>Your approved moments become a shareable page and a downloadable comic card. The lore gets a permanent address.</p><a className="text-link" href="/studio?demo=1">Make this your next recap<ArrowRight size={18}/></a></div><div className="preview-magazine"><header><strong>COMICTOONS</strong><span>THE DEMO ISSUE · NO. 001</span></header><h3>The last<br/><em>last attempt.</em></h3><ComicPanel panel={pop[2]!} index={2}/><footer><span>Nova & the night crew</span><span>Original art. Unforgettable chat.</span></footer></div></section>
+    <section className="landing-styles" id="styles"><div className="styles-heading"><div><h2>Same crew.<br/><em>Different after hours.</em></h2><p>Pick the ink that fits your stream.</p></div><div className="style-switch" role="group" aria-label="Preview art style"><button aria-pressed={style === 'pop'} onClick={() => setStyle('pop')}>Festival colour</button><button aria-pressed={style === 'noir'} onClick={() => setStyle('noir')}>Midnight noir</button></div></div><div className="style-duet"><article data-selected={style === 'pop'}><img src={pop[0]!.imageUrl} alt={pop[0]!.altText} loading="lazy"/><div><h3>Festival colour</h3><p>Big feelings. Bright colour. No quiet entrances.</p></div></article><article data-selected={style === 'noir'}><img src={noir[0]!.imageUrl} alt={noir[0]!.altText} loading="lazy"/><div><h3>Midnight noir</h3><p>Rain-soaked nights. A little mystery. Your people.</p></div></article></div></section>
+    <section className="landing-last"><h2>The next great story<br/>is already in your chat.</h2><a className="button button-primary" href={`/studio?demo=1&style=${style === 'noir' ? 'noir' : 'risograph'}`}>Watch the demo<ArrowUpRight size={18}/></a></section></main><footer className="landing-footer"><Brand/><span>Made live. Remembered in ink.</span><span>Original art · Invented sample chat · Keyless demo</span></footer></div>;
+}

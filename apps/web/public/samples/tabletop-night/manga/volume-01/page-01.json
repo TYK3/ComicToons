@@ -1,0 +1,95 @@
+{
+  "number": 1,
+  "heroId": "tabletop-night-panel-0-shot-0-0",
+  "summary": "The story, moment by moment.",
+  "panels": [
+    {
+      "panel": {
+        "id": "tabletop-night-panel-0-shot-0-0",
+        "caption": "Juniper and Pixel enter the crystal vault.",
+        "dialogue": [
+          "We made it. Where is the key?",
+          "CHAT: This place is HUGE."
+        ],
+        "scene": "Juniper and Pixel enter the crystal vault.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Juniper and Pixel enter the crystal vault.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-0.png",
+        "at": 0,
+        "composition": 0,
+        "sfx": "",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The vault run begins. Chat settles in for the ride.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-0",
+        "atlas": {
+          "frame": 0,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 1,
+      "hero": true,
+      "span": 12
+    },
+    {
+      "panel": {
+        "id": "tabletop-night-panel-0-shot-1-0",
+        "caption": "Pixel runs off with the vault key.",
+        "dialogue": [
+          "Pixel! Drop the key!",
+          "CHAT: The fox has the key!!"
+        ],
+        "scene": "Juniper and Pixel enter the crystal vault.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Pixel runs off with the vault key.",
+        "imageUrl": "tabletop-night/art/panel-story-tabletop-1.png",
+        "at": 0,
+        "composition": 0,
+        "sfx": "ZIP!",
+        "bubblePlacement": "top-left",
+        "storyCaption": "The vault run begins. Chat settles in for the ride.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-tabletop-0.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "tabletop-night-panel-0",
+        "atlas": {
+          "frame": 1,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 2,
+      "hero": false,
+      "span": 12
+    }
+  ]
+}

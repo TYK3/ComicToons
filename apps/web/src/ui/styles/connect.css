@@ -1,0 +1,23 @@
+.ct-connect{min-height:100vh;background:var(--paper) var(--fest-wash)}
+.ct-connect__main{max-width:1120px;margin:0 auto;padding:48px 24px 72px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px;align-items:start}
+.ct-connect__card{min-width:0;background:var(--paper);border:var(--b);box-shadow:10px 10px 0 var(--act);padding:32px;display:grid;gap:18px}
+.ct-connect__card h1{font-size:clamp(40px,6vw,76px);text-wrap:balance;overflow-wrap:anywhere;min-width:0}
+.ct-connect__lede{font-size:18px;line-height:1.5}
+.ct-connect__card .ct-btn--twitch{min-height:56px;font-size:18px;justify-content:center}
+.ct-connect__acts{display:grid;gap:12px}
+.ct-connect__acts .ct-btn{justify-content:center}
+.ct-connect__err,.ct-banner--paper.ct-connect__err{margin:0;border-left:8px solid var(--hot)}
+.ct-ready{display:grid;border:var(--b-hair)}
+.ct-ready li{display:flex;gap:12px;align-items:center;min-height:44px;padding:8px 14px;min-width:0;overflow-wrap:anywhere;line-height:1.3;border-bottom:2px solid var(--ink);font-weight:600}
+.ct-ready li:last-child{border-bottom:0}
+.ct-ready li span:first-child{width:24px;font:400 22px/1 var(--f-display)}
+.ct-ready li[data-ok=true]{background:var(--fest-teal-soft)}
+.ct-ready li[data-ok=false]{color:var(--ink-3);background:var(--paper-2)}
+.ct-connect__why{background:var(--act);color:var(--ink);border:var(--b);padding:28px;display:grid;gap:16px;box-shadow:10px 10px 0 var(--ink)}
+.ct-connect__why h2{font-size:36px;color:var(--ink)}
+.ct-connect__why .ct-note{color:var(--ink)}
+.ct-connect__why :focus-visible{outline-color:var(--ink)}
+.ct-scopes{display:grid;gap:12px}
+.ct-scopes li{display:grid;gap:4px;border-left:4px solid var(--ink);padding-left:12px}
+.ct-scopes code{font:700 13px/1.2 ui-monospace,Menlo,monospace;background:var(--hi);color:var(--ink);border:1.5px solid var(--ink);padding:3px 6px;justify-self:start}
+@media (max-width:860px){.ct-connect__main{grid-template-columns:minmax(0,1fr);padding:24px 12px 48px}.ct-connect__card{padding:20px;box-shadow:6px 6px 0 var(--act)}.ct-connect__card .ct-btn--twitch{min-height:52px}}

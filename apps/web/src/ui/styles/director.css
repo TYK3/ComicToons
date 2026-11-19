@@ -1,0 +1,32 @@
+.ct-director{min-height:100vh;background:var(--paper-2)}
+.ct-director__bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--act);color:var(--ink);border-bottom:var(--b);min-height:var(--bar-h)}
+.ct-director__bar .ct-btn--back{margin-left:auto}
+.ct-director__main{max-width:1180px;margin:0 auto;padding:20px 24px 48px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start}
+.ct-director__panic{grid-column:1/-1;min-height:64px;font-size:18px;justify-content:center;border-color:var(--ink)}
+/* B2: Panic stays in reach while the page scrolls (it sticks under the bar at every width). */
+.ct-director__panic{position:sticky;top:calc(var(--bar-h) + 8px);z-index:39;box-shadow:0 0 0 4px var(--paper-2)}
+/* W5: hidden is loud, not disabled-looking: solid ink frame, flat deep-coral edges (FESTIVAL-UI p2, was hazard stripes; 5.4:1 on paper), plus a HIDDEN stamp in the bar. */
+.ct-director__panic[aria-pressed=true]{border:4px solid var(--ink);background:linear-gradient(var(--fest-coral-deep),var(--fest-coral-deep)) left/18px 100% no-repeat,linear-gradient(var(--fest-coral-deep),var(--fest-coral-deep)) right/18px 100% no-repeat,var(--paper);color:var(--ink)}
+.ct-director__narrow{display:none}
+@media (max-width:600px){.ct-director__bar:has(.ct-director__hidden)>.ct-chip{display:none}.ct-director__wide{display:none}.ct-director__narrow{display:inline}.ct-director__hidden{font-size:14px;padding:4px 6px}}
+.ct-director__hidden{padding:4px 8px;background:var(--paper);color:var(--ink);border:2px solid var(--ink);font:400 18px/1 var(--f-display);letter-spacing:.06em;text-transform:uppercase;transform:rotate(-3deg)}
+.ct-director__next{grid-row:span 3;display:grid;gap:14px;padding:16px;background:var(--paper);border:var(--b);box-shadow:var(--sh-2)}
+.ct-director__cap{font:700 22px/1.2 var(--f-letter);text-transform:uppercase}
+.ct-director__decide{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.ct-director__decide .ct-btn{min-height:76px;font:400 32px/1 var(--f-display);letter-spacing:.05em;text-transform:uppercase;justify-content:center}
+.ct-director__idle{padding:28px 16px;border:2px dashed var(--ink);text-align:center;color:var(--ink-3)}
+.ct-director__tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ct-tile{display:grid;gap:8px;align-content:start;padding:12px;background:var(--paper);border:var(--b-hair);box-shadow:var(--sh-1)}
+.ct-tile__big{font:400 26px/1 var(--f-display);letter-spacing:.03em}
+.ct-tile .ct-btn{justify-content:center}
+.ct-director__look,.ct-director__onair{display:grid;gap:10px;padding:12px;background:var(--paper);border:var(--b-hair)}
+.ct-director__look .ct-lookswitch{flex-wrap:wrap}
+@media (max-width:820px){
+  .ct-director__main{grid-template-columns:1fr;padding:12px 12px 32px;gap:14px}
+  .ct-director__next{grid-row:auto;padding:12px}
+  .ct-director__bar .ct-sample{display:none}
+  .ct-director__look .ct-seg{display:grid;grid-template-columns:repeat(4,1fr);width:100%}
+  .ct-director__look .ct-seg.ct-seg button{padding:0 4px;font-size:13px}
+}
+.ct-director__empty{display:grid;gap:10px}
+.ct-director__tiles .ct-skel{min-height:112px}

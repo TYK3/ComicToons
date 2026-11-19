@@ -1,0 +1,783 @@
+{
+  "id": "speedrun-fail",
+  "streamTitle": "One jump from glory",
+  "streamer": {
+    "displayName": "Orbit",
+    "avatarDescription": "Original anonymous explorer with a round helmet and scarf"
+  },
+  "duration": 1440,
+  "events": [
+    {
+      "id": "speedrun-fail-0",
+      "t": 0,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-1",
+      "t": 15,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "!ink"
+    },
+    {
+      "id": "speedrun-fail-2",
+      "t": 30,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-3",
+      "t": 45,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-4",
+      "t": 60,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-5",
+      "t": 75,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-6",
+      "t": 90,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-7",
+      "t": 105,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-8",
+      "t": 120,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-9",
+      "t": 135,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-10",
+      "t": 150,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-11",
+      "t": 165,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-12",
+      "t": 180,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-13",
+      "t": 195,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-14",
+      "t": 210,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-15",
+      "t": 225,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-16",
+      "t": 240,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-17",
+      "t": 255,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-18",
+      "t": 270,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-19",
+      "t": 285,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-20",
+      "t": 300,
+      "type": "raid",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "A new personal best is within reach.",
+      "from": "MoonlightCrew",
+      "viewers": 42
+    },
+    {
+      "id": "speedrun-fail-21",
+      "t": 315,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-22",
+      "t": 330,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-23",
+      "t": 345,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "A new personal best is within reach."
+    },
+    {
+      "id": "speedrun-fail-24",
+      "t": 360,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-25",
+      "t": 375,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-26",
+      "t": 390,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-27",
+      "t": 405,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-28",
+      "t": 420,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-29",
+      "t": 435,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-30",
+      "t": 450,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-31",
+      "t": 465,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-32",
+      "t": 480,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-33",
+      "t": 495,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-34",
+      "t": 510,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-35",
+      "t": 525,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-36",
+      "t": 540,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-37",
+      "t": 555,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-38",
+      "t": 570,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-39",
+      "t": 585,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-40",
+      "t": 600,
+      "type": "moment",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "The shortcut becomes a scenic detour.",
+      "moderator": true
+    },
+    {
+      "id": "speedrun-fail-41",
+      "t": 615,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-42",
+      "t": 630,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-43",
+      "t": 645,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-44",
+      "t": 660,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-45",
+      "t": 675,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-46",
+      "t": 690,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-47",
+      "t": 705,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "The shortcut becomes a scenic detour."
+    },
+    {
+      "id": "speedrun-fail-48",
+      "t": 720,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-49",
+      "t": 735,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-50",
+      "t": 750,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-51",
+      "t": 765,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-52",
+      "t": 780,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-53",
+      "t": 795,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-54",
+      "t": 810,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-55",
+      "t": 825,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-56",
+      "t": 840,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-57",
+      "t": 855,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-58",
+      "t": 870,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-59",
+      "t": 885,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-60",
+      "t": 900,
+      "type": "hype_train_begin",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "Chat rallies for one more attempt.",
+      "level": 2
+    },
+    {
+      "id": "speedrun-fail-61",
+      "t": 915,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-62",
+      "t": 930,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-63",
+      "t": 945,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-64",
+      "t": 960,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-65",
+      "t": 975,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-66",
+      "t": 990,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-67",
+      "t": 1005,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-68",
+      "t": 1020,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-69",
+      "t": 1035,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-70",
+      "t": 1050,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-71",
+      "t": 1065,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "Chat rallies for one more attempt."
+    },
+    {
+      "id": "speedrun-fail-72",
+      "t": 1080,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-73",
+      "t": 1095,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-74",
+      "t": 1110,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-75",
+      "t": 1125,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-76",
+      "t": 1140,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-77",
+      "t": 1155,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-78",
+      "t": 1170,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-79",
+      "t": 1185,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-80",
+      "t": 1200,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "!noink"
+    },
+    {
+      "id": "speedrun-fail-81",
+      "t": 1215,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-82",
+      "t": 1230,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-83",
+      "t": 1245,
+      "type": "chat",
+      "user": "viewer-5",
+      "name": "Stargazer5",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-84",
+      "t": 1260,
+      "type": "chat",
+      "user": "viewer-6",
+      "name": "Stargazer6",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-85",
+      "t": 1275,
+      "type": "chat",
+      "user": "viewer-7",
+      "name": "Stargazer7",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-86",
+      "t": 1290,
+      "type": "chat",
+      "user": "viewer-8",
+      "name": "Stargazer8",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-87",
+      "t": 1305,
+      "type": "chat",
+      "user": "viewer-9",
+      "name": "Stargazer9",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-88",
+      "t": 1320,
+      "type": "chat",
+      "user": "viewer-10",
+      "name": "Stargazer10",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-89",
+      "t": 1335,
+      "type": "chat",
+      "user": "viewer-11",
+      "name": "Stargazer11",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-90",
+      "t": 1350,
+      "type": "chat",
+      "user": "viewer-12",
+      "name": "Stargazer12",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-91",
+      "t": 1365,
+      "type": "chat",
+      "user": "viewer-0",
+      "name": "Stargazer0",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-92",
+      "t": 1380,
+      "type": "chat",
+      "user": "viewer-1",
+      "name": "Stargazer1",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-93",
+      "t": 1395,
+      "type": "chat",
+      "user": "viewer-2",
+      "name": "Stargazer2",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-94",
+      "t": 1410,
+      "type": "chat",
+      "user": "viewer-3",
+      "name": "Stargazer3",
+      "text": "The final jump finally lands."
+    },
+    {
+      "id": "speedrun-fail-95",
+      "t": 1425,
+      "type": "chat",
+      "user": "viewer-4",
+      "name": "Stargazer4",
+      "text": "The final jump finally lands."
+    }
+  ]
+}

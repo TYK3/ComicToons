@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "id": "tabletop-night",
+      "title": "The dice had other plans",
+      "theme": "festival",
+      "sample": true,
+      "panels": "tabletop-night/panels.json",
+      "panelCount": 4,
+      "art": [
+        "tabletop-night/art/panel-story-tabletop-0.png",
+        "tabletop-night/art/panel-story-tabletop-1.png",
+        "tabletop-night/art/panel-story-tabletop-2.png",
+        "tabletop-night/art/panel-story-tabletop-3.png",
+        "tabletop-night/art/panel-story-tabletop-4.png",
+        "tabletop-night/art/panel-story-tabletop-5.png"
+      ],
+      "catchup": {
+        "channel": "The dice had other plans",
+        "minutes": 20,
+        "panels": [
+          {
+            "id": "tabletop-night-panel-1",
+            "caption": "One close call sends the whole chat into suspense.",
+            "dialogue": [
+              "Nobody move. I think it heard us.",
+              "CHAT: Behind you. BEHIND YOU!"
+            ],
+            "scene": "A crystal guardian wakes behind Juniper.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "A crystal guardian wakes behind Juniper.",
+            "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+            "at": 240,
+            "composition": 1,
+            "sfx": "GASP!",
+            "bubblePlacement": "top-right",
+            "storyBeats": [
+              {
+                "frame": 2,
+                "imageUrl": "tabletop-night/art/panel-story-tabletop-2.png",
+                "scene": "A crystal guardian wakes behind Juniper.",
+                "dialogue": [
+                  "Nobody move. I think it heard us.",
+                  "CHAT: Behind you. BEHIND YOU!"
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "One close call sends the whole chat into suspense.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-tabletop-2.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "tabletop-night-panel-2",
+            "caption": "The comeback roll lands—and the studio erupts.",
+            "dialogue": [
+              "One roll. Please work...",
+              "CHAT: We believe. Roll it!"
+            ],
+            "scene": "Juniper bets everything on one roll.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "triumphant",
+            "altText": "Juniper bets everything on one roll.",
+            "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+            "at": 480,
+            "composition": 2,
+            "sfx": "POW!",
+            "bubblePlacement": "top-left",
+            "storyBeats": [
+              {
+                "frame": 3,
+                "imageUrl": "tabletop-night/art/panel-story-tabletop-3.png",
+                "scene": "Juniper bets everything on one roll.",
+                "dialogue": [
+                  "One roll. Please work...",
+                  "CHAT: We believe. Roll it!"
+                ],
+                "sfx": "CLACK",
+                "climax": false
+              },
+              {
+                "frame": 4,
+                "imageUrl": "tabletop-night/art/panel-story-tabletop-4.png",
+                "scene": "The roll opens the vault. The party is safe.",
+                "dialogue": [
+                  "YES! The vault is open!",
+                  "CHAT: NAT TWENTY! WE LIVED!"
+                ],
+                "sfx": "KRA-KOOM!",
+                "climax": true
+              }
+            ],
+            "storyCaption": "The comeback roll lands—and the studio erupts.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-tabletop-3.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "tabletop-night-panel-3",
+            "caption": "A new crew arrives just in time to celebrate.",
+            "dialogue": [
+              "Next time, YOU carry the key.",
+              "CHAT: New crew, same chaos."
+            ],
+            "scene": "Pixel returns the key as new friends arrive.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "Pixel returns the key as new friends arrive.",
+            "imageUrl": "tabletop-night/art/panel-story-tabletop-5.png",
+            "at": 720,
+            "composition": 3,
+            "sfx": "WHOOSH!",
+            "bubblePlacement": "top-right",
+            "storyBeats": [
+              {
+                "frame": 5,
+                "imageUrl": "tabletop-night/art/panel-story-tabletop-5.png",
+                "scene": "Pixel returns the key as new friends arrive.",
+                "dialogue": [
+                  "Next time, YOU carry the key.",
+                  "CHAT: New crew, same chaos."
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "A new crew arrives just in time to celebrate.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-tabletop-5.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          }
+        ],
+        "panelCount": 3,
+        "approvedCount": 3,
+        "sample": true
+      },
+      "comicBook": {
+        "title": "The dice had other plans",
+        "cover": "tabletop-night/book/page-01.json",
+        "pages": [
+          "tabletop-night/book/page-01.json",
+          "tabletop-night/book/page-02.json",
+          "tabletop-night/book/page-03.json",
+          "tabletop-night/book/page-04.json",
+          "tabletop-night/book/page-05.json",
+          "tabletop-night/book/page-06.json",
+          "tabletop-night/book/page-07.json",
+          "tabletop-night/book/page-08.json"
+        ],
+        "chapters": [
+          {
+            "title": "Chapter 1",
+            "start": 0,
+            "end": 0,
+            "panels": 1,
+            "cameos": 0,
+            "page": 3
+          },
+          {
+            "title": "Chapter 2",
+            "start": 240,
+            "end": 720,
+            "panels": 3,
+            "cameos": 0,
+            "page": 6
+          }
+        ]
+      },
+      "manga": {
+        "title": "The dice had other plans",
+        "volumes": [
+          {
+            "number": 1,
+            "title": "The vault run begins. Chat settles in for the ride.",
+            "chapter": "Chapter 1",
+            "highlightId": "tabletop-night-panel-0",
+            "pages": [
+              "tabletop-night/manga/volume-01/page-01.json"
+            ]
+          },
+          {
+            "number": 2,
+            "title": "The comeback roll lands—and the studio erupts.",
+            "chapter": "Chapter 2",
+            "highlightId": "tabletop-night-panel-2",
+            "pages": [
+              "tabletop-night/manga/volume-02/page-01.json"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "speedrun-fail",
+      "title": "One jump from glory",
+      "theme": "sunset",
+      "sample": true,
+      "panels": "speedrun-fail/panels.json",
+      "panelCount": 4,
+      "art": [
+        "speedrun-fail/art/panel-story-speedrun-0.png",
+        "speedrun-fail/art/panel-story-speedrun-1.png",
+        "speedrun-fail/art/panel-story-speedrun-2.png",
+        "speedrun-fail/art/panel-story-speedrun-3.png",
+        "speedrun-fail/art/panel-story-speedrun-4.png",
+        "speedrun-fail/art/panel-story-speedrun-5.png"
+      ],
+      "catchup": {
+        "channel": "One jump from glory",
+        "minutes": 20,
+        "panels": [
+          {
+            "id": "speedrun-fail-panel-1",
+            "caption": "One tiny mistake becomes a legendary detour.",
+            "dialogue": [
+              "I meant to do that. Obviously.",
+              "CHAT: New scenic route unlocked."
+            ],
+            "scene": "Orbit clings to the ledge, stunned.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "Orbit clings to the ledge, stunned.",
+            "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+            "at": 240,
+            "composition": 0,
+            "sfx": "GASP!",
+            "bubblePlacement": "top-left",
+            "storyBeats": [
+              {
+                "frame": 2,
+                "imageUrl": "speedrun-fail/art/panel-story-speedrun-2.png",
+                "scene": "Orbit clings to the ledge, stunned.",
+                "dialogue": [
+                  "I meant to do that. Obviously.",
+                  "CHAT: New scenic route unlocked."
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "One tiny mistake becomes a legendary detour.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-speedrun-2.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "speedrun-fail-panel-2",
+            "caption": "The crew rallies behind one more attempt.",
+            "dialogue": [
+              "Okay. One more try. Together.",
+              "CHAT: Reset the nerves. You got this."
+            ],
+            "scene": "Orbit and Pip line up one last attempt.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "triumphant",
+            "altText": "Orbit and Pip line up one last attempt.",
+            "imageUrl": "speedrun-fail/art/panel-story-speedrun-3.png",
+            "at": 480,
+            "composition": 2,
+            "sfx": "POW!",
+            "bubblePlacement": "top-left",
+            "storyBeats": [
+              {
+                "frame": 3,
+                "imageUrl": "speedrun-fail/art/panel-story-speedrun-3.png",
+                "scene": "Orbit and Pip line up one last attempt.",
+                "dialogue": [
+                  "Okay. One more try. Together.",
+                  "CHAT: Reset the nerves. You got this."
+                ],
+                "sfx": "",
+                "climax": false
+              },
+              {
+                "frame": 4,
+                "imageUrl": "speedrun-fail/art/panel-story-speedrun-4.png",
+                "scene": "Orbit clears the gap and reaches the finish.",
+                "dialogue": [
+                  "LANDED! Stop the clock!",
+                  "CHAT: THAT IS THE RUN!"
+                ],
+                "sfx": "WHOOSH!",
+                "climax": true
+              }
+            ],
+            "storyCaption": "The crew rallies behind one more attempt.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-speedrun-3.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "speedrun-fail-panel-3",
+            "caption": "The comeback lands. Chat can finally breathe.",
+            "dialogue": [
+              "Never doubted us. Not even a little.",
+              "CHAT: We all aged ten years."
+            ],
+            "scene": "Orbit catches their breath while Pip celebrates.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "Orbit catches their breath while Pip celebrates.",
+            "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+            "at": 720,
+            "composition": 3,
+            "sfx": "WHOOSH!",
+            "bubblePlacement": "top-right",
+            "storyBeats": [
+              {
+                "frame": 5,
+                "imageUrl": "speedrun-fail/art/panel-story-speedrun-5.png",
+                "scene": "Orbit catches their breath while Pip celebrates.",
+                "dialogue": [
+                  "Never doubted us. Not even a little.",
+                  "CHAT: We all aged ten years."
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "The comeback lands. Chat can finally breathe.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-speedrun-5.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          }
+        ],
+        "panelCount": 3,
+        "approvedCount": 3,
+        "sample": true
+      },
+      "comicBook": {
+        "title": "One jump from glory",
+        "cover": "speedrun-fail/book/page-01.json",
+        "pages": [
+          "speedrun-fail/book/page-01.json",
+          "speedrun-fail/book/page-02.json",
+          "speedrun-fail/book/page-03.json",
+          "speedrun-fail/book/page-04.json",
+          "speedrun-fail/book/page-05.json",
+          "speedrun-fail/book/page-06.json",
+          "speedrun-fail/book/page-07.json",
+          "speedrun-fail/book/page-08.json"
+        ],
+        "chapters": [
+          {
+            "title": "Chapter 1",
+            "start": 0,
+            "end": 0,
+            "panels": 1,
+            "cameos": 0,
+            "page": 3
+          },
+          {
+            "title": "Chapter 2",
+            "start": 240,
+            "end": 720,
+            "panels": 3,
+            "cameos": 0,
+            "page": 6
+          }
+        ]
+      },
+      "manga": {
+        "title": "One jump from glory",
+        "volumes": [
+          {
+            "number": 1,
+            "title": "The record is in sight. Every second counts.",
+            "chapter": "Chapter 1",
+            "highlightId": "speedrun-fail-panel-0",
+            "pages": [
+              "speedrun-fail/manga/volume-01/page-01.json"
+            ]
+          },
+          {
+            "number": 2,
+            "title": "The comeback lands. Chat can finally breathe.",
+            "chapter": "Chapter 2",
+            "highlightId": "speedrun-fail-panel-3",
+            "pages": [
+              "speedrun-fail/manga/volume-02/page-01.json"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "irl-cooking",
+      "title": "The great pancake comeback",
+      "theme": "lagoon",
+      "sample": true,
+      "panels": "irl-cooking/panels.json",
+      "panelCount": 4,
+      "art": [
+        "irl-cooking/art/panel-story-cooking-0.png",
+        "irl-cooking/art/panel-story-cooking-1.png",
+        "irl-cooking/art/panel-story-cooking-2.png",
+        "irl-cooking/art/panel-story-cooking-3.png",
+        "irl-cooking/art/panel-story-cooking-4.png",
+        "irl-cooking/art/panel-story-cooking-5.png"
+      ],
+      "catchup": {
+        "channel": "The great pancake comeback",
+        "minutes": 20,
+        "panels": [
+          {
+            "id": "irl-cooking-panel-1",
+            "caption": "A small mishap becomes chat’s favourite moment.",
+            "dialogue": [
+              "...That is not a plate.",
+              "CHAT: Ceiling pancake. Five stars."
+            ],
+            "scene": "The pancake sticks to the range hood.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "The pancake sticks to the range hood.",
+            "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+            "at": 240,
+            "composition": 2,
+            "sfx": "GASP!",
+            "bubblePlacement": "top-left",
+            "storyBeats": [
+              {
+                "frame": 2,
+                "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+                "scene": "The pancake sticks to the range hood.",
+                "dialogue": [
+                  "...That is not a plate.",
+                  "CHAT: Ceiling pancake. Five stars."
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "A small mishap becomes chat’s favourite moment.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-cooking-2.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "irl-cooking-panel-2",
+            "caption": "The crew turns the chaos into a celebration.",
+            "dialogue": [
+              "Smaller flip. Bigger belief.",
+              "CHAT: We believe in the comeback."
+            ],
+            "scene": "Clover steadies the pan for a second attempt.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "triumphant",
+            "altText": "Clover steadies the pan for a second attempt.",
+            "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+            "at": 480,
+            "composition": 1,
+            "sfx": "POW!",
+            "bubblePlacement": "top-right",
+            "storyBeats": [
+              {
+                "frame": 3,
+                "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+                "scene": "Clover steadies the pan for a second attempt.",
+                "dialogue": [
+                  "Smaller flip. Bigger belief.",
+                  "CHAT: We believe in the comeback."
+                ],
+                "sfx": "",
+                "climax": false
+              },
+              {
+                "frame": 4,
+                "imageUrl": "irl-cooking/art/panel-story-cooking-4.png",
+                "scene": "The pancake lands perfectly in the pan.",
+                "dialogue": [
+                  "Breakfast is SAVED!",
+                  "CHAT: CHEF CLOVER! CHEF CLOVER!"
+                ],
+                "sfx": "PAT!",
+                "climax": true
+              }
+            ],
+            "storyCaption": "The crew turns the chaos into a celebration.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-cooking-3.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          },
+          {
+            "id": "irl-cooking-panel-3",
+            "caption": "One last wave before the kitchen closes.",
+            "dialogue": [
+              "Same time tomorrow? Bring a helmet.",
+              "CHAT: Worth every chaotic minute."
+            ],
+            "scene": "Clover shares the finished pancake celebration with Miso.",
+            "characters": [
+              "Stargazer1"
+            ],
+            "mood": "playful",
+            "altText": "Clover shares the finished pancake celebration with Miso.",
+            "imageUrl": "irl-cooking/art/panel-story-cooking-5.png",
+            "at": 720,
+            "composition": 3,
+            "sfx": "WHOOSH!",
+            "bubblePlacement": "top-right",
+            "storyBeats": [
+              {
+                "frame": 5,
+                "imageUrl": "irl-cooking/art/panel-story-cooking-5.png",
+                "scene": "Clover shares the finished pancake celebration with Miso.",
+                "dialogue": [
+                  "Same time tomorrow? Bring a helmet.",
+                  "CHAT: Worth every chaotic minute."
+                ],
+                "sfx": "",
+                "climax": false
+              }
+            ],
+            "storyCaption": "One last wave before the kitchen closes.",
+            "provenance": {
+              "provider": "library",
+              "asset": "panel-story-cooking-5.png",
+              "style": "pop-ink",
+              "fallback": false
+            },
+            "origin": "sample"
+          }
+        ],
+        "panelCount": 3,
+        "approvedCount": 3,
+        "sample": true
+      },
+      "comicBook": {
+        "title": "The great pancake comeback",
+        "cover": "irl-cooking/book/page-01.json",
+        "pages": [
+          "irl-cooking/book/page-01.json",
+          "irl-cooking/book/page-02.json",
+          "irl-cooking/book/page-03.json",
+          "irl-cooking/book/page-04.json",
+          "irl-cooking/book/page-05.json",
+          "irl-cooking/book/page-06.json",
+          "irl-cooking/book/page-07.json",
+          "irl-cooking/book/page-08.json"
+        ],
+        "chapters": [
+          {
+            "title": "Chapter 1",
+            "start": 0,
+            "end": 0,
+            "panels": 1,
+            "cameos": 0,
+            "page": 3
+          },
+          {
+            "title": "Chapter 2",
+            "start": 240,
+            "end": 720,
+            "panels": 3,
+            "cameos": 0,
+            "page": 6
+          }
+        ]
+      },
+      "manga": {
+        "title": "The great pancake comeback",
+        "volumes": [
+          {
+            "number": 1,
+            "title": "The pancake experiment gets a little too ambitious.",
+            "chapter": "Chapter 1",
+            "highlightId": "irl-cooking-panel-0",
+            "pages": [
+              "irl-cooking/manga/volume-01/page-01.json"
+            ]
+          },
+          {
+            "number": 2,
+            "title": "The crew turns the chaos into a celebration.",
+            "chapter": "Chapter 2",
+            "highlightId": "irl-cooking-panel-2",
+            "pages": [
+              "irl-cooking/manga/volume-02/page-01.json"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

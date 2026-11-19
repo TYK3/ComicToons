@@ -1,0 +1,912 @@
+[
+  {
+    "file": "panel-01-stream-start.webp",
+    "tags": [
+      "start",
+      "chat",
+      "hype"
+    ],
+    "mood": "excited",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Chat Crowd"
+    ],
+    "sceneSummary": "Nova starts the stream while chat floods in.",
+    "lettering": {
+      "faceBox": {
+        "x": 43,
+        "y": 24,
+        "width": 21,
+        "height": 31
+      },
+      "faceBoxes": [
+        {
+          "x": 43,
+          "y": 24,
+          "width": 21,
+          "height": 31
+        },
+        {
+          "x": 15,
+          "y": 58,
+          "width": 21,
+          "height": 28
+        }
+      ],
+      "subjectBox": {
+        "x": 13,
+        "y": 7,
+        "width": 85,
+        "height": 89
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-1.jpg",
+        "cell": 1,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova leans toward the desk; Pixel sits lower left; emote faces fill both margins."
+      }
+    }
+  },
+  {
+    "file": "panel-02-clutch-comeback.webp",
+    "tags": [
+      "clutch",
+      "comeback",
+      "victory",
+      "gaming"
+    ],
+    "mood": "triumphant",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A clutch comeback victory.",
+    "lettering": {
+      "faceBox": {
+        "x": 44,
+        "y": 23,
+        "width": 17,
+        "height": 28
+      },
+      "faceBoxes": [
+        {
+          "x": 44,
+          "y": 23,
+          "width": 17,
+          "height": 28
+        },
+        {
+          "x": 66,
+          "y": 64,
+          "width": 23,
+          "height": 31
+        }
+      ],
+      "subjectBox": {
+        "x": 25,
+        "y": 0,
+        "width": 65,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-1.jpg",
+        "cell": 2,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Raised arms reach the top edge; Pixel and the trophy fill the lower right and centre."
+      }
+    }
+  },
+  {
+    "file": "panel-03-boss-fight.webp",
+    "tags": [
+      "boss",
+      "tension",
+      "gaming",
+      "near-death"
+    ],
+    "mood": "tense",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova"
+    ],
+    "sceneSummary": "Near-death boss fight tension.",
+    "lettering": {
+      "faceBox": {
+        "x": 26,
+        "y": 25,
+        "width": 23,
+        "height": 36
+      },
+      "faceBoxes": [
+        {
+          "x": 26,
+          "y": 25,
+          "width": 23,
+          "height": 36
+        },
+        {
+          "x": 0,
+          "y": 49,
+          "width": 22,
+          "height": 34
+        }
+      ],
+      "subjectBox": {
+        "x": 0,
+        "y": 4,
+        "width": 100,
+        "height": 96
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-1.jpg",
+        "cell": 3,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova and Pixel occupy the left half; the boss and monitor are the main subject on the right."
+      }
+    }
+  },
+  {
+    "file": "panel-04-funny-fail.webp",
+    "tags": [
+      "fail",
+      "oops",
+      "funny"
+    ],
+    "mood": "funny",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A funny fail moment.",
+    "lettering": {
+      "faceBox": {
+        "x": 36,
+        "y": 17,
+        "width": 18,
+        "height": 29
+      },
+      "faceBoxes": [
+        {
+          "x": 36,
+          "y": 17,
+          "width": 18,
+          "height": 29
+        },
+        {
+          "x": 12,
+          "y": 55,
+          "width": 18,
+          "height": 29
+        }
+      ],
+      "subjectBox": {
+        "x": 4,
+        "y": 1,
+        "width": 91,
+        "height": 97
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-1.jpg",
+        "cell": 4,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "The falling body, thrown headset and controller spread across the frame; Pixel is lower left."
+      }
+    }
+  },
+  {
+    "file": "panel-05-raid-arrives.webp",
+    "tags": [
+      "raid",
+      "crowd",
+      "arrival"
+    ],
+    "mood": "epic",
+    "style": "pop-ink",
+    "characters": [
+      "Chat Crowd"
+    ],
+    "sceneSummary": "A raid arrives across a bridge.",
+    "lettering": {
+      "faceBox": {
+        "x": 29,
+        "y": 29,
+        "width": 12,
+        "height": 18
+      },
+      "faceBoxes": [
+        {
+          "x": 29,
+          "y": 29,
+          "width": 12,
+          "height": 18
+        },
+        {
+          "x": 21,
+          "y": 55,
+          "width": 16,
+          "height": 22
+        }
+      ],
+      "subjectBox": {
+        "x": 0,
+        "y": 14,
+        "width": 100,
+        "height": 86
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-2.jpg",
+        "cell": 1,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "The back of Nova’s head and Pixel lead a crowd across the bridge; crowd faces and the destination are story content."
+      }
+    }
+  },
+  {
+    "file": "panel-06-hype-train.webp",
+    "tags": [
+      "hype train",
+      "subscribers",
+      "speed"
+    ],
+    "mood": "energetic",
+    "style": "pop-ink",
+    "characters": [
+      "Chat Crowd",
+      "Pixel"
+    ],
+    "sceneSummary": "A subscriber hype train rushes past.",
+    "lettering": {
+      "faceBox": {
+        "x": 29,
+        "y": 23,
+        "width": 13,
+        "height": 24
+      },
+      "faceBoxes": [
+        {
+          "x": 29,
+          "y": 23,
+          "width": 13,
+          "height": 24
+        },
+        {
+          "x": 86,
+          "y": 49,
+          "width": 13,
+          "height": 30
+        }
+      ],
+      "subjectBox": {
+        "x": 0,
+        "y": 8,
+        "width": 100,
+        "height": 92
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-2.jpg",
+        "cell": 2,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Pixel drives the engine at left; Nova watches at far right; the train spans the entire frame."
+      }
+    }
+  },
+  {
+    "file": "panel-07-donation-sparkle.webp",
+    "tags": [
+      "donation",
+      "sparkle",
+      "celebration"
+    ],
+    "mood": "joyful",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A big donation sparkle explosion.",
+    "lettering": {
+      "faceBox": {
+        "x": 29,
+        "y": 16,
+        "width": 18,
+        "height": 30
+      },
+      "faceBoxes": [
+        {
+          "x": 29,
+          "y": 16,
+          "width": 18,
+          "height": 30
+        },
+        {
+          "x": 63,
+          "y": 32,
+          "width": 20,
+          "height": 29
+        }
+      ],
+      "subjectBox": {
+        "x": 17,
+        "y": 0,
+        "width": 68,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-2.jpg",
+        "cell": 3,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova, Pixel, coins and the opening gift occupy the centre; animated crowd faces fill the edges."
+      }
+    }
+  },
+  {
+    "file": "panel-08-rainy-chill.webp",
+    "tags": [
+      "chill",
+      "lofi",
+      "rain",
+      "quiet"
+    ],
+    "mood": "calm",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A quiet lo-fi rainy moment.",
+    "lettering": {
+      "faceBox": {
+        "x": 41,
+        "y": 9,
+        "width": 16,
+        "height": 35
+      },
+      "faceBoxes": [
+        {
+          "x": 41,
+          "y": 9,
+          "width": 16,
+          "height": 35
+        },
+        {
+          "x": 68,
+          "y": 63,
+          "width": 19,
+          "height": 23
+        }
+      ],
+      "subjectBox": {
+        "x": 27,
+        "y": 0,
+        "width": 73,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-2.jpg",
+        "cell": 4,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova’s profile is upper centre and sleeping Pixel lower right; rain and window establish the quiet scene."
+      }
+    }
+  },
+  {
+    "file": "panel-09-emote-storm.webp",
+    "tags": [
+      "emotes",
+      "spam",
+      "chat",
+      "chaos"
+    ],
+    "mood": "chaotic",
+    "style": "pop-ink",
+    "characters": [
+      "Chat Crowd",
+      "Nova"
+    ],
+    "sceneSummary": "Chat spams an emote storm.",
+    "lettering": {
+      "faceBox": {
+        "x": 39,
+        "y": 27,
+        "width": 17,
+        "height": 28
+      },
+      "faceBoxes": [
+        {
+          "x": 39,
+          "y": 27,
+          "width": 17,
+          "height": 28
+        },
+        {
+          "x": 26,
+          "y": 51,
+          "width": 14,
+          "height": 20
+        }
+      ],
+      "subjectBox": {
+        "x": 0,
+        "y": 0,
+        "width": 100,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-3.jpg",
+        "cell": 1,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova and Pixel sit centrally; a foreground/background emote vortex makes every image region narrative content."
+      }
+    }
+  },
+  {
+    "file": "panel-10-jump-scare.webp",
+    "tags": [
+      "jumpscare",
+      "scare",
+      "reaction"
+    ],
+    "mood": "shocked",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A jump-scare reaction.",
+    "lettering": {
+      "faceBox": {
+        "x": 23,
+        "y": 21,
+        "width": 12,
+        "height": 22
+      },
+      "faceBoxes": [
+        {
+          "x": 23,
+          "y": 21,
+          "width": 12,
+          "height": 22
+        },
+        {
+          "x": 12,
+          "y": 64,
+          "width": 15,
+          "height": 26
+        }
+      ],
+      "subjectBox": {
+        "x": 3,
+        "y": 0,
+        "width": 97,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-3.jpg",
+        "cell": 2,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova recoils on the left and Pixel is below; the large ghost and reaction pose fill the remaining image."
+      }
+    }
+  },
+  {
+    "file": "panel-11-speedrun-record.webp",
+    "tags": [
+      "speedrun",
+      "record",
+      "timer"
+    ],
+    "mood": "intense",
+    "style": "pop-ink",
+    "characters": [
+      "Nova"
+    ],
+    "sceneSummary": "A speedrun record is broken.",
+    "lettering": {
+      "faceBox": {
+        "x": 44,
+        "y": 21,
+        "width": 18,
+        "height": 28
+      },
+      "faceBoxes": [
+        {
+          "x": 44,
+          "y": 21,
+          "width": 18,
+          "height": 28
+        },
+        {
+          "x": 19,
+          "y": 56,
+          "width": 22,
+          "height": 23
+        }
+      ],
+      "subjectBox": {
+        "x": 19,
+        "y": 5,
+        "width": 61,
+        "height": 95
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-3.jpg",
+        "cell": 3,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova runs through the finish ribbon centrally and Pixel runs at lower left; speed lines carry the action."
+      }
+    }
+  },
+  {
+    "file": "panel-12-cooking-chaos.webp",
+    "tags": [
+      "cooking",
+      "irl",
+      "flames",
+      "funny"
+    ],
+    "mood": "chaotic",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Pixel"
+    ],
+    "sceneSummary": "A cooking stream descends into chaos.",
+    "lettering": {
+      "faceBox": {
+        "x": 30,
+        "y": 15,
+        "width": 19,
+        "height": 32
+      },
+      "faceBoxes": [
+        {
+          "x": 30,
+          "y": 15,
+          "width": 19,
+          "height": 32
+        },
+        {
+          "x": 6,
+          "y": 49,
+          "width": 17,
+          "height": 17
+        }
+      ],
+      "subjectBox": {
+        "x": 4,
+        "y": 2,
+        "width": 96,
+        "height": 96
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-3.jpg",
+        "cell": 4,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova cooks centrally; Pixel peeks from the left pot; flames, flying food and camera fill the right."
+      }
+    }
+  },
+  {
+    "file": "panel-13-jam-session.webp",
+    "tags": [
+      "music",
+      "jam",
+      "performance"
+    ],
+    "mood": "groovy",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova",
+      "Pixel",
+      "Chat Crowd"
+    ],
+    "sceneSummary": "A music jam session.",
+    "lettering": {
+      "faceBox": {
+        "x": 44,
+        "y": 9,
+        "width": 13,
+        "height": 18
+      },
+      "faceBoxes": [
+        {
+          "x": 44,
+          "y": 9,
+          "width": 13,
+          "height": 18
+        },
+        {
+          "x": 70,
+          "y": 44,
+          "width": 11,
+          "height": 22
+        }
+      ],
+      "subjectBox": {
+        "x": 15,
+        "y": 0,
+        "width": 73,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-4.jpg",
+        "cell": 1,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova’s face is above the guitar; Pixel sits by the drums; instruments and audience silhouettes are protected."
+      }
+    }
+  },
+  {
+    "file": "panel-14-neon-city-walk.webp",
+    "tags": [
+      "irl",
+      "night",
+      "city",
+      "walk"
+    ],
+    "mood": "wandering",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova"
+    ],
+    "sceneSummary": "An IRL walk through a neon city at night.",
+    "lettering": {
+      "faceBox": {
+        "x": 43,
+        "y": 6,
+        "width": 11,
+        "height": 18
+      },
+      "faceBoxes": [
+        {
+          "x": 43,
+          "y": 6,
+          "width": 11,
+          "height": 18
+        },
+        {
+          "x": 32,
+          "y": 63,
+          "width": 9,
+          "height": 19
+        }
+      ],
+      "subjectBox": {
+        "x": 27,
+        "y": 0,
+        "width": 42,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-4.jpg",
+        "cell": 2,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova walks centrally with a camera pole to the right; Pixel walks lower left; city reflections remain visible."
+      }
+    }
+  },
+  {
+    "file": "panel-15-sunset-goodbye.webp",
+    "tags": [
+      "end",
+      "goodbye",
+      "sunset",
+      "outro"
+    ],
+    "mood": "warm",
+    "style": "pop-ink",
+    "characters": [
+      "Nova",
+      "Pixel",
+      "Chat Crowd"
+    ],
+    "sceneSummary": "The end-of-stream sunset goodbye wave.",
+    "lettering": {
+      "faceBox": {
+        "x": 31,
+        "y": 16,
+        "width": 14,
+        "height": 24
+      },
+      "faceBoxes": [
+        {
+          "x": 31,
+          "y": 16,
+          "width": 14,
+          "height": 24
+        },
+        {
+          "x": 53,
+          "y": 53,
+          "width": 14,
+          "height": 26
+        }
+      ],
+      "subjectBox": {
+        "x": 23,
+        "y": 8,
+        "width": 49,
+        "height": 84
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-4.jpg",
+        "cell": 3,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "Nova waves over one shoulder on the left; Pixel sits to the right; sunset and crowd form the farewell."
+      }
+    }
+  },
+  {
+    "file": "panel-16-to-be-continued.webp",
+    "tags": [
+      "cliffhanger",
+      "to be continued",
+      "silhouette"
+    ],
+    "mood": "dramatic",
+    "style": "midnight-noir",
+    "characters": [
+      "Nova"
+    ],
+    "sceneSummary": "A dramatic cliffhanger silhouette.",
+    "lettering": {
+      "faceBox": {
+        "x": 30,
+        "y": 2,
+        "width": 9,
+        "height": 13
+      },
+      "faceBoxes": [
+        {
+          "x": 30,
+          "y": 2,
+          "width": 9,
+          "height": 13
+        }
+      ],
+      "subjectBox": {
+        "x": 0,
+        "y": 0,
+        "width": 100,
+        "height": 100
+      },
+      "bubbleZones": [],
+      "sfxZones": [],
+      "captionZone": {
+        "x": 0,
+        "y": 100,
+        "width": 100,
+        "height": "auto"
+      },
+      "derivation": {
+        "source": "artifacts/ui-after/lettering/contact-sheet-4.jpg",
+        "cell": 4,
+        "method": "Visual inspection of original 16:9 art; conservative percent bounds, rounded outward. No image zone approved for lettering.",
+        "observations": "The head is a small upper-left-centre silhouette; the full silhouette, moon, ledge and landscape are the main subject."
+      }
+    }
+  }
+]

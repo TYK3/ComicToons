@@ -1,0 +1,183 @@
+{
+  "number": 1,
+  "heroId": "irl-cooking-panel-2-shot-1-0",
+  "summary": "The story, moment by moment.",
+  "panels": [
+    {
+      "panel": {
+        "id": "irl-cooking-panel-1-shot-0-0",
+        "caption": "The pancake sticks to the range hood.",
+        "dialogue": [
+          "...That is not a plate.",
+          "CHAT: Ceiling pancake. Five stars."
+        ],
+        "scene": "The pancake sticks to the range hood.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "The pancake sticks to the range hood.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-2.png",
+        "at": 240,
+        "composition": 2,
+        "sfx": "",
+        "bubblePlacement": "top-left",
+        "storyCaption": "A small mishap becomes chat’s favourite moment.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-2.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-1",
+        "atlas": {
+          "frame": 2,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 1,
+      "hero": false,
+      "span": 7
+    },
+    {
+      "panel": {
+        "id": "irl-cooking-panel-2-shot-0-0",
+        "caption": "Clover steadies the pan for a second attempt.",
+        "dialogue": [
+          "Smaller flip. Bigger belief.",
+          "CHAT: We believe in the comeback."
+        ],
+        "scene": "Clover steadies the pan for a second attempt.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "triumphant",
+        "altText": "Clover steadies the pan for a second attempt.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-3.png",
+        "at": 480,
+        "composition": 1,
+        "sfx": "",
+        "bubblePlacement": "top-right",
+        "storyCaption": "The crew turns the chaos into a celebration.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-3.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-2",
+        "atlas": {
+          "frame": 3,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 2,
+      "hero": false,
+      "span": 5
+    },
+    {
+      "panel": {
+        "id": "irl-cooking-panel-2-shot-1-0",
+        "caption": "The pancake lands perfectly in the pan.",
+        "dialogue": [
+          "Breakfast is SAVED!",
+          "CHAT: CHEF CLOVER! CHEF CLOVER!"
+        ],
+        "scene": "Clover steadies the pan for a second attempt.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "triumphant",
+        "altText": "The pancake lands perfectly in the pan.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-4.png",
+        "at": 480,
+        "composition": 1,
+        "sfx": "PAT!",
+        "bubblePlacement": "top-right",
+        "storyCaption": "The crew turns the chaos into a celebration.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-3.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-2",
+        "atlas": {
+          "frame": 4,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 3,
+      "hero": true,
+      "span": 5
+    },
+    {
+      "panel": {
+        "id": "irl-cooking-panel-3-shot-0-0",
+        "caption": "Clover shares the finished pancake celebration with Miso.",
+        "dialogue": [
+          "Same time tomorrow? Bring a helmet.",
+          "CHAT: Worth every chaotic minute."
+        ],
+        "scene": "Clover shares the finished pancake celebration with Miso.",
+        "characters": [
+          "Stargazer1"
+        ],
+        "mood": "playful",
+        "altText": "Clover shares the finished pancake celebration with Miso.",
+        "imageUrl": "irl-cooking/art/panel-story-cooking-5.png",
+        "at": 720,
+        "composition": 3,
+        "sfx": "",
+        "bubblePlacement": "top-right",
+        "storyCaption": "One last wave before the kitchen closes.",
+        "provenance": {
+          "provider": "library",
+          "asset": "panel-story-cooking-5.png",
+          "style": "pop-ink",
+          "fallback": false
+        },
+        "origin": "sample",
+        "sourceId": "irl-cooking-panel-3",
+        "atlas": {
+          "frame": 5,
+          "columns": 2,
+          "rows": 3
+        },
+        "crop": {
+          "shot": 0,
+          "zoom": 1,
+          "x": 50,
+          "y": 50
+        }
+      },
+      "order": 4,
+      "hero": false,
+      "span": 7
+    }
+  ]
+}

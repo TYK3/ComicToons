@@ -1,0 +1,44 @@
+{
+  "name": "comictoons",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,web \"npm run dev -w @comictoons/server\" \"npm run dev -w @comictoons/web\"",
+    "demo": "playwright install chromium && node scripts/demo.mjs",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "node scripts/run-tests.mjs",
+    "smoke:twitch": "node --import tsx scripts/smoke-twitch.ts",
+    "test:twitch": "node scripts/twitch-mock/run-tests.mjs",
+    "test:obs": "playwright test -c tests/obs/playwright.config.ts",
+    "e2e": "playwright test -c tests/playwright.config.ts",
+    "e2e:import-wire": "playwright test -c tests/import-wire/playwright.config.ts",
+    "test:chaos": "playwright test -c tests/playwright.config.ts tests/ingest-chaos.spec.ts",
+    "gate": "npm run typecheck && npm run lint && npm run test && npm run test:twitch -- --gate && npm run build && npm run e2e && npm run test:obs && npm run e2e:import-wire && npm run secrets && npm audit --audit-level=high && npm run fresh-clone",
+    "secrets": "node scripts/secret-scan.mjs",
+    "fresh-clone": "node scripts/fresh-clone.mjs",
+    "trial-run": "node --import tsx scripts/trial-run/run.ts",
+    "build:samples": "node --import tsx scripts/build-samples.ts",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^22.18.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.2",
+    "@axe-core/playwright": "^4.14.0"
+  }
+}

@@ -1,0 +1,73 @@
+# ---- Secrets: never commit ----
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+secrets/
+.secrets/
+credentials*.json
+client_secret*.json
+service-account*.json
+*-credentials.json
+.npmrc
+.netrc
+.twitch-token*
+twitch-token*
+*token-cache*
+*.token
+.token*
+.auth/
+.vercel/
+
+# ---- Dependencies and build output ----
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# ---- Local state, databases, logs ----
+*.log
+npm-debug.log*
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.data/
+data/local/
+tmp/
+.tmp/
+
+# ---- Test and QA output ----
+playwright-report/
+test-results/
+blob-report/
+exports/tmp/
+exports/*/
+artifacts/tmp/
+artifacts/playwright/
+# Gate output is local; only its regeneration guide is versioned.
+/artifacts/*
+!/artifacts/README.md
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
