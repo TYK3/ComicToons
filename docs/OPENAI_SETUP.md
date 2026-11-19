@@ -19,9 +19,9 @@ ComicToons calls the OpenAI API from its Node server. You need API access and av
    if (-not (Test-Path .env)) { Copy-Item .env.example .env }
    ```
 
-   The conditional copy preserves an existing `.env`. Keep your private configuration. See [installation](../README.md#installation) for Linux dependencies and PowerShell command troubleshooting. Local uncommitted changes are not part of a GitHub download.
+   The conditional copy preserves an existing `.env`. Keep your private configuration. See [installation](../README.md#️-installation) for Linux dependencies and PowerShell command troubleshooting. Local uncommitted changes are not part of a GitHub download.
 
-3. Follow the [README Twitch setup](../README.md#configure-twitch-once) for your own Twitch client ID, client secret and callback. Run `npm run dev` and open [Studio](http://localhost:4173/ui.html#/studio). The owner's existing machine uses [port 4122](http://localhost:4122/ui.html#/studio) instead; do not mix callback/port configurations.
+3. Follow the [README Twitch setup](../README.md#-configure-twitch-once) for your own Twitch client ID, client secret and callback. Run `npm run dev` and open [Studio](http://localhost:4173/ui.html#/studio). The owner's existing machine uses [port 4122](http://localhost:4122/ui.html#/studio) instead; do not mix callback/port configurations.
 
 ## 2. Get an API key
 

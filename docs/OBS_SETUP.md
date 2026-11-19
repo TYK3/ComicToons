@@ -4,7 +4,7 @@ Updated 3 November 2026. This guide uses the current workspace-aware overlay. Ad
 
 ## Prepare the app
 
-1. Follow [installation](../README.md#installation) and keep ComicToons running.
+1. Follow [installation](../README.md#️-installation) and keep ComicToons running.
 2. Open Sample or Live Studio on the **web** port. Run the guided Sample demo, or capture/review/release Live pages.
 3. Open **More → Overlay**. The preview includes **Back to Sample/Live Studio**, **Viewer screen** and **Clean OBS output**.
 4. Choose **Clean OBS output** for the address to use in OBS. Keep Studio open separately; the clean page has no navigation.

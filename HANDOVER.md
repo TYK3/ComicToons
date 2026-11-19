@@ -179,7 +179,6 @@ Copy `.env.example` to `.env` (git-ignored). Only the API server reads `.env`, a
 - A real Windows run of the demo or the gate: GAP (section 3).
 - The fake Twitch suite keeps 13 checklist cases skipped by design. One safety test names the real Twitch API host without dialling it; QA accepted this.
 - One old commit message (number 180 of 245) still names a crew role. QA ruled history messages are left as they are.
-- `docs/SESSION_ID.txt` and the README Submission section hold the hackathon submission session ID. They were kept on purpose.
 - BOTS-HARDEN-1 is not applied to the test bots (section 5).
 - There is no licence file. Whether one is wanted: GAP, Young to decide.
 

@@ -1,6 +1,6 @@
 # Twitch setup for ComicToons
 
-Updated 3 November 2026. Start with the [installation guide](../README.md#installation). Sample mode needs no Twitch credentials.
+Updated 3 November 2026. Start with the [installation guide](../README.md#️-installation). Sample mode needs no Twitch credentials.
 
 ## Match the ports and callback
 
@@ -49,7 +49,7 @@ For your channel, open **Live setup → Create pages from my live video**. Choos
 
 For another channel, expand **Capture another channel’s video** and use its setup button. This opens Viewer setup; choose settings/duration before capture. Viewer makes a viewing comic but cannot approve/hide/manage the broadcaster’s output. **Studio** returns to Streamer setup.
 
-At least four distinct playing-video frames are required. Chat is commentary, not speech transcription. Source-frame comics need no image API; illustrated providers can incur charges. [Capture/provider workflow](../README.md#live-workflows).
+At least four distinct playing-video frames are required. Chat is commentary, not speech transcription. Source-frame comics need no image API; illustrated providers can incur charges. [Capture/provider workflow](../README.md#-live-workflows).
 
 The approved feed only contains releases from the connected broadcaster on this ComicToons server. Arbitrary Twitch channels do not automatically expose a ComicToons history.
 

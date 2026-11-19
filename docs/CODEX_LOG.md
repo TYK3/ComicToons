@@ -1,5 +1,4 @@
 # CODEX_LOG.md — how Codex was used
-Lead session ID: see docs/SESSION_ID.txt
 
 ## 2026-10-27 (London)
 - Repo bootstrapped by the operator on a cloud box: AGENTS.md, STATE.md, BACKLOG.md, docs/*, .env.example, .gitignore. Commits authored as TYK3.
@@ -12,7 +11,7 @@ Lead session ID: see docs/SESSION_ID.txt
 
 ### Evidence policy
 
-Only record commands as passing after they actually complete. Screenshots and design findings refer to the locally running application; mocked live integrations must be labelled. The operator must supply the actual lead session ID from their session UI; this log does not invent one.
+Only record commands as passing after they actually complete. Screenshots and design findings refer to the locally running application; mocked live integrations must be labelled.
 
 ## UI overhaul follow-up
 

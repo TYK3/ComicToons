@@ -1,14 +1,88 @@
-# ComicToons
+<p align="center">
+  <img src="docs/media/banner.png" alt="ComicToons: your stream, inked live. A speech-bubble logo beside three comic panels." width="100%">
+</p>
+
+<h1 align="center">💬 ComicToons: <em>your stream, inked live</em></h1>
+
+<p align="center">
+  <b>Chat's best Twitch moments become comic and manga panels on your overlay. You approve every one. When you log off, the whole night is a comic you can share.</b><br>
+  <sub>Codex × TwitchCon hackathon project · built with Codex</sub>
+</p>
+
+<p align="center">
+  <a href="https://comictoons-demo.vercel.app"><img alt="Try the live demo" src="https://img.shields.io/badge/▲%20try%20the%20live%20demo-comictoons--demo.vercel.app-000000?style=for-the-badge&labelColor=142b36"></a>
+  <a href="docs/media/ComicToons-demo.mp4"><img alt="Watch the demo video" src="https://img.shields.io/badge/🎬%20watch%20the%20demo-4%20min-ee6471?style=for-the-badge&labelColor=142b36"></a>
+  <a href="#️-installation"><img alt="Install it" src="https://img.shields.io/badge/⚙%20install-npm%20ci-1da2b3?style=for-the-badge&labelColor=142b36"></a>
+</p>
+
+<p align="center">
+  <img alt="834 unit and contract tests passing" src="https://img.shields.io/badge/unit%20%26%20contract%20tests-834%20passing-1E9650?style=flat-square&labelColor=142b36">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white&labelColor=142b36">
+  <img alt="Vite 6" src="https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite&logoColor=white&labelColor=142b36">
+  <img alt="Fastify 5" src="https://img.shields.io/badge/Fastify-5-FFFFFF?style=flat-square&logo=fastify&logoColor=white&labelColor=142b36">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white&labelColor=142b36">
+  <img alt="Node 24" src="https://img.shields.io/badge/Node-24-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=142b36">
+  <img alt="Twitch" src="https://img.shields.io/badge/Twitch-IRC%20·%20EventSub%20·%20Helix-9146FF?style=flat-square&logo=twitch&logoColor=white&labelColor=142b36">
+  <img alt="Playwright" src="https://img.shields.io/badge/tests-Playwright%20·%20axe--core-2EAD33?style=flat-square&logo=playwright&logoColor=white&labelColor=142b36">
+  <img alt="Hosting" src="https://img.shields.io/badge/Sample%20demo-Vercel-000000?style=flat-square&logo=vercel&logoColor=white&labelColor=142b36">
+</p>
+
+<a id="-demo-video"></a>
+
+## 🎬 Demo video
+
+<p align="center">
+  <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/highlights.gif" alt="Highlights of the ComicToons demo: the landing page, the Studio releasing comic panels during a Sample run, the audience view with catch-up, the manga reader and the OBS overlay" width="88%"></a><br>
+  <sub>▲ Highlights, looping with no sound. The full 4-minute walkthrough is below.</sub>
+</p>
+
+<p align="center">
+  <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/video-thumb.jpg" alt="Watch the ComicToons demo video: the problem, the architecture, and a full walkthrough of the Sample stream" width="62%"></a><br>
+  <a href="docs/media/ComicToons-demo.mp4"><b>▶ Watch the full demo video (about 4 minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a>
+</p>
+
+The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo. The video is rendered with [Remotion](https://www.remotion.dev); [`video/`](video) rebuilds it.
+
+<table align="center">
+<tr>
+<td align="center" width="33%">🎞️<br><b>Moments to pages</b><br><sub>Chat activity and captured video frames become a comic page the streamer reviews.</sub></td>
+<td align="center" width="33%">✅<br><b>You approve every panel</b><br><sub>Release, Reject or Edit caption. Nothing airs unreviewed.</sub></td>
+<td align="center" width="33%">📖<br><b>One story, two formats</b><br><sub>The same issue reads as a comic book or a manga series, with PNG export.</sub></td>
+</tr>
+</table>
+
+---
+
+<details open>
+<summary><b>📑 Contents</b> (click to collapse)</summary>
+
+- [🌟 What you can do](#-what-you-can-do)
+- [🖼️ What it looks like](#️-what-it-looks-like)
+- [⚙️ How it works](#️-how-it-works)
+- [🏗️ Architecture](#️-architecture)
+- [🛠️ Installation](#️-installation)
+- [🧪 Sample demo](#-sample-demo)
+- [🔌 Configure Twitch once](#-configure-twitch-once)
+- [📡 Live workflows](#-live-workflows)
+- [🎨 Image providers and private configuration](#-image-providers-and-private-configuration)
+- [👥 Audience view, Library and exports](#-audience-view-library-and-exports)
+- [📺 OBS overlay](#-obs-overlay)
+- [🔧 Configuration](#-configuration)
+- [🩺 Troubleshooting](#-troubleshooting)
+- [▲ Deployment: the Vercel Sample demo](#-deployment-the-vercel-sample-demo)
+- [✅ Testing](#-testing)
+- [🧰 Tech stack](#-tech-stack)
+- [🗂️ Project structure](#️-project-structure)
+- [🚧 Known limits](#-known-limits)
+- [🙏 Credits](#-credits)
+
+</details>
+
+---
+
+## 🌟 What you can do
 
 Turn stream moments into a comic, review what goes on air, and give late arrivals a quick catch-up. Try the fictional Sample stream first, or connect Twitch and capture real video with matching chat.
-
-![Current Sample Studio with the sticky Sample/Live switch, guided demo controls, Library navigation and audience preview](docs/screenshots/studio-current.jpg)
-
-**Updated: 3 November 2026.** This guide and its screenshots describe the local working tree. This documentation refresh has not been committed or pushed to GitHub.
-
-[Install](#installation) · [Try Sample](#sample-demo) · [Connect Twitch](#configure-twitch-once) · [Live workflows](#live-workflows) · [OBS](#obs-overlay) · [Troubleshooting](#troubleshooting) · [Verification](#testing-and-current-status)
-
-## What you can do
 
 | Experience | What it does | What you need |
 | --- | --- | --- |
@@ -24,7 +98,117 @@ Comic book and manga are **two reading formats of the same story**. The landing 
 
 Sample and Live have separate chat, panels, catch-up, saved issues and output. Sample uses bundled art and local simulation; it does not prove that real Twitch capture or AI illustration passed review.
 
-## Installation
+## 🖼️ What it looks like
+
+Captured from the running Sample demo ([`video/capture/screenshots.mjs`](video/capture/screenshots.mjs) regenerates them). Story content is Sample art and a local simulation; these screenshots do not show live Twitch capture.
+
+<table>
+<tr>
+<td width="50%"><img src="docs/media/landing.jpg" alt="Landing page: Your stream, inked live, with Connect with Twitch, Try Sample demo and three sample issues"><br><sub><b>Landing.</b> Connect Twitch or try the Sample demo, with a preview of three sample issues.</sub></td>
+<td width="50%"><img src="docs/media/studio-running.jpg" alt="Studio during a Sample run: panels releasing with live counters and the audience preview"><br><sub><b>Studio, mid-run.</b> Panels release as scenes unfold, with live counters and an audience preview.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/studio-finished.jpg" alt="Studio after the Sample run with twenty released panels"><br><sub><b>Studio, finished.</b> All twenty scenes released and the issue ready to read.</sub></td>
+<td><img src="docs/media/studio-viewers.jpg" alt="Studio with the Simulate viewers menu open and a new viewer joining"><br><sub><b>Simulate viewers.</b> Arrivals, raids, votes, cameos and predictions, all local.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/audience.jpg" alt="Audience view with On air and Catch-up switching and expandable chat and votes"><br><sub><b>Audience view.</b> On air or Catch-up, with chat and votes one click away.</sub></td>
+<td><img src="docs/media/catchup.jpg" alt="Previously on card with a 5, 15 or 30 minute window"><br><sub><b>Catch-up.</b> A short "Previously on..." preview for late arrivals and raiders.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/export.jpg" alt="Create and export screen with recap, comic book, manga series and catch-up choices"><br><sub><b>Create &amp; export.</b> Recap, comic book, manga series and catch-up from one issue.</sub></td>
+<td><img src="docs/media/recap.jpg" alt="Recap page showing every page of the issue with PNG downloads"><br><sub><b>Recap.</b> Every page at a glance, with PNG downloads.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/book.jpg" alt="Comic book reader showing two pages at a time"><br><sub><b>Comic book.</b> Cover to back page, two pages at a time.</sub></td>
+<td><img src="docs/media/manga.jpg" alt="Manga series reader with episode and chapter"><br><sub><b>Manga series.</b> The same story, episode by episode.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/overlay.jpg" alt="Clean OBS overlay with a Previously on card over a dark stand-in canvas"><br><sub><b>OBS overlay.</b> Navigation-free output (shown on a dark stand-in canvas).</sub></td>
+<td><img src="docs/media/connect.jpg" alt="Connection screen listing what ComicToons asks Twitch for"><br><sub><b>Connect.</b> Sign in with Twitch, or read public chat read-only.</sub></td>
+</tr>
+</table>
+
+<p align="center"><img src="docs/media/audience-phone.jpg" alt="Phone audience view with On air and Catch-up switching" width="280"><br><sub><b>Phone audience view.</b> The audience screens are built for a phone.</sub></p>
+
+## ⚙️ How it works
+
+```mermaid
+flowchart TB
+  subgraph TW["Twitch"]
+    CHAT["Chat (IRC)"]
+    EVT["EventSub events"]
+    VID["Live video"]
+  end
+  CHAT --> ING
+  EVT --> ING
+  ING["Ingest<br/>de-duplicate · opt-outs · 60 events/s cap"] --> DET["Moment detection<br/>spike · burst · clip cluster"]
+  VID --> CAP
+  DET --> CAP["Scene capture<br/>4+ distinct frames + attributed chat"]
+  CAP --> COMP{"Page composition"}
+  COMP -->|no image API| SRC["Source-frame comic"]
+  COMP -->|provider you choose| ILL["Illustrated page<br/>OpenAI · Gemini · Pollinations · Cloudflare"]
+  SRC --> LET["Lettering<br/>editable balloons"]
+  ILL --> LET
+  LET --> REV["Studio review<br/>Release · Reject · Edit caption"]
+  REV --> AUD["Audience view<br/>On air · Catch-up"]
+  REV --> OBS["OBS overlay"]
+  REV --> LIB["Library<br/>recap · comic book · manga · PNG"]
+  classDef tw fill:#9146ff,color:#fff,stroke:#142b36;
+  classDef code fill:#1da2b3,color:#fff,stroke:#142b36;
+  classDef out fill:#ffc258,color:#142b36,stroke:#142b36;
+  class CHAT,EVT,VID tw;
+  class ING,DET,CAP,COMP,SRC,ILL,LET,REV code;
+  class AUD,OBS,LIB out;
+```
+
+<sub>Purple = Twitch. Teal = ComicToons server and Studio. Amber = outputs.</sub>
+
+### 1. Moments are found in chat
+
+Input admission deduplicates events, respects deletes and opt-outs, and rate-limits accepted events to 60 per second. A candidate moment opens on a **spike** (at least six messages from three distinct users in ten seconds, at least three times the trailing baseline, after 30 seconds of warm-up), a **burst** (three distinct users repeat a recognised token such as KEKW, LUL, GG or "clip it" within eight seconds) or a **clip cluster** (three distinct polled clips within 120 seconds). Cooldowns stop one moment opening repeatedly. Scores are sums of per-event weights, not model confidence.
+
+### 2. Real frames become a page
+
+Capture needs Twitch video playing and at least four distinct frames. A **source-frame comic** composes the actual captured frames with attributed chat and needs no image API key. An **illustrated comic** analyses the frames, draws a page through the provider you select, and checks the result. Chat is commentary, not streamer speech, and there is no audio transcription.
+
+### 3. The streamer reviews, then it airs
+
+Pages from your own stream wait in Studio review. **Release** puts a page on air, **Reject** excludes it, and **Edit caption** starts an eligible revision. Panic hide blanks ComicToons output instantly while panels keep arriving.
+
+### 4. The same story, everywhere
+
+Released panels reach the **Audience view** (On air and Catch-up), the **OBS overlay**, and the **Library**, which groups saved issues and offers a recap, a comic book, a manga series, a catch-up card and PNG downloads.
+
+## 🏗️ Architecture
+
+| Layer | What it does |
+| --- | --- |
+| `apps/web` | React 19 + Vite landing page, Studio, Audience, Catch-up, Library, readers and the overlay |
+| `apps/server` | Fastify 5 API: Twitch OAuth, IRC and EventSub ingest, moment detection, scene capture, image providers, participation, exports |
+| `packages/core` | Shared types, colour themes, lettering and layout rules, environment helpers |
+| Sample demo | `apps/web/demo.html` runs the same UI against a bundled `MockAdapter`, so it needs no server, keys or Twitch |
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant S as Streamer
+  participant W as Web app (Studio)
+  participant A as API server
+  participant T as Twitch
+  S->>W: Connect with Twitch
+  W->>A: Start OAuth
+  A->>T: Authorise (callback on the API port)
+  T-->>A: Token (kept in API memory)
+  A->>T: Read chat, receive events, capture frames
+  A->>A: Detect moments, compose and letter a page
+  A-->>W: Page waits for review
+  S->>W: Release, Reject or Edit caption
+  W-->>A: Approved pages published
+  A-->>W: Audience view, overlay and Library update
+```
+
+## 🛠️ Installation
 
 ### 1. Prerequisites
 
@@ -43,14 +227,14 @@ On Windows, reopen the terminal after installing Node. If PowerShell blocks `npm
 
 ### 2. Get the source
 
-Open the [project branch](https://github.com/TYK3/ComicToons/tree/codex/windows-demo-setup), choose **Code → Download ZIP**, and extract it. With Git:
+Open the [repository](https://github.com/TYK3/ComicToons), choose **Code → Download ZIP**, and extract it. With Git:
 
 ```sh
-git clone --branch codex/windows-demo-setup https://github.com/TYK3/ComicToons.git
+git clone https://github.com/TYK3/ComicToons.git
 cd ComicToons
 ```
 
-If you already have this local working folder, use it directly. Run commands from the root containing `package.json`, not `apps/web`. A GitHub download includes that remote revision, not uncommitted local changes.
+Run commands from the root containing `package.json`, not `apps/web`. A GitHub download contains exactly the files in the repository, with no private environment files.
 
 ### 3. Dependencies and Chromium
 
@@ -111,7 +295,7 @@ Use [web port 4122](http://localhost:4122/ui.html#/studio?workspace=sample) and 
 
 PowerShell `$env:` values last for that terminal session. Open a new terminal for a clean environment, or remove a specific setting with `Remove-Item Env:COMICTOONS_API_PORT`. Startup fails if a requested port is already occupied.
 
-## Sample demo
+## 🧪 Sample demo
 
 1. Open Sample Studio. The **Sample / Live** switch stays beside the stream selector while you scroll.
 2. Click **Run demo**. Scenes release automatically and audience activity is simulated. Selecting another invented stream starts its guided demo.
@@ -125,7 +309,7 @@ Invented streams: Critical Mess (`tabletop-night`), Frame Perfect (`speedrun-fai
 
 Sample time advances by one simulated minute per scene. Catch-up windows use story time, not the accelerated wall clock. Keep the driving Studio tab open. Sample state/issues are saved in this browser’s local storage; export a separate copy before clearing browser data. Restarting replay clears current output, not saved issues.
 
-## Configure Twitch once
+## 🔌 Configure Twitch once
 
 Sample needs no `.env`. For Live, copy the example **only if your private file does not already exist**.
 
@@ -159,7 +343,7 @@ For ports 3122 / 4122, use `http://localhost:3122/auth/twitch/callback` instead 
 
 Tokens stay in API-server memory; a restart requires sign-in again. For private server settings, precedence is shell values, then `.env`, then optional `.env.images`. Port variables belong in the shell as described above. [Detailed Twitch setup](docs/twitch-setup.md).
 
-## Live workflows
+## 📡 Live workflows
 
 ### Read chat without capturing video
 
@@ -204,7 +388,7 @@ For a real dialogue vote, keep two distinct ordinary chat lines fresh, choose an
 
 Chat is commentary, not streamer speech. There is no audio transcription. `!noink` opts a viewer out of supported quotation/participation paths.
 
-## Image providers and private configuration
+## 🎨 Image providers and private configuration
 
 Source-frame comics use actual frames and attributed lettering, without an external image API or AI illustration. Illustrated pages support these provider choices in **Page creation settings**:
 
@@ -224,14 +408,14 @@ Session keys stay in server memory for up to one hour, not browser storage. A co
 
 Keep real credentials in ignored `.env` / `.env.images` or the session form, never in source, screenshots, archives or `VITE_` variables. **Use app default / forget my key** removes the session key but can switch back to a configured server default; it does not necessarily disable generation.
 
-## Audience view, Library and exports
+## 👥 Audience view, Library and exports
 
 - **Audience view:** open from Studio preview or More. Swap **On air / Catch-up**, choose the time window, and expand **Show chat & votes**. Sample controls simulate a viewer; Live commands are entered in Twitch chat. The Studio return remains available.
 - **Library → Saved issues:** browse the active workspace’s comics and open an issue, book or manga series. Failed issue requests show recovery UI rather than a false empty library.
 - **Library → Create & export:** choose title/formats and bind released panels. Recap/book/series links preserve the workspace; use their PNG download controls for portable images.
 - **Local links:** a localhost recap URL does not publish anything. Others need access to the server; Sample issues additionally depend on that browser’s saved data. Export files for a portable copy.
 
-## OBS overlay
+## 📺 OBS overlay
 
 Open the preview first; it has return navigation. For OBS, choose **Clean OBS output** and use `obs=1` with an explicit workspace:
 
@@ -244,30 +428,7 @@ Replace `4173` with `4122` for the existing web port. Keep ComicToons running an
 
 Clean output intentionally has no navigation; operate through a separate Studio/audience tab. [Full OBS setup](docs/OBS_SETUP.md).
 
-## Current screenshots
-
-Captured from the local UI on 3 November 2026. Story content is Sample; the connection screenshot shows an unconfigured account. These are not live-Twitch or AI-quality proof. Addresses inside screenshots use isolated test ports; use the installation addresses above. [Screenshot inventory](docs/screenshots/README.md).
-
-| Landing | Audience with expandable voting |
-| --- | --- |
-| ![Landing with Sample and Live entry points](docs/screenshots/landing-current.jpg) | ![Audience presentation with local chat and vote controls](docs/screenshots/audience-current.jpg) |
-
-| Library | Create & export |
-| --- | --- |
-| ![Library with a saved Sample issue and export navigation](docs/screenshots/library-current.jpg) | ![Bound Sample issue with recap, book, manga and catch-up choices](docs/screenshots/output-current.jpg) |
-
-<details>
-<summary>Reader, phone catch-up and Twitch setup</summary>
-
-![Current manga reader with integrated panel lettering](docs/screenshots/reader-current.jpg)
-
-<img src="docs/screenshots/audience-mobile-current.jpg" alt="Phone audience view with On air and Catch-up switching, viewer arrival and local interactions" width="390">
-
-![Connection screen before a Twitch app is configured](docs/screenshots/connect-current.jpg)
-
-</details>
-
-## Configuration
+## 🔧 Configuration
 
 [.env.example](.env.example) contains placeholders, not shared credentials. Main settings:
 
@@ -291,7 +452,7 @@ The shared environment helper accepts legacy `PANELCAST_*` aliases for settings 
 
 Director access protects local writes; Viewer sessions remain restricted from broadcaster APIs. Exposing a server is a separate hosting/security task, not something copying a recap link accomplishes.
 
-## Troubleshooting
+## 🩺 Troubleshooting
 
 | Symptom | What to do |
 | --- | --- |
@@ -312,7 +473,18 @@ Director access protects local writes; Viewer sessions remain restricted from br
 | Cannot return from overlay | Use the preview’s Studio return. Clean OBS output has no controls; keep a separate Studio tab |
 | Recap link fails on another device | `localhost` points at that device. Export a file or separately configure an accessible server |
 
-## Testing and current status
+## ▲ Deployment: the Vercel Sample demo
+
+The Sample demo is a static site hosted on Vercel at **[comictoons-demo.vercel.app](https://comictoons-demo.vercel.app)**. It runs the bundled Sample data through `MockAdapter` (`apps/web/src/ui/demo-main.tsx`), so it needs no API server, no Twitch sign-in and no keys.
+
+- **Build:** `npm run build:demo` writes `apps/web/dist-demo` (about 75 MB, mostly Sample art).
+- **Config:** [`vercel.json`](vercel.json) sets `npm ci`, the build command, the output directory and a rewrite of `/` to `/demo.html`.
+- **Environment:** set no environment variables on the Vercel project and never add `.env` values there.
+- **Updates:** the Vercel project is connected to this repository, so every push to `main` redeploys the demo.
+- **Routes** are hash-based: [`/#/studio?workspace=sample`](https://comictoons-demo.vercel.app/#/studio?workspace=sample) (press **Run demo**), [`/#/overlay?workspace=sample`](https://comictoons-demo.vercel.app/#/overlay?workspace=sample), [`/#/recap/sample-tabletop-night?workspace=sample`](https://comictoons-demo.vercel.app/#/recap/sample-tabletop-night?workspace=sample) and [`/#/book/sample-tabletop-night?workspace=sample`](https://comictoons-demo.vercel.app/#/book/sample-tabletop-night?workspace=sample).
+- Live Twitch features (Connect with Twitch, live chat, panel generation) need the API and run locally. More in [docs/VERCEL_DEMO.md](docs/VERCEL_DEMO.md).
+
+## ✅ Testing
 
 ```sh
 npm run typecheck
@@ -326,7 +498,7 @@ npm run e2e:import-wire
 npm run secrets
 ```
 
-`npm run check` combines typecheck, lint and unit/contract tests. `npm run gate` also runs mock Twitch, builds, browser/OBS/import suites, secret scan, dependency audit and fresh-clone checks. The **maintainer owns the full gate**; focused checks are not a full-suite pass.
+`npm run check` combines typecheck, lint and unit/contract tests. `npm run gate` also runs mock Twitch, builds, browser/OBS/import suites, the secret scan, the dependency audit and fresh-clone checks.
 
 Browser tests use isolated loopback services. Default e2e ports are API 4301 / web 4273. For occupied test ports:
 
@@ -336,17 +508,23 @@ $env:COMICTOONS_E2E_WEB_PORT = '4373'
 npx playwright test -c tests/playwright.config.ts tests/ux-refinement.spec.ts
 ```
 
-### Verified local evidence, 3 November 2026
+### Verified status
 
-- Latest UX work: **19 distinct focused browser checks** and **6 Node checks** passed across recorded runs; typecheck, ESLint, web build, generic secret scan and whitespace checks passed.
-- Tested desktop/phone audience and public-chat states had no serious/critical axe findings. This is not full accessibility certification.
-- One long guided replay regression awaits maintainer rerun after an accessible-selector fix. Its latest run reached the event sequence and saved issue before timing out on that selector. Direct desktop/phone selector and catch-up-window unit checks passed afterward. The long test is not counted as passing.
-- Historical real evidence includes a ten-minute Twitch capture with 59 unique frames. This does not prove the latest full approval → vote → newcomer → export workflow passed live.
-- Strict AI illustration fidelity has not passed the complete live proof; quota/provider failures remain documented. Source-frame output and AI illustration must be labelled accurately.
+`npm run check` passes on the current `main`: TypeScript typecheck, ESLint and **834 unit and contract tests** (Node 24, with Playwright Chromium installed for the export tests). The browser, mock-Twitch, OBS and fresh-clone suites run through `npm run gate`.
 
-See [STATE.md](STATE.md) for delivery history/log paths and [the earlier QA sprint](docs/QA_SPRINT_2026-11-02.md) for real-source evidence. `artifacts/` contains ignored local evidence and may be absent from downloads. Older gate results do not certify the current working tree.
+## 🧰 Tech stack
 
-## Project structure and credits
+| Area | Tools |
+| --- | --- |
+| Front end | React 19, Vite 6, TypeScript, locally served fonts (Bangers, Comic Neue, Space Grotesk) |
+| Server | Node 24, Fastify 5, `sharp` for image composition, Playwright Chromium for capture and server-side export |
+| Twitch | OAuth, IRC chat, EventSub, Helix API |
+| Illustration | Source frames (no API), OpenAI, Gemini, Pollinations, Cloudflare |
+| Quality | Playwright end-to-end tests, axe-core accessibility checks, a mock Twitch harness, ESLint, a secret scan |
+| Hosting | Vercel for the static Sample demo, OBS Browser Source for the overlay |
+| Demo video | Remotion, Playwright screen capture, FFmpeg |
+
+## 🗂️ Project structure
 
 | Path | Purpose |
 | --- | --- |
@@ -357,16 +535,30 @@ See [STATE.md](STATE.md) for delivery history/log paths and [the earlier QA spri
 | `tests/` / `scripts/` | Automated checks, launchers, harnesses and secret scans |
 | `docs/` | Setup guides, QA references and current screenshots |
 | `exports/` / `artifacts/` | Local output/evidence; review ignore rules before packaging |
+| `video/` | Remotion project and Playwright capture scripts that rebuild the demo video |
 
-The app uses React 19, Vite 6, Fastify 5, TypeScript and Playwright. Fonts and Sample art are served locally. See [dependency/license notes](docs/DEPENDENCIES.md), [art provenance](fixtures/art/generated/LICENSE-NOTE.md), [lettering maps](docs/LETTERING_MAPS.md) and [BACKLOG.md](BACKLOG.md).
+## 🚧 Known limits
 
-## How Codex was used and submission record
+- Chat is commentary, not streamer speech. There is no audio transcription, and quotations are attributed to Chat.
+- Sample mode uses bundled art and a local simulation. It does not prove that real Twitch capture or AI illustration passed review.
+- Source-frame output and AI illustration are labelled differently on purpose. An illustrated page depends on your provider's access, quota and model, and a failed attempt is shown as failed.
+- Approved history is not a Twitch-wide comic library. Viewer shows pages released by the connected broadcaster on this ComicToons server.
+- Tokens live in API-server memory, so restarting the server means signing in to Twitch again.
+- Native Twitch polls, predictions and channel-point rewards depend on the channel's Twitch eligibility and permissions. Chat votes work where those are unavailable.
+- A localhost recap link publishes nothing. Export a file for a portable copy.
 
-The owner supplied product direction, visual requirements, approval rules and testing authorization. Codex implemented/debugged UI, Twitch integration, capture, provider adapters, lettering, review, participation, export, tests and documentation. Live images come through the app’s selected provider; a separate image-generation tool was not used to manufacture live-proof artwork. Incomplete/failed checks remain recorded.
+## 🙏 Credits
 
-- Recorded build/QA session: `01a1989f-bf57-71f0-a88f-c10dad4473ec`.
-- Earlier build session: `01a18f6b-e271-7c62-96c6-d743ad8eda57`.
-- Demo video: not yet linked in this README.
-- No public deployment is claimed. This documentation/screenshot refresh is local only.
+Built by **Tyk Anthony** (TYK3) for the Codex × TwitchCon hackathon. The owner supplied product direction, visual requirements, approval rules and testing authorisation. Codex implemented the UI, Twitch integration, capture, provider adapters, lettering, review, participation, export, tests and documentation. Live images come through the app's selected provider.
 
-For submission, provide reviewed source/assets, runnable instructions, an accurate demo and relevant build-session IDs. Check the organizer’s current requirements separately. Never package private environment files, stream/session keys, captures or chat logs unintentionally. A ZIP made from a working folder can contain ignored files; a GitHub ZIP contains only that remote revision.
+- Fonts: Bangers, Comic Neue and Space Grotesk, all under the SIL Open Font Licence (see `apps/web/src/ui/fonts`).
+- Sample art provenance and licence notes: [fixtures/art/generated/LICENSE-NOTE.md](fixtures/art/generated/LICENSE-NOTE.md). Dependency and licence review: [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md). Lettering maps: [docs/LETTERING_MAPS.md](docs/LETTERING_MAPS.md).
+- The speech-bubble logo is drawn for ComicToons and is not taken from any brand kit. The Connect glyph is a generic chat bubble, not the Twitch logo.
+- Demo video music is an original ambient bed synthesised by [`video/capture/make_music.py`](video/capture/make_music.py).
+
+Copyright © 2026 Tyk Anthony. All rights reserved.
+
+<p align="center">
+  <img src="https://img.shields.io/badge/made%20for-Codex%20×%20TwitchCon-9146FF?style=for-the-badge&labelColor=142b36" alt="Made for the Codex × TwitchCon hackathon"><br>
+  <sub>Never package private environment files, stream keys, captures or chat logs. A ZIP made from a working folder can contain ignored files; a GitHub ZIP contains only what is in the repository.</sub>
+</p>

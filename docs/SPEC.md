@@ -25,9 +25,8 @@ T1 end-to-end on sample data, zero keys → T2 real Twitch + real images → T3 
 ## 2. Hackathon constraints
 - Must connect to Twitch (chat, overlay, API, EventSub). Overlay = OBS Browser Source + EventSub.
 - Newly built in the window; standard libs/templates OK.
-- Submission: repo URL, description incl. Codex use, Codex session ID (from `/status`) of the thread where most was built, YouTube video <3 min showing it working on Twitch and how Codex built it.
+- Submission: repo URL, description incl. Codex use, YouTube video <3 min showing it working on Twitch and how Codex built it.
 - Repo must run from a fresh clone; never commit keys; document env vars.
-- Open question: are Codex CLI session IDs accepted? (Owner asks in Discord.)
 
 ## 3. Architecture
 Stack: TypeScript monorepo (Node 20+). `apps/server` (Fastify + `ws`, SQLite via better-sqlite3, in-process persisted job queue), `apps/web` (Vite + React; routes `/dashboard`, `/overlay` (OBS uses ui.html#/overlay), `/r/:streamId`, `/demo`), `packages/core` (types, windowing, scoring, prompt builders, provider interfaces + mocks), `fixtures/` (sample streams + pre-generated art), `exports/` (static recap bundles).

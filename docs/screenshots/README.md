@@ -15,6 +15,6 @@ Captured on 3 November 2026 from the local working tree using isolated Playwrigh
 
 Desktop captures are 1242 pixels wide; the phone capture is 390 pixels wide. JPEGs are stored here so a source archive includes README images. Older `*-1280.png` images are historical and are no longer referenced by the main README.
 
-The local capture harness is `artifacts/tmp/readme-shots.spec.ts`, configured by `artifacts/tmp/readme-shots.config.ts`. It runs on API 4405 / web 4375 with the repository's credential scrubbing and loopback network guard. Its files and logs are ignored local evidence, not prerequisites for installing the app. A checkout without that harness can reproduce the views manually using the [Sample walkthrough](../../README.md#sample-demo).
+The local capture harness is `artifacts/tmp/readme-shots.spec.ts`, configured by `artifacts/tmp/readme-shots.config.ts`. It runs on API 4405 / web 4375 with the repository's credential scrubbing and loopback network guard. Its files and logs are ignored local evidence, not prerequisites for installing the app. A checkout without that harness can reproduce the views manually using the [Sample walkthrough](../../README.md#-sample-demo).
 
 Capture the actual app, retain visible Sample labels and navigation, exclude keys/account tokens, and inspect lettering and controls before replacing an image. Avoid artificial mockups as evidence of implemented behavior.

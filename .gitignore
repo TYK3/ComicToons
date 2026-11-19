@@ -74,3 +74,9 @@ desktop.ini
 
 # Static demo build output
 dist-demo/
+
+# Demo video project: rebuild clips with `node video/capture/record.mjs`
+video/node_modules/
+video/out/
+video/public/clips/
+video/capture/.state.json

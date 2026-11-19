@@ -4,7 +4,7 @@ In Live Studio, open **Live setup → Create pages from a VOD or clip**, then pa
 
 ## What you need
 
-- **Twitch app credentials** (`COMICTOONS_TWITCH_CLIENT_ID` and `COMICTOONS_TWITCH_CLIENT_SECRET`, see [Configuration](../README.md#configuration)). Clip and VOD details come from Twitch's read-only Helix API, using an app token. If no credentials are set, the request is refused with 409 ("Twitch app access is not set up on this machine…") and nothing is sent to Twitch.
+- **Twitch app credentials** (`COMICTOONS_TWITCH_CLIENT_ID` and `COMICTOONS_TWITCH_CLIENT_SECRET`, see [Configuration](../README.md#-configuration)). Clip and VOD details come from Twitch's read-only Helix API, using an app token. If no credentials are set, the request is refused with 409 ("Twitch app access is not set up on this machine…") and nothing is sent to Twitch.
 - **Live Studio:** the server adapter implements `importLink` and `addSeriesChapter`; the routes are registered in `apps/server/src/app.ts`. Use the Live workspace for Twitch imports.
 
 ## Accepted links
