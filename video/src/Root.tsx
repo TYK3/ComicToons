@@ -6,11 +6,12 @@ import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
-import { Captions, ScreenScene, type Callout, type Cap, type Zoom } from "./components";
-import { Architecture, Intro, Outro, Problem, TechStack, UseCase } from "./scenes";
+import { Captions, ScreenScene, type Callout, type Cap, type Track, type Zoom } from "./components";
+import { Architecture, Intro, LiveSetup, Outro, Problem, TechStack, UseCase } from "./scenes";
 import { FPS, H, sec, W } from "./theme";
 import script from "../narration/script.json";
 import manifest from "./voice-manifest.json";
+import trackData from "./tracks.json";
 
 // ---------------------------------------------------------------------------
 // Narration timing: every scene is as long as its narration (plus a short lead
@@ -38,7 +39,9 @@ const narr = (id: string): Narr => {
   return { items, total: t - GAP + TAIL, starts: items.map((i) => i.from) };
 };
 
-const co = (from: number, to: number, box: [number, number, number, number], label: string, side?: Callout["side"]): Callout => ({ from, to, box, label, side });
+const tracks = trackData as unknown as Record<string, Record<string, Track>>;
+// A callout appears in scene seconds (after the narrator says the words) and follows a measured element.
+const co = (from: number, to: number, target: string, label: string, side?: Callout["side"]): Callout => ({ from, to, target, label, side });
 const zoom = (from: number, to: number, focus: [number, number], scale: number): Zoom => ({ from, to, focus, scale });
 
 const LABEL = "Recorded from the Sample demo";
@@ -47,7 +50,7 @@ type Scene = { id: string; secs: number; node: React.ReactNode; tr?: "fade" | "s
 
 type ClipOpts = {
   clip: string; start: number; span: number; chapter: { n: string; label: string };
-  callouts?: Callout[]; zooms?: Zoom[]; bg?: "ink" | "teal"; frameLabel?: string; min?: number;
+  track?: string; callouts?: Callout[]; zooms?: Zoom[]; bg?: "ink" | "teal"; frameLabel?: string; min?: number;
 };
 
 const clipScene = (id: string, o: ClipOpts, tr?: Scene["tr"]): Scene => {
@@ -55,8 +58,8 @@ const clipScene = (id: string, o: ClipOpts, tr?: Scene["tr"]): Scene => {
   const secs = Math.max(o.min ?? 0, n.total);
   const speed = Math.min(2.2, Math.max(0.8, o.span / secs));
   return {
-    id, secs, tr, n, capBottom: 22,
-    node: <ScreenScene clip={o.clip} start={o.start} speed={speed} chapter={o.chapter} callouts={o.callouts} zooms={o.zooms} bg={o.bg} frameLabel={o.frameLabel ?? LABEL} />,
+    id, secs, tr, n, capBottom: 18,
+    node: <ScreenScene clip={o.clip} start={o.start} speed={speed} chapter={o.chapter} callouts={o.callouts} zooms={o.zooms} tracks={o.track ? tracks[o.track] : undefined} bg={o.bg} frameLabel={o.frameLabel ?? LABEL} />,
   };
 };
 
@@ -67,19 +70,23 @@ const titleScene = (id: string, min: number, node: (n: Narr) => React.ReactNode,
 
 const heroN = narr("what-hero");
 const archN = narr("arch");
+const conN = narr("connect");
+const stuN = narr("studio");
+const viewN = narr("viewers");
 
 const scenes: Scene[] = [
   titleScene("intro", 7, () => <Intro />),
   titleScene("problem", 0, (n) => <Problem at={n.starts} />, "slide"),
   {
-    id: "what-hero", secs: heroN.total, tr: "wipe", n: heroN, capBottom: 22,
+    id: "what-hero", secs: heroN.total, tr: "wipe", n: heroN, capBottom: 18,
     node: (
       <ScreenScene
         clip="" still="clips/hero.png" chapter={{ n: "01", label: "WHAT IT IS" }} frameLabel={LABEL}
+        tracks={tracks.hero}
         callouts={[
-          co(heroN.starts[0] + 0.5, heroN.starts[0] + heroN.items[0].dur, [535, 150, 853, 281], "Chat becomes panels", "top"),
-          co(heroN.starts[1] + 0.3, heroN.starts[1] + heroN.items[1].dur, [716, 572, 250, 52], "Your channel", "left"),
-          co(heroN.starts[1] + 0.9, heroN.starts[1] + heroN.items[1].dur, [982, 572, 222, 52], "Or the Sample", "right"),
+          co(heroN.starts[0] + 1.4, heroN.starts[0] + heroN.items[0].dur + 0.3, "title", "Chat becomes panels", "top"),
+          co(heroN.starts[1] + 1.2, heroN.starts[1] + 3.6, "connectBtn", "Your channel", "left"),
+          co(heroN.starts[1] + 3.7, heroN.starts[1] + heroN.items[1].dur, "sampleBtn", "Or the Sample", "right"),
         ]}
         zooms={[zoom(heroN.starts[0], heroN.starts[0] + heroN.items[0].dur + 1.2, [960, 330], 1.25)]}
       />
@@ -88,12 +95,17 @@ const scenes: Scene[] = [
   clipScene("what-scroll", { clip: "landing", start: 3.2, span: 12, chapter: { n: "01", label: "WHAT IT IS" } }),
   { id: "arch", secs: archN.total, tr: "slide", n: archN, capBottom: 30, node: <Architecture at={archN.starts} /> },
   titleScene("usecase", 7, () => <UseCase />, "wipe"),
-  clipScene("connect", { clip: "connect", start: 1.5, span: 10, chapter: { n: "02", label: "CONNECT TWITCH" }, callouts: [co(1.5, 5, [366, 520, 420, 66], "Sign in with Twitch", "right")] }),
+  clipScene("connect", { clip: "connect", track: "connect", start: 0.9, span: 10, chapter: { n: "02", label: "CONNECT TWITCH" }, callouts: [co(conN.starts[0] + 0.9, conN.starts[0] + conN.items[0].dur - 0.6, "connect", "Sign in with Twitch", "right")] }),
+  titleScene("keys", 0, (n) => <LiveSetup at={n.starts} />, "wipe"),
   clipScene("studio", {
-    clip: "studio", start: 2, span: 27, chapter: { n: "03", label: "STUDIO" },
-    callouts: [co(0.7, 3.5, [452, 74, 100, 44], "Run demo", "bottom"), co(3.7, 6.5, [16, 78, 150, 34], "Sample or Live", "bottom"), co(7, 12, [1130, 169, 342, 52], "Live counters", "bottom"), co(14, 20, [1494, 140, 396, 490], "Audience preview", "left")],
+    clip: "studio", track: "studio", start: 2, span: 27, chapter: { n: "03", label: "STUDIO" },
+    callouts: [
+      co(stuN.starts[0] + 0.5, stuN.starts[0] + 2.6, "sampleSwitch", "Sample mode", "bottom"),
+      co(stuN.starts[0] + 2.8, stuN.starts[0] + stuN.items[0].dur + 0.2, "runDemo", "Run demo", "bottom"),
+      co(stuN.starts[1] + 2.8, stuN.starts[1] + stuN.items[1].dur + 0.9, "stats", "Live counters", "bottom"),
+    ],
   }),
-  clipScene("viewers", { clip: "studio", start: 34.5, span: 18, chapter: { n: "03", label: "STUDIO · VIEWERS" }, callouts: [co(5.5, 11, [1494, 140, 396, 490], "What viewers see", "left")] }, undefined),
+  clipScene("viewers", { clip: "studio", track: "studio", start: 34.5, span: 18, chapter: { n: "03", label: "STUDIO · VIEWERS" }, callouts: [co(viewN.starts[1] + 1.5, viewN.starts[1] + viewN.items[1].dur + 0.2, "audiencePreview", "Audience preview", "left")] }, undefined),
   clipScene("audience", { clip: "audience", start: 1.5, span: 16, chapter: { n: "04", label: "AUDIENCE VIEW" } }, "slide"),
   clipScene("catchup", { clip: "catchup", start: 2.5, span: 12, chapter: { n: "04", label: "CATCH-UP" } }),
   clipScene("library", { clip: "output", start: 2, span: 16, chapter: { n: "05", label: "LIBRARY & EXPORT" } }, "wipe"),

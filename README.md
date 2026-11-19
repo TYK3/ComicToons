@@ -38,10 +38,10 @@
 
 <p align="center">
   <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/video-thumb.jpg" alt="Watch the ComicToons demo video: the problem, the architecture, and a full walkthrough of the Sample stream" width="62%"></a><br>
-  <a href="docs/media/ComicToons-demo.mp4"><b>▶ Watch the full demo video (about 4 minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a>
+  <a href="docs/media/ComicToons-demo.mp4"><b>▶ Watch the full demo video (about 4½ minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a>
 </p>
 
-The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo. It is narrated with Microsoft neural text-to-speech (the `en-GB-RyanNeural` voice, through `edge-tts`), captioned from the narration, and rendered with [Remotion](https://www.remotion.dev). The narration script is [`video/narration/script.json`](video/narration/script.json), and [`video/`](video) rebuilds the whole video.
+The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo, and the video states plainly that the Sample needs no keys while live use needs your own Twitch app and an image-provider key. It is narrated with Microsoft neural text-to-speech (the `en-GB-RyanNeural` voice, through `edge-tts`), captioned from the narration, and rendered with [Remotion](https://www.remotion.dev). The narration script is [`video/narration/script.json`](video/narration/script.json), and [`video/`](video) rebuilds the whole video.
 
 <table align="center">
 <tr>
@@ -57,6 +57,7 @@ The video covers the problem, what ComicToons is, how the pipeline fits together
 <summary><b>📑 Contents</b> (click to collapse)</summary>
 
 - [🌟 What you can do](#-what-you-can-do)
+- [🔑 What you need: keys and accounts](#-what-you-need-keys-and-accounts)
 - [🖼️ What it looks like](#️-what-it-looks-like)
 - [⚙️ How it works](#️-how-it-works)
 - [🏗️ Architecture](#️-architecture)
@@ -86,15 +87,29 @@ Turn stream moments into a comic, review what goes on air, and give late arrival
 
 | Experience | What it does | What you need |
 | --- | --- | --- |
-| Sample Studio | Simulates chat, panel releases, arrivals, raid catch-up, dialogue votes, a cameo and a prediction; saves a Sample issue | Local app; no Twitch or image-provider credentials |
-| Read public chat only | Reads a channel’s chat without video capture or panel creation | Twitch app configuration and your Twitch sign-in |
-| Source-frame comic | Composes actual captured frames with attributed chat; your stream’s pages wait for review | Playing Twitch video and explicit capture; no image API key |
-| Illustrated comic | Analyses captured frames, draws a page and checks the result | Supported provider credentials, model access and quota |
+| Sample Studio | Simulates chat, panel releases, arrivals, raid catch-up, dialogue votes, a cameo and a prediction; saves a Sample issue | Nothing: no Twitch account, no keys (the hosted demo works the same way) |
+| Read public chat only | Reads a channel’s chat without video capture or panel creation | **Your own Twitch app** (client ID and secret in `.env`) and your Twitch sign-in |
+| Source-frame comic | Composes actual captured frames with attributed chat; your stream’s pages wait for review | **Your own Twitch app** and sign-in, playing Twitch video and explicit capture; no image API key |
+| Illustrated comic | Analyses captured frames, draws a page and checks the result | **Your own Twitch app** plus **your own image-provider key** (OpenAI, Gemini, Pollinations or Cloudflare), model access and quota |
 | Audience view | Shows released panels, On air / Catch-up switching and expandable interactions | Released Sample or Live content |
 | Library | Groups saved issues with Create & export, collected books and manga readers | Released panels or a saved issue |
 | OBS overlay | Presents released content without navigation in a Browser Source | Running app; OBS for broadcast use |
 
 Comic book and manga are **two reading formats of the same story**. The landing page shows previews; **Read full comic book** and **Read full manga series** open the complete readers. Festival, Sunset, Lagoon and Blossom are the colour themes.
+
+## 🔑 What you need: keys and accounts
+
+**The Sample needs no keys.** The built-in Sample (and the [hosted demo](https://comictoons-demo.vercel.app)) runs with no Twitch account, no `.env` and no API keys.
+
+**Using ComicToons on your own stream does need your own keys.** ComicToons never ships with any, and nobody can use yours. You supply:
+
+| For | You provide | Where it goes |
+| --- | --- | --- |
+| Live Twitch (sign-in, chat, events) | A Twitch application you register yourself: `COMICTOONS_TWITCH_CLIENT_ID`, `COMICTOONS_TWITCH_CLIENT_SECRET` and `COMICTOONS_TWITCH_REDIRECT_URI` | Ignored `.env` ([setup](#-configure-twitch-once)) |
+| Source-frame comics | No image key. Set `COMICTOONS_IMAGE_PROVIDER=source` | Ignored `.env` |
+| Illustrated pages | A key for the provider you choose: `OPENAI_API_KEY`, `GEMINI_API_KEY`, `POLLINATIONS_API_KEY`, or `CLOUDFLARE_API_TOKEN` with `CLOUDFLARE_ACCOUNT_ID` | Ignored `.env` / `.env.images`, or the session form for one hour ([providers](#-image-providers-and-private-configuration)) |
+
+Keep real values out of source, screenshots and archives. The narration and captions of the demo video say the same thing.
 
 Sample and Live have separate chat, panels, catch-up, saved issues and output. Sample uses bundled art and local simulation; it does not prove that real Twitch capture or AI illustration passed review.
 
@@ -311,7 +326,7 @@ Sample time advances by one simulated minute per scene. Catch-up windows use sto
 
 ## 🔌 Configure Twitch once
 
-Sample needs no `.env`. For Live, copy the example **only if your private file does not already exist**.
+Sample needs no `.env` and no keys. **Live needs your own Twitch app credentials** (and an image-provider key only if you want illustrated pages; see [What you need](#-what-you-need-keys-and-accounts)). Copy the example **only if your private file does not already exist**.
 
 PowerShell:
 
@@ -390,7 +405,7 @@ Chat is commentary, not streamer speech. There is no audio transcription. `!noin
 
 ## 🎨 Image providers and private configuration
 
-Source-frame comics use actual frames and attributed lettering, without an external image API or AI illustration. Illustrated pages support these provider choices in **Page creation settings**:
+Source-frame comics use actual frames and attributed lettering, without an external image API or AI illustration, so they need no image key (live use still needs your Twitch app credentials). Illustrated pages need **your own key** for one of these providers, entered in **Page creation settings** or kept in `.env`:
 
 | Choice | Private server defaults |
 | --- | --- |
@@ -475,7 +490,7 @@ Director access protects local writes; Viewer sessions remain restricted from br
 
 ## ▲ Deployment: the Vercel Sample demo
 
-The Sample demo is a static site hosted on Vercel at **[comictoons-demo.vercel.app](https://comictoons-demo.vercel.app)**. It runs the bundled Sample data through `MockAdapter` (`apps/web/src/ui/demo-main.tsx`), so it needs no API server, no Twitch sign-in and no keys.
+The Sample demo is a static site hosted on Vercel at **[comictoons-demo.vercel.app](https://comictoons-demo.vercel.app)**. It runs the bundled Sample data through `MockAdapter` (`apps/web/src/ui/demo-main.tsx`), so the hosted demo needs no API server, no Twitch sign-in and no keys. Running ComicToons live on your own stream does need your own Twitch app and, for illustrated pages, an image-provider key (see [What you need](#-what-you-need-keys-and-accounts)).
 
 - **Build:** `npm run build:demo` writes `apps/web/dist-demo` (about 75 MB, mostly Sample art).
 - **Config:** [`vercel.json`](vercel.json) sets `npm ci`, the build command, the output directory and a rewrite of `/` to `/demo.html`.

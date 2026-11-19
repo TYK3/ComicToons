@@ -82,19 +82,44 @@ export const Chip: React.FC<{ n: string; label: string }> = ({ n, label }) => {
   );
 };
 
-export type Callout = { from: number; to: number; box: [number, number, number, number]; label: string; side?: "top" | "bottom" | "left" | "right" };
-export type Zoom = { from: number; to: number; focus: [number, number]; scale: number };
+// Seconds between a page's creation (the tracker's t=0) and the first frame of its recorded video.
+export const TRACK_LAG = 0;
+// The recording is shown at 1520x855 so even two-line captions sit clear of its bottom edge.
+const FRAME_W = 1520;
 
-const CalloutView: React.FC<{ c: Callout; speed: number }> = ({ c, speed }) => {
+export type Callout = { from: number; to: number; target: string; label: string; side?: "top" | "bottom" | "left" | "right" };
+export type Zoom = { from: number; to: number; focus: [number, number]; scale: number };
+export type Track = number[][]; // rows of [t, x, y, w, h] sampled from the live page while it was recorded
+type Box = [number, number, number, number];
+
+// Where the target element really was at source time `ts`: interpolated between the sampled boxes.
+export const boxAt = (track: Track | undefined, ts: number): Box | null => {
+  if (!track || track.length === 0) return null;
+  let i = 0;
+  while (i < track.length - 1 && track[i + 1][0] <= ts) i++;
+  const a = track[i];
+  const b = track[Math.min(i + 1, track.length - 1)];
+  if (a[3] === 0 || b[3] === 0) return null; // not on screen
+  const p = b[0] === a[0] ? 0 : Math.min(1, Math.max(0, (ts - a[0]) / (b[0] - a[0])));
+  const box = [1, 2, 3, 4].map((k) => a[k] + (b[k] - a[k]) * p) as Box;
+  // clip to the 1920x1080 page
+  const x0 = Math.max(0, box[0]);
+  const y0 = Math.max(0, box[1]);
+  const x1 = Math.min(1920, box[0] + box[2]);
+  const y1 = Math.min(1080, box[1] + box[3]);
+  if (x1 - x0 < 8 || y1 - y0 < 8) return null;
+  return [x0, y0, x1 - x0, y1 - y0];
+};
+
+const CalloutView: React.FC<{ c: Callout; box: Box | null }> = ({ c, box: bx }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const t = (frame / fps) * speed;
-  if (t < c.from || t > c.to) return null;
-  const enter = spring({ frame: frame - (c.from / speed) * fps, fps, config: { damping: 16, stiffness: 160 } });
+  const t = frame / fps;
+  if (t < c.from || t > c.to || !bx) return null;
+  const enter = spring({ frame: frame - c.from * fps, fps, config: { damping: 16, stiffness: 160 } });
   const exit = interpolate(t, [c.to - 0.25, c.to], [1, 0], { extrapolateLeft: "clamp" });
   const o = Math.min(1, enter) * exit;
-  const pulse = 1 + Math.sin(frame / 5) * 0.012;
-  const [x, y, w, h] = c.box;
+  const [x, y, w, h] = bx;
   const side = c.side ?? "bottom";
   const pill: React.CSSProperties = {
     position: "absolute",
@@ -112,9 +137,10 @@ const CalloutView: React.FC<{ c: Callout; speed: number }> = ({ c, speed }) => {
   if (side === "top") Object.assign(pill, { left: 0, bottom: h + 18 });
   if (side === "left") Object.assign(pill, { right: w + 22, top: 0 });
   if (side === "right") Object.assign(pill, { left: w + 22, top: 0 });
+  // The red outline sits exactly 8px outside the element, so it frames it without covering it.
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: w, height: h, opacity: o, scale: String(pulse * (0.9 + 0.1 * Math.min(1, enter))) }}>
-      <div style={{ position: "absolute", inset: -8, border: `6px solid ${C.coral}`, borderRadius: 12, boxShadow: "0 0 0 4px rgba(255,255,255,0.9), 0 0 40px rgba(238,100,113,0.6)" }} />
+    <div style={{ position: "absolute", left: x, top: y, width: w, height: h, opacity: o }}>
+      <div style={{ position: "absolute", inset: -8, border: `6px solid ${C.coral}`, borderRadius: 12, boxShadow: "0 0 0 4px rgba(255,255,255,0.9), 0 0 40px rgba(238,100,113,0.6)", opacity: 0.88 + 0.12 * Math.sin(frame / 5) }} />
       <div style={pill}>{c.label}</div>
     </div>
   );
@@ -130,11 +156,13 @@ export const ScreenScene: React.FC<{
   bg?: "ink" | "teal";
   frameLabel?: string;
   still?: string;
-}> = ({ clip, still, start = 0, speed = 1, chapter, callouts = [], zooms = [], bg = "ink", frameLabel }) => {
+  tracks?: Record<string, Track>;
+}> = ({ clip, still, start = 0, speed = 1, chapter, callouts = [], zooms = [], bg = "ink", frameLabel, tracks }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const t = (frame / fps) * speed;
-  const k = 1600 / 1920;
+  const t = frame / fps; // scene time; zooms and callouts follow the narration
+  const ts = start + t * speed + TRACK_LAG; // time inside the recording
+  const k = FRAME_W / 1920;
   // Smooth zoom: blend all active zooms
   let scale = 1;
   let fx = 960;
@@ -155,7 +183,7 @@ export const ScreenScene: React.FC<{
     <AbsoluteFill>
       <Backdrop variant={bg} />
       <Chip n={chapter.n} label={chapter.label} />
-      <div style={{ position: "absolute", left: 160, top: 64, width: 1600, height: 900, border: `6px solid ${C.cream}`, boxShadow: `14px 14px 0 ${C.amber}`, overflow: "hidden", background: "#fff" }}>
+      <div style={{ position: "absolute", left: (1920 - FRAME_W - 12) / 2, top: 66, width: FRAME_W, height: FRAME_W * 0.5625, border: `6px solid ${C.cream}`, boxShadow: `14px 14px 0 ${C.amber}`, overflow: "hidden", background: "#fff" }}>
         <div style={{ width: 1920, height: 1080, transformOrigin: "0 0", scale: String(k), position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, transformOrigin: `${fx}px ${fy}px`, scale: String(scale) }}>
             {still ? (
@@ -164,7 +192,7 @@ export const ScreenScene: React.FC<{
               <Video src={staticFile(`clips/${clip}.mp4`)} trimBefore={Math.round(start * fps)} playbackRate={speed} muted style={{ width: 1920, height: 1080 }} />
             )}
             {callouts.map((c, i) => (
-              <CalloutView key={i} c={c} speed={speed} />
+              <CalloutView key={i} c={c} box={boxAt(tracks?.[c.target], still ? 0 : ts)} />
             ))}
           </div>
         </div>

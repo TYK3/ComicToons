@@ -56,10 +56,36 @@ async function scrollBy(p, dy, ms = 2400) {
   for (let i = 0; i < steps; i++) { await p.mouse.wheel(0, dy / steps); await sleep(40); }
 }
 
+// Samples the real bounding boxes of named UI targets while a scene plays, so the video's callouts
+// can follow the actual element. Times are seconds since the page was created (the recording's t=0).
+const TRACKS_FILE = path.resolve('video/src/tracks.json');
+const tracks = fs.existsSync(TRACKS_FILE) ? JSON.parse(fs.readFileSync(TRACKS_FILE, 'utf8')) : {};
+function startTracker(page, targets, t0) {
+  const data = Object.fromEntries(Object.keys(targets).map(k => [k, []]));
+  let on = true;
+  const loop = (async () => {
+    while (on) {
+      const t = (Date.now() - t0) / 1000;
+      try {
+        const boxes = await page.evaluate(spec => spec.map(([css, text]) => {
+          const els = [...document.querySelectorAll(css)].filter(e => !text || e.textContent.includes(text));
+          const e = els.find(x => { const r = x.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+          if (!e) return null;
+          const r = e.getBoundingClientRect();
+          return [r.x, r.y, r.width, r.height].map(v => Math.round(v * 10) / 10);
+        }), Object.values(targets));
+        Object.keys(targets).forEach((k, i) => data[k].push([Math.round(t * 1000) / 1000, ...(boxes[i] ?? [0, 0, 0, 0])]));
+      } catch { /* page navigating */ }
+      await sleep(50);
+    }
+  })();
+  return async () => { on = false; await loop; return data; };
+}
+
 const browser = await chromium.launch({channel: 'chrome', args: ['--no-sandbox', '--force-device-scale-factor=1']});
 const results = {};
 
-async function scene(name, fn, {extra} = {}) {
+async function scene(name, fn, {extra, track} = {}) {
   const dir = path.resolve(OUT, '_tmp_' + name);
   fs.rmSync(dir, {recursive: true, force: true});
   const ctx = await browser.newContext({
@@ -72,7 +98,9 @@ async function scene(name, fn, {extra} = {}) {
   page.on('pageerror', e => console.log(name, 'pageerror', e.message));
   cx = 960; cy = 540;
   const t0 = Date.now();
+  const stopTracker = track ? startTracker(page, track, t0) : null;
   await fn(page, ctx);
+  if (stopTracker) { tracks[name] = await stopTracker(); fs.writeFileSync(TRACKS_FILE, JSON.stringify(tracks)); }
   await sleep(600);
   await ctx.storageState({path: STATE});
   const vids = (await Promise.all(ctx.pages().map(async pg => ({pg, v: pg.video()})))).filter(x => x.v);
@@ -115,7 +143,7 @@ await run('connect', async p => {
   await sleep(2500);
   await scrollBy(p, -500, 1500);
   await sleep(1000);
-});
+}, {track: {connect: ['button', 'Connect with Twitch']}});
 
 await run('studio', async p => {
   await go(p, '#/studio?workspace=sample');
@@ -131,7 +159,7 @@ await run('studio', async p => {
   await click(p, p.locator('button:has-text("Simulate a raid")').first(), 2800);
   await click(p, p.locator('button:has-text("Simulate viewers")').first(), 700);
   await click(p, p.locator('button:has-text("Try voting")').first(), 3200);
-});
+}, {track: {runDemo: ['.ct-toolbar__primary button.ct-btn--ink'], sampleSwitch: ['label.ct-source-switch'], stats: ['dl.ct-stats'], audiencePreview: ['section.ct-onair']}});
 
 await run('audience', async p => {
   await go(p, '#/audience?workspace=sample');
@@ -203,6 +231,9 @@ if (!only || only === 'hero') {
   await go(page, '#/');
   await sleep(3500);
   await page.screenshot({path: path.join(OUT, 'hero.png')});
+  const box = async (css, text) => page.evaluate(([c, t]) => { const e = [...document.querySelectorAll(c)].find(x => !t || x.textContent.includes(t)); const r = e.getBoundingClientRect(); return [0, r.x, r.y, r.width, r.height].map(v => Math.round(v * 10) / 10); }, [css, text]);
+  tracks.hero = {title: [await box('h1')], connectBtn: [await box('button', 'Connect with Twitch')], sampleBtn: [await box('a,button', 'Try Sample demo')]};
+  fs.writeFileSync(TRACKS_FILE, JSON.stringify(tracks));
   await ctx.close();
 }
 await browser.close();

@@ -170,7 +170,7 @@ export const UseCase: React.FC = () => {
         CRITICAL MESS
       </div>
       <div style={{ position: "absolute", left: 136, top: 470, fontFamily: UI, fontWeight: 700, fontSize: 40, color: C.ink, maxWidth: 940, lineHeight: 1.3, opacity: reveal(t, 1.2) }}>
-        A fictional tabletop night streamed by @juniper_rolls. Everything you are about to see is the built-in Sample: no Twitch account and no keys.
+        A fictional tabletop night streamed by @juniper_rolls. The built-in Sample needs no Twitch account and no keys. Going live needs your own.
       </div>
       <div style={{ position: "absolute", left: 136, top: 760, display: "flex", gap: 16, opacity: reveal(t, 2.2) }}>
         {["Connect", "Studio", "Audience", "Library", "OBS overlay"].map((s, i) => (
@@ -216,6 +216,48 @@ export const TechStack: React.FC = () => {
             </div>
           );
         })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+const keyCards: { h: string; sub: string; items: string[]; c: string }[] = [
+  { h: "1  Twitch app", sub: "Register your own app at dev.twitch.tv", items: ["COMICTOONS_TWITCH_CLIENT_ID", "COMICTOONS_TWITCH_CLIENT_SECRET", "COMICTOONS_TWITCH_REDIRECT_URI"], c: C.twitch },
+  { h: "2  Source frames", sub: "Real captured frames, composed as a comic", items: ["No image key needed"], c: C.teal },
+  { h: "3  Illustrated pages", sub: "Add a key for the provider you choose", items: ["OPENAI_API_KEY", "GEMINI_API_KEY", "POLLINATIONS_API_KEY", "CLOUDFLARE_API_TOKEN"], c: C.coral },
+];
+
+export const LiveSetup: React.FC<{ at: number[] }> = ({ at }) => {
+  const t = useT();
+  return (
+    <AbsoluteFill>
+      <Backdrop variant="ink" />
+      <div style={{ position: "absolute", left: 120, top: 60, fontFamily: DISPLAY, fontSize: 104, color: C.cream, letterSpacing: 3, opacity: reveal(t, at[0]) }}>
+        GOING LIVE: BRING YOUR OWN KEYS
+      </div>
+      <div style={{ position: "absolute", left: 124, top: 190, fontFamily: UI, fontWeight: 700, fontSize: 38, color: C.amber, opacity: reveal(t, at[0] + 2.2) }}>
+        The built-in Sample runs with no keys and no sign-in.
+      </div>
+      <div style={{ position: "absolute", left: 120, right: 120, top: 290, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 36 }}>
+        {keyCards.map((g, i) => {
+          const p = reveal(t, at[i + 1] + 0.1, 0.5);
+          return (
+            <div key={g.h} style={{ background: C.cream, border: `6px solid ${C.ink}`, boxShadow: `10px 10px 0 ${g.c}`, padding: "20px 26px 26px", opacity: p, translate: `0px ${(1 - p) * 40}px`, minHeight: 420 }}>
+              <div style={{ fontFamily: DISPLAY, fontSize: 54, color: C.ink, letterSpacing: 1.5 }}>{g.h.toUpperCase()}</div>
+              <div style={{ fontFamily: UI, fontWeight: 600, fontSize: 26, color: C.ink2, marginTop: 6 }}>{g.sub}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 22 }}>
+                {g.items.map((s) => (
+                  <span key={s} style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, fontSize: 24, color: C.ink, background: C.amber, border: `3px solid ${C.ink}`, padding: "6px 12px", alignSelf: "flex-start" }}>
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "absolute", left: 124, right: 120, top: 860, fontFamily: UI, fontWeight: 700, fontSize: 38, color: C.cream, opacity: reveal(t, at[4] + 0.1) }}>
+        Keys live in your git-ignored <span style={{ background: C.amber, color: C.ink, padding: "2px 12px", fontFamily: "'Courier New', monospace" }}>.env</span>, never in the repository.
       </div>
     </AbsoluteFill>
   );
