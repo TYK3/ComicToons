@@ -1,6 +1,6 @@
 # ComicToons demo video
 
-A [Remotion](https://www.remotion.dev) project that renders the four-minute narrated demo video (1920×1080, 30 fps). It combines animated titles, captions synced to the narration and callouts with screen recordings of the Sample demo. The music bed is ducked about 20 dB under the voice.
+A [Remotion](https://www.remotion.dev) project that renders the narrated demo video (about 4½ minutes, [watch it on YouTube](https://youtu.be/GTMBXVyuo0o); the MP4 is also at [`docs/media/ComicToons-demo.mp4`](../docs/media/ComicToons-demo.mp4)) (1920×1080, 30 fps). It combines animated titles, captions synced to the narration and callouts with screen recordings of the Sample demo. The music bed is ducked about 20 dB under the voice.
 
 ```text
 video/

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://comictoons-demo.vercel.app"><img alt="Try the live demo" src="https://img.shields.io/badge/▲%20try%20the%20live%20demo-comictoons--demo.vercel.app-000000?style=for-the-badge&labelColor=142b36"></a>
-  <a href="docs/media/ComicToons-demo.mp4"><img alt="Watch the demo video" src="https://img.shields.io/badge/🎬%20watch%20the%20demo-4%20min-ee6471?style=for-the-badge&labelColor=142b36"></a>
+  <a href="https://youtu.be/GTMBXVyuo0o"><img alt="Watch the demo video on YouTube" src="https://img.shields.io/badge/🎬%20watch%20on%20YouTube-4½%20min-ee6471?style=for-the-badge&labelColor=142b36"></a>
   <a href="#️-installation"><img alt="Install it" src="https://img.shields.io/badge/⚙%20install-npm%20ci-1da2b3?style=for-the-badge&labelColor=142b36"></a>
 </p>
 
@@ -32,13 +32,14 @@
 ## 🎬 Demo video
 
 <p align="center">
-  <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/highlights.gif" alt="Highlights of the ComicToons demo: the landing page, the Studio releasing comic panels during a Sample run, the audience view with catch-up, the manga reader and the OBS overlay" width="88%"></a><br>
-  <sub>▲ Highlights, looping with no sound. The full narrated 4-minute walkthrough is below.</sub>
+  <a href="https://youtu.be/GTMBXVyuo0o"><img src="docs/media/highlights.gif" alt="Highlights of the ComicToons demo: the landing page, the Studio releasing comic panels during a Sample run, the audience view with catch-up, the manga reader and the OBS overlay" width="88%"></a><br>
+  <sub>▲ Highlights, looping with no sound. Click it to watch the full narrated 4½-minute walkthrough on YouTube.</sub>
 </p>
 
 <p align="center">
-  <a href="docs/media/ComicToons-demo.mp4"><img src="docs/media/video-thumb.jpg" alt="Watch the ComicToons demo video: the problem, the architecture, and a full walkthrough of the Sample stream" width="62%"></a><br>
-  <a href="docs/media/ComicToons-demo.mp4"><b>▶ Watch the full demo video (about 4½ minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a>
+  <a href="https://youtu.be/GTMBXVyuo0o"><img src="https://img.youtube.com/vi/GTMBXVyuo0o/maxresdefault.jpg" alt="Watch the ComicToons demo video on YouTube: the problem, the architecture, and a full walkthrough of the Sample stream" width="62%"></a><br>
+  <a href="https://youtu.be/GTMBXVyuo0o"><b>▶ Watch the full demo on YouTube (about 4½ minutes)</b></a> · <a href="https://comictoons-demo.vercel.app"><b>▲ Open the live demo</b></a><br>
+  <sub>Prefer a file? <a href="docs/media/ComicToons-demo.mp4">Download the MP4</a> (about 49 MB).</sub>
 </p>
 
 The video covers the problem, what ComicToons is, how the pipeline fits together, and then one sample use case from start to finish: a streamer connects Twitch, a stream turns into comic panels in the Studio, the Audience view and Catch-up serve late arrivals, the Library offers a recap, comic book and manga series, and the clean overlay goes into OBS. Everything on screen was recorded from the running Sample demo, and the video states plainly that the Sample needs no keys while live use needs your own Twitch app and an image-provider key. It is narrated with Microsoft neural text-to-speech (the `en-GB-RyanNeural` voice, through `edge-tts`), captioned from the narration, and rendered with [Remotion](https://www.remotion.dev). The narration script is [`video/narration/script.json`](video/narration/script.json), and [`video/`](video) rebuilds the whole video.
